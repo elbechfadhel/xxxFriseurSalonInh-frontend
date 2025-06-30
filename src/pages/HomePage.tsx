@@ -15,6 +15,8 @@ const HomePage: React.FC = () => {
     const [selectedEmployee, setSelectedEmployee] = useState<string | null>(null);
     const [resetTrigger, setResetTrigger] = useState(0);
     const [employees, setEmployees] = useState<Employee[]>([]);
+    const [customerName, setCustomerName] = useState('');
+    const [phone, setPhone] = useState('');
 
     useEffect(() => {
         const fetchEmployees = async () => {
@@ -29,9 +31,22 @@ const HomePage: React.FC = () => {
         fetchEmployees();
     }, []);
 
+    const isValidGermanPhone = (number: string) =>
+        /^[1-9][0-9]{9}$/.test(number);
+
     const handleConfirmBooking = async () => {
-        if (!selectedDateTime || !selectedEmployee) {
-            toast.error("Please select a time slot and a barber before confirming.");
+        if (
+            !selectedDateTime ||
+            !selectedEmployee ||
+            !customerName.trim() ||
+            !phone.trim()
+        ) {
+            toast.error("Please fill in all fields before confirming.");
+            return;
+        }
+
+        if (!isValidGermanPhone(phone)) {
+            toast.error("Please enter a valid German phone number.");
             return;
         }
 
@@ -40,8 +55,8 @@ const HomePage: React.FC = () => {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    customerName: "Ali",
-                    phone: "0123456789",
+                    customerName,
+                    phone,
                     service: "Haircut",
                     date: selectedDateTime,
                     employeeId: selectedEmployee,
@@ -54,10 +69,19 @@ const HomePage: React.FC = () => {
             toast.success("Booking confirmed!");
             setResetTrigger(prev => prev + 1);
             setSelectedDateTime(null);
+            setCustomerName('');
+            setPhone('');
         } catch (err) {
             toast.error("Booking failed. Please try again.");
         }
     };
+
+    const isBookingValid =
+        selectedDateTime &&
+        selectedEmployee &&
+        customerName.trim() &&
+        phone.trim() &&
+        isValidGermanPhone(phone);
 
     return (
         <div className="min-h-screen px-4 py-10">
@@ -65,10 +89,13 @@ const HomePage: React.FC = () => {
                 <h1 className="text-4xl font-extrabold text-gray-800 mb-4">
                     Welcome to <span className="text-green-600">Our Barber Shop</span>
                 </h1>
-                <p className="text-lg text-gray-600">Book your next haircut appointment with us — it’s fast and easy!</p>
+                <p className="text-lg text-gray-600">
+                    Book your next haircut appointment with us — it’s fast and easy!
+                </p>
             </div>
 
             <div className="max-w-5xl mx-auto bg-white grid grid-cols-1 md:grid-cols-3 gap-6 rounded-xl shadow-lg p-6">
+                {/* Calendar */}
                 <div className="col-span-1">
                     <h2 className="text-lg font-semibold text-gray-700 mb-2 text-center">Pick a date</h2>
                     <Calendar
@@ -79,9 +106,11 @@ const HomePage: React.FC = () => {
                     />
                 </div>
 
+                {/* Right Panel */}
                 <div className="col-span-2">
                     <h2 className="text-lg font-semibold text-gray-700 mb-4 text-center">Pick a time slot</h2>
 
+                    {/* Barber Select */}
                     <div className="mb-6">
                         <label className="block text-sm font-medium text-gray-700 mb-1">Choose a Barber</label>
                         <select
@@ -106,15 +135,55 @@ const HomePage: React.FC = () => {
                         resetTrigger={resetTrigger}
                     />
 
+                    {/* Customer Info */}
+                    <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                            <input
+                                type="text"
+                                value={customerName}
+                                onChange={(e) => setCustomerName(e.target.value)}
+                                placeholder="Your full name"
+                                className={`w-full border rounded px-3 py-2 shadow-sm ${!customerName.trim() ? 'border-red-500' : ''}`}
+                            />
+                            {!customerName.trim() && (
+                                <p className="text-red-500 text-sm mt-1">Full name is required.</p>
+                            )}
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                            <div className="flex items-center border rounded px-3 py-2 shadow-sm">
+                                <img
+                                    src="https://flagcdn.com/w40/de.png"
+                                    alt="Germany"
+                                    className="w-5 h-4 mr-2"
+                                />
+                                <span className="mr-2 text-sm text-gray-700">+49</span>
+                                <input
+                                    type="tel"
+                                    value={phone}
+                                    onChange={(e) => setPhone(e.target.value)}
+                                    placeholder="e.g. 1761234567"
+                                    className="flex-1 outline-none"
+                                />
+                            </div>
+                            {!isValidGermanPhone(phone) && phone && (
+                                <p className="text-sm text-red-500 mt-1">Please enter a valid German phone number.</p>
+                            )}
+                        </div>
+                    </div>
+
+
+                    {/* Confirm Button */}
                     <div className="mt-6">
                         <button
                             onClick={handleConfirmBooking}
-                            disabled={!selectedDateTime || !selectedEmployee}
+                            disabled={!isBookingValid}
                             className={`w-full py-3 rounded-lg text-lg font-semibold 
-                             ${!selectedDateTime || !selectedEmployee
+                                ${!isBookingValid
                                 ? 'bg-gray-200 text-gray-500 border border-gray-300 shadow-inner cursor-not-allowed'
                                 : 'bg-blue-600 hover:bg-blue-700 text-white'}
-  `}
+                            `}
                         >
                             Confirm Booking
                         </button>
