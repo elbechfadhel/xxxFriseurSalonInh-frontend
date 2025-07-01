@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import Footer from './Footer'; // ⬅️ Import the Footer component
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { pathname } = useLocation();
 
     return (
-        <div>
+        <div className="flex flex-col min-h-screen">
             {/* Header Navigation */}
             <header className="bg-gray-800 text-white py-4 shadow">
                 <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
@@ -28,7 +29,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             </header>
 
             {/* Main content */}
-            <main className="px-6 py-8">{children}</main>
+            <main className="flex-grow px-6 py-8">{children}</main>
+
+            {/* Footer */}
+            <Footer />
         </div>
     );
 };
