@@ -182,6 +182,13 @@
   resolved "https://jfrog.devstack.vwgroup.com/artifactory/api/npm/npm-public/@types/json-schema/-/json-schema-7.0.12.tgz"
   integrity sha512-Hr5Jfhc9eYOQNPYO5WLDq/n4jqijdHNlDXjuAQkkt+mWdQR+XJToOHrsD4cPaMXpn6KO7y2+wM8AZEs8VpBLVA==
 
+"@types/node@>= 14":
+  version "24.0.8"
+  resolved "https://jfrog.devstack.vwgroup.com/artifactory/api/npm/npm-public/@types/node/-/node-24.0.8.tgz"
+  integrity sha512-WytNrFSgWO/esSH9NbpWUfTMGQwCGIKfCmNlmFDNiI5gGhgMmEA+V1AEvKLeBNvvtBnailJtkrEa2OIISwrVAA==
+  dependencies:
+    undici-types "~7.8.0"
+
 "@types/prop-types@*":
   version "15.7.5"
   resolved "https://jfrog.devstack.vwgroup.com/artifactory/api/npm/npm-public/@types/prop-types/-/prop-types-15.7.5.tgz"
@@ -1641,6 +1648,11 @@ typescript@^5.0.2, "typescript@>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4
   version "5.1.6"
   resolved "https://jfrog.devstack.vwgroup.com/artifactory/api/npm/npm-public/typescript/-/typescript-5.1.6.tgz"
   integrity sha512-zaWCozRZ6DLEWAWFrVDz1H6FVXzUSfTy5FUMWsQlU8Ym5JP9eO4xkTIROFCQvhQf61z6O/G6ugw3SgAnvvm+HA==
+
+undici-types@~7.8.0:
+  version "7.8.0"
+  resolved "https://jfrog.devstack.vwgroup.com/artifactory/api/npm/npm-public/undici-types/-/undici-types-7.8.0.tgz"
+  integrity sha512-9UJ2xGDvQ43tYyVMpuHlsgApydB8ZKfVYTsLDhXkFL/6gfkp+U8xTGdh8pMJv1SpZna0zxG1DwsKZsreLbXBxw==
 
 update-browserslist-db@^1.0.11:
   version "1.0.11"
