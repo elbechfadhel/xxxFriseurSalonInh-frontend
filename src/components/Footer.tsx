@@ -36,9 +36,9 @@ const Footer: React.FC = () => {
                 </div>
             </div>
 
-            <div className="text-center text-xs text-gray-400 mt-6">
+           {/* <div className="text-center text-xs text-gray-400 mt-6">
                 © {new Date().getFullYear()} Nejib’s Barber Shop. All rights reserved.
-            </div>
+            </div>*/}
         </footer>
     );
 };

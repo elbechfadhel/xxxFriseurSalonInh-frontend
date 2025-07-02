@@ -3,6 +3,7 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import TimeSlotSelection from '@/components/TimeSlotSelection';
 import toast from 'react-hot-toast';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 interface Employee {
     id: string;
@@ -20,6 +21,7 @@ const BookingPage: React.FC = () => {
     const [phone, setPhone] = useState('');
     const [codeSent, setCodeSent] = useState(false);
     const [emailCode, setEmailCode] = useState('');
+    const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchEmployees = async () => {
@@ -46,11 +48,16 @@ const BookingPage: React.FC = () => {
             return;
         }
 
+        if (!captchaToken) {
+            toast.error("Please complete the CAPTCHA.");
+            return;
+        }
+
         try {
             const res = await fetch('http://localhost:4000/api/verify-email/send-code', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email }),
+                body: JSON.stringify({ email, captchaToken }),
             });
 
             if (!res.ok) throw new Error('Failed to send verification email');
@@ -95,6 +102,7 @@ const BookingPage: React.FC = () => {
             setPhone('');
             setEmailCode('');
             setCodeSent(false);
+            setCaptchaToken(null);
             setSelectedDateTime(null);
             setResetTrigger(prev => prev + 1);
         } catch (err) {
@@ -109,7 +117,7 @@ const BookingPage: React.FC = () => {
         isValidEmail(email);
 
     return (
-        <div className="min-h-screen px-4 py-10">
+        <div className="px-4 py-10">
             <div className="text-center mb-12">
                 <h1 className="text-4xl font-extrabold text-gray-800 mb-4">
                     Welcome to <span className="text-green-600">Our Barber Shop</span>
@@ -120,6 +128,7 @@ const BookingPage: React.FC = () => {
             </div>
 
             <div className="max-w-5xl mx-auto bg-white grid grid-cols-1 md:grid-cols-3 gap-6 rounded-xl shadow-lg p-6">
+                {/* Calendar */}
                 <div className="col-span-1">
                     <h2 className="text-lg font-semibold text-gray-700 mb-2 text-center">Pick a date</h2>
                     <Calendar
@@ -130,6 +139,7 @@ const BookingPage: React.FC = () => {
                     />
                 </div>
 
+                {/* Right Panel */}
                 <div className="col-span-2">
                     <h2 className="text-lg font-semibold text-gray-700 mb-4 text-center">Pick a time slot</h2>
 
@@ -157,6 +167,7 @@ const BookingPage: React.FC = () => {
                         resetTrigger={resetTrigger}
                     />
 
+                    {/* Customer Info */}
                     <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
@@ -209,16 +220,25 @@ const BookingPage: React.FC = () => {
                         </div>
                     </div>
 
+                    {/* CAPTCHA */}
                     <div className="mt-6">
+                        <ReCAPTCHA
+                            sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" // test site key from Google
+                            onChange={(token: any) => setCaptchaToken(token)}
+                        />
+                    </div>
+
+                    {/* Send code / verify code */}
+                    <div className="mt-6 mb-2">
                         {!codeSent ? (
                             <button
                                 onClick={handleSendEmailCode}
-                                disabled={!isBookingInfoValid}
+                                disabled={!isBookingInfoValid || !captchaToken}
                                 className={`w-full py-3 rounded-lg text-lg font-semibold 
-                  ${!isBookingInfoValid
+                                    ${!isBookingInfoValid
                                     ? 'bg-gray-200 text-gray-500 border border-gray-300 shadow-inner cursor-not-allowed'
                                     : 'bg-blue-600 hover:bg-blue-700 text-white'}
-                `}
+                                `}
                             >
                                 Send Verification Code
                             </button>

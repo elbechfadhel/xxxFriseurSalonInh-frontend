@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { CalendarDays, Scissors } from 'lucide-react';
+import {CalendarDays, Clock, Scissors, Smile} from 'lucide-react';
 
 const HomePage: React.FC = () => {
     return (
@@ -27,37 +27,48 @@ const HomePage: React.FC = () => {
                             to="/booking"
                             className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition"
                         >
-                            <CalendarDays className="w-5 h-5" />
+                            <CalendarDays className="w-5 h-5"/>
                             Book an Appointment
                         </Link>
                         <Link
                             to="/services"
                             className="inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold px-6 py-3 rounded-lg transition"
                         >
-                            <Scissors className="w-5 h-5" />
+                            <Scissors className="w-5 h-5"/>
                             View Services
                         </Link>
                     </div>
                 </div>
 
                 {/* Why Choose Us */}
-                <section className="mt-20">
+                <section className="mt-20 max-w-3xl">
                     <motion.h2
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4 }}
+                        initial={{opacity: 0, y: 10}}
+                        animate={{opacity: 1, y: 0}}
+                        transition={{delay: 0.4}}
                         className="text-2xl font-semibold text-gray-800 mb-4"
                     >
                         Why Choose Us?
                     </motion.h2>
-                    <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.5 }}
-                        className="text-gray-600 text-lg"
+                    <motion.div
+                        initial={{opacity: 0}}
+                        animate={{opacity: 1}}
+                        transition={{delay: 0.5}}
+                        className="flex justify-center gap-8 flex-wrap text-gray-600 text-lg"
                     >
-                        ✂️ Expert barbers &mdash; 🕒 Fast appointments &mdash; 💈 Friendly atmosphere
-                    </motion.p>
+                        <div className="flex items-center gap-2">
+                            <Scissors className="w-5 h-5 text-gray-700"/>
+                            <span>Expert barbers</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Clock className="w-5 h-5 text-gray-700"/>
+                            <span>Fast appointments</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Smile className="w-5 h-5 text-gray-700"/>
+                            <span>Friendly atmosphere</span>
+                        </div>
+                    </motion.div>
                 </section>
             </div>
         </motion.div>
