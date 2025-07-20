@@ -16,7 +16,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <header className="bg-[#636A6D] text-white py-4 shadow">
                 <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
                     <h1 className="text-2xl font-bold">
-                        <span className="text-orange-500">Nejib’s </span>Barber Shop
+                        <span className="text-orange-500">XXXFriseursalon Inh. </span>Najib Neffati
                     </h1>
                     <nav className="space-x-6 text-sm">
                         <Link to="/" className={navLinkClass('/')}>Home</Link>

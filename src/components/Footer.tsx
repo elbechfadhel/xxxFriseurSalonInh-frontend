@@ -7,7 +7,8 @@ const Footer: React.FC = () => {
             <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
                 {/* Shop Info */}
                 <div>
-                    <h4 className="text-lg font-semibold mb-2 text-white">Nejib’s Barber Shop</h4>
+                    <h4 className="text-lg font-semibold mb-2 text-white">XXXFriseursalon Inh. Najib
+                        Neffati</h4>
                     <p>Classic cuts. Modern style. Premium service.</p>
                 </div>
 
@@ -25,7 +26,7 @@ const Footer: React.FC = () => {
                     </div>
                     <div className="flex items-center gap-2 mb-1">
                         <Phone className="w-4 h-4 text-orange-400" />
-                        <span>+49 176 12345678</span>
+                        <span>01694363101</span>
                     </div>
                 </div>
 
@@ -34,7 +35,7 @@ const Footer: React.FC = () => {
                     <h4 className="text-lg font-semibold mb-0 text-white">Location</h4>
                     <div className="flex items-center gap-2">
                         <MapPin className="w-4 h-4 text-orange-400" />
-                        <span>123 Barber Street, Berlin, Germany</span>
+                        <span>Munz Straße 5 38100 Braunschweig, Germany</span>
                     </div>
                 </div>
             </div>

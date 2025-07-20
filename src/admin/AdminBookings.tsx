@@ -54,6 +54,15 @@ const AdminBookings: React.FC = () => {
     };
 
     const todayBookings = reservations.filter((res) => isToday(res.date));
+
+    const todayGroupedByEmployee = todayBookings.reduce((groups: Record<string, Reservation[]>, res) => {
+        const empName = res.employee?.name || 'Unassigned';
+        if (!groups[empName]) groups[empName] = [];
+        groups[empName].push(res);
+        return groups;
+    }, {});
+
+
     const futureBookings = reservations.filter((res) => !isToday(res.date));
 
     const groupedByEmployee = futureBookings.reduce((groups: Record<string, Reservation[]>, res) => {
@@ -102,47 +111,83 @@ const AdminBookings: React.FC = () => {
                 todayBookings.length === 0 ? (
                     <p className="text-gray-600">No bookings for today.</p>
                 ) : (
-                    <div className="overflow-x-auto">
-                        <table className="min-w-full bg-white shadow rounded border">
-                            <thead>
-                            <tr className="bg-gray-100 text-left text-sm font-medium text-gray-700">
-                                <th className="px-4 py-2">Name</th>
-                                <th className="px-4 py-2">Email</th>
-                                <th className="px-4 py-2">Phone</th>
-                                <th className="px-4 py-2">Service</th>
-                                <th className="px-4 py-2">Time</th>
-                                <th className="px-4 py-2">Barber</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {todayBookings
-                                .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-                                .map((res) => (
-                                    <tr key={res.id} className="border-t text-sm text-gray-800">
-                                        <td className="px-4 py-2">{res.customerName}</td>
-                                        <td className="px-4 py-2">{res.email}</td>
-                                        <td className="px-4 py-2">{res.phone || '-'}</td>
-                                        <td className="px-4 py-2">{res.service}</td>
-                                        <td className="px-4 py-2">
-                                            {new Date(res.date).toLocaleTimeString([], {
-                                                hour: '2-digit',
-                                                minute: '2-digit',
-                                            })}
-                                        </td>
-                                        <td className="px-4 py-2">{res.employee?.name || '—'}</td>
+                    Object.entries(todayGroupedByEmployee).map(([employeeName, bookings]) => (
+                        <div key={employeeName} className="mb-10">
+
+                            <h1 className="text-2xl font-bold mb-6 flex items-center gap-3">
+                                {/* Avatar Circle with Initials */}
+                                <div
+                                    className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center text-white font-semibold text-sm">
+                                    {employeeName.charAt(0).toUpperCase()}
+                                </div>
+                                {employeeName}
+                            </h1>
+
+
+                            <div className="overflow-x-auto">
+                                <table className="min-w-full bg-white shadow rounded border">
+                                    <thead className="bg-gray-100 text-left text-sm font-medium text-gray-700">
+                                    <tr>
+                                        <th className="px-4 py-2">Name</th>
+                                        <th className="px-4 py-2">Email</th>
+                                        <th className="px-4 py-2">Phone</th>
+                                        <th className="px-4 py-2">Service</th>
+                                        <th className="px-4 py-2">Time</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                                    </thead>
+                                    <tbody>
+                                    {bookings
+                                        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+                                        .map((res) => (
+                                            <tr key={res.id} className="border-t text-sm text-gray-800">
+                                                <td className="px-4 py-2">{res.customerName}</td>
+                                                <td className="px-4 py-2">
+                                                    <a href={`mailto:${res.email}`}
+                                                       className="text-blue-600 hover:underline">
+                                                        {res.email}
+                                                    </a>
+                                                </td>
+                                                <td className="px-4 py-2">
+                                                    {res.phone ? (
+                                                        <a href={`tel:${res.phone}`}
+                                                           className="text-blue-600 hover:underline">
+                                                            {res.phone}
+                                                        </a>
+                                                    ) : (
+                                                        '-'
+                                                    )}
+                                                </td>
+                                                <td className="px-4 py-2">{res.service}</td>
+                                                <td className="px-4 py-2">
+                                                <span
+                                                    className="inline-block  font-normal px-2 py-1 rounded text-sm">
+                                                 {new Date(res.date).toLocaleTimeString([], {
+                                                     hour: '2-digit',
+                                                     minute: '2-digit',
+                                                 })}
+  </span>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    ))
+
                 )
             ) : (
                 // 🔷 FUTURE BOOKINGS VIEW
                 Object.entries(groupedByEmployee).map(([employeeName, bookings]) => (
                     <div key={employeeName} className="mb-10">
-                        <h2 className="text-xl font-semibold text-orange-600 mb-4 border-b pb-1">
+                        <h1 className="text-2xl font-bold mb-6 flex items-center gap-3">
+                            {/* Avatar Circle with Initials */}
+                            <div
+                                className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-black font-semibold text-sm">
+                                {employeeName.charAt(0).toUpperCase()}
+                            </div>
                             {employeeName}
-                        </h2>
+                        </h1>
                         <div className="overflow-x-auto">
                             <table className="min-w-full bg-white shadow rounded border">
                                 <thead>
