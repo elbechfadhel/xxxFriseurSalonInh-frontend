@@ -22,14 +22,14 @@ const BookingPage: React.FC = () => {
     const [codeSent, setCodeSent] = useState(false);
     const [emailCode, setEmailCode] = useState('');
     const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-    //const API_BASE = import.meta.env.VITE_API_URL;
-   const url='https://xxxfriseursaloninh-backend.onrender.com/api';
+    const API_BASE = import.meta.env.VITE_API_URL;
+
     useEffect(() => {
         const fetchEmployees = async () => {
             try {
 
 
-                const res = await fetch(`${url}/employees`);
+                const res = await fetch(`${API_BASE}/employees`);
                 const data = await res.json();
                 setEmployees(data);
             } catch (err) {
@@ -57,7 +57,7 @@ const BookingPage: React.FC = () => {
         }
 
         try {
-            const res = await fetch(`${url}/verify-email/send-code`, {
+            const res = await fetch(`${API_BASE}/verify-email/send-code`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, captchaToken }),
@@ -74,7 +74,7 @@ const BookingPage: React.FC = () => {
 
     const handleVerifyCodeAndBook = async () => {
         try {
-            const verifyRes = await fetch(`${url}/verify-email/confirm-code`, {
+            const verifyRes = await fetch(`${API_BASE}/verify-email/confirm-code`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, code: emailCode }),
@@ -84,7 +84,7 @@ const BookingPage: React.FC = () => {
 
             toast.success('Email verified. Booking in progress...');
 
-            const bookingRes = await fetch(`${url}/reservations`, {
+            const bookingRes = await fetch(`${API_BASE}/reservations`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
