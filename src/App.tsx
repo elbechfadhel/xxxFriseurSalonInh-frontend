@@ -7,7 +7,7 @@ import AdminBookings from './admin/AdminBookings';
 import Layout from './components/Layout';
 import { Toaster } from 'react-hot-toast';
 import AdminLogin from "@/admin/AdminLogin.tsx";
-import ProtectedRoute from "pages/ProtectedRoute.tsx";
+import ProtectedRoute from './pages/ProtectedRoute';
 
 const App: React.FC = () => {
     return (
