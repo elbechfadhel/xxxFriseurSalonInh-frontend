@@ -16,6 +16,10 @@ const AdminBookings: React.FC = () => {
     const [error, setError] = useState('');
     const [view, setView] = useState<'today' | 'future'>('today');
     const API_BASE = import.meta.env.VITE_API_URL;
+
+    console.log("🌍 VITE_API_URL:", API_BASE);
+
+
     useEffect(() => {
         const fetchReservations = async () => {
             try {
