@@ -17,13 +17,17 @@ const AdminBookings: React.FC = () => {
     const [view, setView] = useState<'today' | 'future'>('today');
     const API_BASE = import.meta.env.VITE_API_URL;
 
-    console.log("🌍 VITE_API_URL:", API_BASE);
-
-
     useEffect(() => {
         const fetchReservations = async () => {
             try {
-                const res = await fetch(`${API_BASE}/reservations`);
+                const token = localStorage.getItem('admin_token');
+
+                const res = await fetch(`${API_BASE}/reservations`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+
                 if (!res.ok) throw new Error('Failed to fetch reservations');
                 const data = await res.json();
                 setReservations(data);

@@ -6,6 +6,8 @@ import ServicesPage from './pages/ServicesPage';
 import AdminBookings from './admin/AdminBookings';
 import Layout from './components/Layout';
 import { Toaster } from 'react-hot-toast';
+import AdminLogin from "@/admin/AdminLogin.tsx";
+import ProtectedRoute from "pages/ProtectedRoute.tsx";
 
 const App: React.FC = () => {
     return (
@@ -16,7 +18,8 @@ const App: React.FC = () => {
                     <Route path="/" element={<HomePage />} />
                     <Route path="/services" element={<ServicesPage />} />
                     <Route path="/booking" element={<BookingPage />} />
-                    <Route path="/admin" element={<AdminBookings />} />
+                    <Route path="/admin/login" element={<AdminLogin />} /> {/* ✅ add this */}
+                    <Route path="/admin" element={<ProtectedRoute><AdminBookings /></ProtectedRoute>} />
                 </Routes>
             </Layout>
         </Router>
