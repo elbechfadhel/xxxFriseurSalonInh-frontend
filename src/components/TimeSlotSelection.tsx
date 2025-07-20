@@ -17,15 +17,15 @@ const TimeSlotSelection: React.FC<TimeSlotSelectionProps> = ({
                                                                  selectedDate,
                                                                  selectedEmployeeId,
                                                                  onSlotSelected,
-                                                                 resetTrigger
+                                                                 resetTrigger,
                                                              }) => {
     const [slots, setSlots] = useState<Slot[]>([]);
     const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
-
+    const API_BASE = import.meta.env.VITE_API_URL;
     useEffect(() => {
         const fetchReservations = async () => {
             try {
-                const res = await fetch("http://localhost:4000/api/reservations");
+                const res = await fetch(`${API_BASE}/reservations`);
                 const reservations = await res.json();
 
                 const bookedTimes = reservations
@@ -60,7 +60,7 @@ const TimeSlotSelection: React.FC<TimeSlotSelectionProps> = ({
         if (selectedEmployeeId) {
             fetchReservations();
         }
-    }, [selectedDate, selectedEmployeeId, resetTrigger])
+    }, [selectedDate, selectedEmployeeId, resetTrigger]);
 
     useEffect(() => {
         setSelectedSlotId(null);
@@ -103,9 +103,9 @@ const TimeSlotSelection: React.FC<TimeSlotSelectionProps> = ({
                                 disabled={!slot.isAvailable}
                                 className={`w-6 h-6 text-xs font-semibold transition-all duration-200 ${
                                     selectedSlotId === slot.id
-                                        ? 'bg-green-700 text-white'
+                                        ? 'bg-orange-600 text-white'
                                         : slot.isAvailable
-                                            ? 'bg-green-400 hover:bg-green-500 text-white'
+                                            ? 'bg-orange-400 hover:bg-orange-500 text-white'
                                             : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                                 }`}
                             />
@@ -122,15 +122,22 @@ const TimeSlotSelection: React.FC<TimeSlotSelectionProps> = ({
 
             {selectedSlotId && (
                 <div className="mt-6 flex justify-center">
-                    <div className="bg-gray-800 text-white px-6 py-4 rounded-md shadow-lg text-sm">
-                        <p className="mb-1">Interval: 30 min</p>
-                        <p>From: <span className="font-bold">{fromTime}</span></p>
-                        <p>To: <span className="font-bold">{toTime}</span></p>
-                        <p className="mt-2">
-                            <span className="text-gray-400">DateTime ISO:</span><br />
-                            <span className="break-all">{selectedDateTimeISO || 'None selected'}</span>
-                        </p>
+                    <div className="bg-[#5A5C60] text-white px-4 py-2 rounded-md shadow text-sm text-center">
+  <span>
+    <strong>30 min</strong> | From: <strong>{fromTime}</strong> | To: <strong>{toTime}</strong> |{' '}
+      {selectedDateTimeISO
+          ? new Date(selectedDateTimeISO).toLocaleString('en-GB', {
+              weekday: 'short',
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+          })
+          : 'No time selected'}
+  </span>
                     </div>
+
                 </div>
             )}
         </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import {CalendarDays, Clock, Scissors, Smile} from 'lucide-react';
+import { CalendarDays, Clock, Scissors, Smile } from 'lucide-react';
 
 const HomePage: React.FC = () => {
     return (
@@ -15,7 +15,7 @@ const HomePage: React.FC = () => {
                 {/* Hero Section */}
                 <div>
                     <h1 className="text-5xl font-extrabold text-gray-900 mb-4">
-                        Welcome to <span className="text-green-600">Nejib’s Barber Shop</span>
+                        Welcome to <span className="text-orange-500">Nejib’s Barber Shop</span>
                     </h1>
                     <p className="text-xl text-gray-600 mb-8">
                         Classic cuts. Modern style. Book your next visit with just a few clicks.
@@ -25,16 +25,16 @@ const HomePage: React.FC = () => {
                     <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
                         <Link
                             to="/booking"
-                            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition"
+                            className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-lg transition"
                         >
-                            <CalendarDays className="w-5 h-5"/>
+                            <CalendarDays className="w-5 h-5" />
                             Book an Appointment
                         </Link>
                         <Link
                             to="/services"
-                            className="inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold px-6 py-3 rounded-lg transition"
+                            className="inline-flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold px-6 py-3 rounded-lg transition"
                         >
-                            <Scissors className="w-5 h-5"/>
+                            <Scissors className="w-5 h-5" />
                             View Services
                         </Link>
                     </div>
@@ -43,29 +43,29 @@ const HomePage: React.FC = () => {
                 {/* Why Choose Us */}
                 <section className="mt-20 max-w-3xl">
                     <motion.h2
-                        initial={{opacity: 0, y: 10}}
-                        animate={{opacity: 1, y: 0}}
-                        transition={{delay: 0.4}}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4 }}
                         className="text-2xl font-semibold text-gray-800 mb-4"
                     >
                         Why Choose Us?
                     </motion.h2>
                     <motion.div
-                        initial={{opacity: 0}}
-                        animate={{opacity: 1}}
-                        transition={{delay: 0.5}}
-                        className="flex justify-center gap-8 flex-wrap text-gray-600 text-lg"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.5 }}
+                        className="flex justify-center gap-8 flex-wrap text-gray-700 text-lg"
                     >
                         <div className="flex items-center gap-2">
-                            <Scissors className="w-5 h-5 text-gray-700"/>
+                            <Scissors className="w-5 h-5 text-orange-500" />
                             <span>Expert barbers</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <Clock className="w-5 h-5 text-gray-700"/>
+                            <Clock className="w-5 h-5 text-orange-500" />
                             <span>Fast appointments</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <Smile className="w-5 h-5 text-gray-700"/>
+                            <Smile className="w-5 h-5 text-orange-500" />
                             <span>Friendly atmosphere</span>
                         </div>
                     </motion.div>

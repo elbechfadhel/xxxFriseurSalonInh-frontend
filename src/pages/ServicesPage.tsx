@@ -80,9 +80,10 @@ const ServicesPage: React.FC = () => {
 
     return (
         <div className="max-w-5xl mx-auto px-4 py-12">
-            <h1 className="text-3xl font-extrabold text-center text-gray-800 mb-8">
-                💈 Our Services
+            <h1 className="text-5xl font-extrabold text-gray-900 mb-4">
+                Our <span className="text-orange-500">Services</span>
             </h1>
+
 
             <div ref={sliderContainerRef} className="relative">
                 <div ref={sliderRef} className="keen-slider">
@@ -108,13 +109,13 @@ const ServicesPage: React.FC = () => {
                     onClick={() => instanceRef.current?.prev()}
                     className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white shadow rounded-full p-2 hover:bg-gray-100 z-10"
                 >
-                    <ChevronLeft className="w-5 h-5" />
+                    <ChevronLeft className="w-5 h-5"/>
                 </button>
                 <button
                     onClick={() => instanceRef.current?.next()}
                     className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white shadow rounded-full p-2 hover:bg-gray-100 z-10"
                 >
-                    <ChevronRight className="w-5 h-5" />
+                    <ChevronRight className="w-5 h-5"/>
                 </button>
             </div>
         </div>

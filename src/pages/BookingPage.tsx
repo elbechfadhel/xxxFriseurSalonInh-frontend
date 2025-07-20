@@ -22,11 +22,13 @@ const BookingPage: React.FC = () => {
     const [codeSent, setCodeSent] = useState(false);
     const [emailCode, setEmailCode] = useState('');
     const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-
+    const API_BASE = import.meta.env.VITE_API_URL;
     useEffect(() => {
         const fetchEmployees = async () => {
             try {
-                const res = await fetch("http://localhost:4000/api/employees");
+
+
+                const res = await fetch(`${API_BASE}/employees`);
                 const data = await res.json();
                 setEmployees(data);
             } catch (err) {
@@ -54,7 +56,7 @@ const BookingPage: React.FC = () => {
         }
 
         try {
-            const res = await fetch('http://localhost:4000/api/verify-email/send-code', {
+            const res = await fetch(`${API_BASE}/verify-email/send-code`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, captchaToken }),
@@ -71,7 +73,7 @@ const BookingPage: React.FC = () => {
 
     const handleVerifyCodeAndBook = async () => {
         try {
-            const verifyRes = await fetch('http://localhost:4000/api/verify-email/confirm-code', {
+            const verifyRes = await fetch(`${API_BASE}/verify-email/confirm-code`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, code: emailCode }),
@@ -81,7 +83,7 @@ const BookingPage: React.FC = () => {
 
             toast.success('Email verified. Booking in progress...');
 
-            const bookingRes = await fetch("http://localhost:4000/api/reservations", {
+            const bookingRes = await fetch(`${API_BASE}/reservations`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -120,14 +122,16 @@ const BookingPage: React.FC = () => {
         <div className="px-4 py-10">
             <div className="text-center mb-12">
                 <h1 className="text-4xl font-extrabold text-gray-800 mb-4">
-                    Welcome to <span className="text-green-600">Our Barber Shop</span>
+                    Welcome to <span className="text-orange-500">Our Barber Shop</span>
                 </h1>
                 <p className="text-lg text-gray-600">
                     Book your next haircut appointment with us — it’s fast and easy!
                 </p>
             </div>
 
-            <div className="max-w-5xl mx-auto bg-white grid grid-cols-1 md:grid-cols-3 gap-6 rounded-xl shadow-lg p-6">
+            <div
+                className="max-w-5xl mx-auto bg-white grid grid-cols-1 md:grid-cols-3 gap-6 g p-6">
+
                 {/* Calendar */}
                 <div className="col-span-1">
                     <h2 className="text-lg font-semibold text-gray-700 mb-2 text-center">Pick a date</h2>
@@ -237,14 +241,15 @@ const BookingPage: React.FC = () => {
                                 className={`w-full py-3 rounded-lg text-lg font-semibold 
                                     ${!isBookingInfoValid
                                     ? 'bg-gray-200 text-gray-500 border border-gray-300 shadow-inner cursor-not-allowed'
-                                    : 'bg-blue-600 hover:bg-blue-700 text-white'}
+                                    : 'bg-orange-500 hover:bg-orange-600 text-white'}
                                 `}
                             >
                                 Send Verification Code
                             </button>
                         ) : (
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mt-2">Enter the 6-digit code</label>
+                                <label className="block text-sm font-medium text-gray-700 mt-2">Enter the 6-digit
+                                    code</label>
                                 <input
                                     type="text"
                                     value={emailCode}
@@ -254,7 +259,7 @@ const BookingPage: React.FC = () => {
                                 />
                                 <button
                                     onClick={handleVerifyCodeAndBook}
-                                    className="w-full mt-3 bg-green-600 hover:bg-green-700 text-white py-2 rounded font-semibold"
+                                    className="w-full mt-3 bg-orange-500 hover:bg-orange-600 text-white py-2 rounded font-semibold"
                                 >
                                     Verify & Confirm Booking
                                 </button>
