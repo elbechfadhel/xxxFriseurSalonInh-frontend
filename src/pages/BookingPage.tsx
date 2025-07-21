@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import Calendar from 'react-calendar';
+import 'react-datepicker/dist/react-datepicker.css';
 import 'react-calendar/dist/Calendar.css';
 import TimeSlotSelection from '@/components/TimeSlotSelection';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
-import {CheckCircle, Info, XCircle} from "lucide-react"; // Import useTranslation
+import {CheckCircle, Info, XCircle} from "lucide-react";
+import {de, enUS} from "date-fns/locale";
+import DatePicker from "react-datepicker"; // Import useTranslation
 
 interface Employee {
     id: string;
@@ -12,8 +14,8 @@ interface Employee {
 }
 
 const BookingPage: React.FC = () => {
-    const { t } = useTranslation(); // Get the translation function
-    const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+    const { t, i18n } = useTranslation(); // Get the translation function
+    const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
     const [selectedDateTime, setSelectedDateTime] = useState<string | null>(null);
     const [selectedEmployee, setSelectedEmployee] = useState<string | null>(null);
     const [resetTrigger, setResetTrigger] = useState(0);
@@ -27,6 +29,18 @@ const BookingPage: React.FC = () => {
     const [notification, setNotification] = useState<string | null>(null); // State for notification
     const [notificationType, setNotificationType] = useState<'success' | 'error' | 'info' | null>(null); // Type of notification (success, error, info)
     const API_BASE = import.meta.env.VITE_API_URL;
+
+
+    const getLocale = () => {
+        switch (i18n.language) {
+            case 'de': // German
+                return de;  // Return the `de` locale from date-fns
+            case 'en': // English
+            default:
+                return enUS; // Return the `enUS` locale from date-fns
+        }
+    };
+
 
     useEffect(() => {
         const fetchEmployees = async () => {
@@ -142,20 +156,22 @@ const BookingPage: React.FC = () => {
 
             <div className="max-w-5xl mx-auto bg-white grid grid-cols-1 md:grid-cols-3 gap-6 g p-6">
                 {/* Calendar */}
-                <div className="col-span-1">
-                    <h2 className="text-lg font-semibold text-gray-700 mb-2 text-center">{t('pickDate')}</h2>
-                    <Calendar
-                        onChange={(date) => setSelectedDate(date as Date)}
-                        value={selectedDate}
+                <div className="col-span-1 text-left">  {/* Add text-left to align the content to the left */}
+                    <h2 className="text-lg font-semibold text-gray-700 mb-2">{t('pickDate')}</h2>
+                    <DatePicker
+                        selected={selectedDate}
+                        onChange={(date: Date | null) => setSelectedDate(date)}  // Accept Date | null
+                        locale={getLocale()}  // Pass locale dynamically
+                        dateFormat="P"  // Date format (you can customize this)
+                        className="rounded-lg border shadow-md p-2 w-full"  // Add w-full to make DatePicker full width
+                        inline
                         minDate={new Date()}
-                        className="rounded-lg border shadow-md p-2"
                     />
                 </div>
 
                 {/* Right Panel */}
                 <div className="col-span-2">
                     <h2 className="text-lg font-semibold text-gray-700 mb-4 text-center">{t('pickTime')}</h2>
-
 
 
                     <div className="mb-6">
@@ -176,7 +192,7 @@ const BookingPage: React.FC = () => {
                     </div>
 
                     <TimeSlotSelection
-                        selectedDate={selectedDate}
+                        selectedDate={selectedDate || new Date()}
                         selectedEmployeeId={selectedEmployee}
                         onSlotSelected={setSelectedDateTime}
                         resetTrigger={resetTrigger}
@@ -245,12 +261,13 @@ const BookingPage: React.FC = () => {
 
                     {/* Display notification here */}
                     {notification && (
-                        <div className={`mb-6 p-4 font-normal border ${notificationType === 'success' ? 'border-green-500 text-green-500' : notificationType === 'error' ? 'border-red-500 text-red-500' : 'border-blue-500 text-blue-500'}`}>
+                        <div
+                            className={`mb-6 p-4 font-normal border ${notificationType === 'success' ? 'border-green-500 text-green-500' : notificationType === 'error' ? 'border-red-500 text-red-500' : 'border-blue-500 text-blue-500'}`}>
                             <div className="flex items-center gap-3">
                                 {/* Display the icon based on notificationType */}
-                                {notificationType === 'success' && <CheckCircle className="w-6 h-6" />}
-                                {notificationType === 'error' && <XCircle className="w-6 h-6" />}
-                                {notificationType === 'info' && <Info className="w-6 h-6" />}
+                                {notificationType === 'success' && <CheckCircle className="w-6 h-6"/>}
+                                {notificationType === 'error' && <XCircle className="w-6 h-6"/>}
+                                {notificationType === 'info' && <Info className="w-6 h-6"/>}
 
                                 <span>{notification}</span>
                             </div>
