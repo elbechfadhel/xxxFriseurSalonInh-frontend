@@ -1,20 +1,24 @@
 import React from 'react';
 import { Mail, Phone, MapPin } from 'lucide-react';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 const Footer: React.FC = () => {
+    const { t } = useTranslation(); // Get the translation function
+
     return (
         <footer className="bg-[#636A6D] text-gray-200 py-8 mt-10">
             <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
                 {/* Shop Info */}
                 <div>
-                    <h4 className="text-lg font-semibold mb-2 text-white">XXXFriseursalon Inh. Najib
-                        Neffati</h4>
-                    <p>Classic cuts. Modern style. Premium service.</p>
+                    <h4 className="text-lg font-semibold mb-2 text-white">
+                        {t('footerShopName')}
+                    </h4>
+                    <p>{t('footerShopDescription')}</p>
                 </div>
 
                 {/* Contact Info */}
                 <div>
-                    <h4 className="text-lg font-semibold mb-2 text-white">Contact</h4>
+                    <h4 className="text-lg font-semibold mb-2 text-white">{t('contact')}</h4>
                     <div className="flex items-center gap-2 mb-1">
                         <Mail className="w-4 h-4 text-orange-400" />
                         <a
@@ -32,14 +36,13 @@ const Footer: React.FC = () => {
 
                 {/* Location */}
                 <div>
-                    <h4 className="text-lg font-semibold mb-0 text-white">Location</h4>
+                    <h4 className="text-lg font-semibold mb-0 text-white">{t('location')}</h4>
                     <div className="flex items-center gap-2">
                         <MapPin className="w-4 h-4 text-orange-400" />
-                        <span>Munz Straße 5 38100 Braunschweig, Germany</span>
+                        <span>{t('address')}</span>
                     </div>
                 </div>
             </div>
-
         </footer>
     );
 };

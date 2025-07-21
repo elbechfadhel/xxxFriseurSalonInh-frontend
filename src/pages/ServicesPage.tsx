@@ -8,6 +8,7 @@ import {
     ChevronLeft,
     ChevronRight,
 } from "lucide-react";
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 interface Service {
     name: string;
@@ -38,6 +39,7 @@ const services: Service[] = [
 ];
 
 const ServicesPage: React.FC = () => {
+    const { t } = useTranslation(); // Get the translation function
     const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
         loop: true,
         slides: { perView: 1, spacing: 15 },
@@ -81,9 +83,8 @@ const ServicesPage: React.FC = () => {
     return (
         <div className="max-w-5xl mx-auto px-4 py-12">
             <h1 className="text-5xl font-extrabold text-gray-900 mb-4">
-                Our <span className="text-orange-500">Services</span>
+                {t('ourServices')} {/* Translate the title */}
             </h1>
-
 
             <div ref={sliderContainerRef} className="relative">
                 <div ref={sliderRef} className="keen-slider">
@@ -95,11 +96,15 @@ const ServicesPage: React.FC = () => {
                             <div className="flex items-center gap-4 mb-3">
                                 {service.icon}
                                 <h3 className="text-xl font-semibold text-gray-800">
-                                    {service.name}
+                                    {t(service.name)} {/* Translate service names */}
                                 </h3>
                             </div>
-                            <p className="text-gray-600 mb-2">{service.description}</p>
-                            <p className="text-gray-800 font-bold">Price: {service.price}</p>
+                            <p className="text-gray-600 mb-2">
+                                {t(service.description)} {/* Translate descriptions */}
+                            </p>
+                            <p className="text-gray-800 font-bold">
+                                {t('price')}: {service.price} {/* Translate price label */}
+                            </p>
                         </div>
                     ))}
                 </div>

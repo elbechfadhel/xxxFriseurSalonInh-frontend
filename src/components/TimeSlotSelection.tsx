@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 interface Slot {
     id: string;
@@ -19,9 +20,11 @@ const TimeSlotSelection: React.FC<TimeSlotSelectionProps> = ({
                                                                  onSlotSelected,
                                                                  resetTrigger,
                                                              }) => {
+    const { t } = useTranslation(); // Get the translation function
     const [slots, setSlots] = useState<Slot[]>([]);
     const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
     const API_BASE = import.meta.env.VITE_API_URL;
+
     useEffect(() => {
         const fetchReservations = async () => {
             try {
@@ -112,7 +115,7 @@ const TimeSlotSelection: React.FC<TimeSlotSelectionProps> = ({
                             <div className="text-xs mt-1 leading-tight text-center">
                                 <div className="font-bold">{slot.time.split(':')[0]}</div>
                                 <div className="text-[10px] text-gray-500">
-                                    {slot.time.includes('AM') ? 'AM' : 'PM'}
+                                    {slot.time.includes('AM') ? t('am') : t('pm')}
                                 </div>
                             </div>
                         </div>
@@ -123,21 +126,20 @@ const TimeSlotSelection: React.FC<TimeSlotSelectionProps> = ({
             {selectedSlotId && (
                 <div className="mt-6 flex justify-center">
                     <div className="bg-[#5A5C60] text-white px-4 py-2 rounded-md shadow text-sm text-center">
-  <span>
-    <strong>30 min</strong> | From: <strong>{fromTime}</strong> | To: <strong>{toTime}</strong> |{' '}
-      {selectedDateTimeISO
-          ? new Date(selectedDateTimeISO).toLocaleString('en-GB', {
-              weekday: 'short',
-              year: 'numeric',
-              month: 'short',
-              day: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit',
-          })
-          : 'No time selected'}
-  </span>
+                        <span>
+                            <strong>30 min</strong> | {t('from')}: <strong>{fromTime}</strong> | {t('to')}: <strong>{toTime}</strong> |{' '}
+                            {selectedDateTimeISO
+                                ? new Date(selectedDateTimeISO).toLocaleString('en-GB', {
+                                    weekday: 'short',
+                                    year: 'numeric',
+                                    month: 'short',
+                                    day: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                })
+                                : t('noTimeSelected')}
+                        </span>
                     </div>
-
                 </div>
             )}
         </div>

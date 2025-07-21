@@ -2,8 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { CalendarDays, Clock, Scissors, Smile } from 'lucide-react';
+import { useTranslation } from 'react-i18next'; // Import useTranslation
 
 const HomePage: React.FC = () => {
+    const { t } = useTranslation(); // Get the translation function
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -15,10 +18,10 @@ const HomePage: React.FC = () => {
                 {/* Hero Section */}
                 <div>
                     <h1 className="text-5xl font-extrabold text-gray-900 mb-4">
-                        Welcome to <span className="text-orange-500">Nejib’s Barber Shop</span>
+                        {t('welcomeTitle')} <span className="text-orange-500">{t('barberShopName')}</span>
                     </h1>
                     <p className="text-xl text-gray-600 mb-8">
-                        Classic cuts. Modern style. Book your next visit with just a few clicks.
+                        {t('heroDescription')}
                     </p>
 
                     {/* CTA Buttons */}
@@ -28,14 +31,14 @@ const HomePage: React.FC = () => {
                             className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-lg transition"
                         >
                             <CalendarDays className="w-5 h-5" />
-                            Book an Appointment
+                            {t('bookAppointment')}
                         </Link>
                         <Link
                             to="/services"
                             className="inline-flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold px-6 py-3 rounded-lg transition"
                         >
                             <Scissors className="w-5 h-5" />
-                            View Services
+                            {t('viewServices')}
                         </Link>
                     </div>
                 </div>
@@ -48,7 +51,7 @@ const HomePage: React.FC = () => {
                         transition={{ delay: 0.4 }}
                         className="text-2xl font-semibold text-gray-800 mb-4"
                     >
-                        Why Choose Us?
+                        {t('whyChooseUs')}
                     </motion.h2>
                     <motion.div
                         initial={{ opacity: 0 }}
@@ -58,15 +61,15 @@ const HomePage: React.FC = () => {
                     >
                         <div className="flex items-center gap-2">
                             <Scissors className="w-5 h-5 text-orange-500" />
-                            <span>Expert barbers</span>
+                            <span>{t('expertBarbers')}</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <Clock className="w-5 h-5 text-orange-500" />
-                            <span>Fast appointments</span>
+                            <span>{t('fastAppointments')}</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <Smile className="w-5 h-5 text-orange-500" />
-                            <span>Friendly atmosphere</span>
+                            <span>{t('friendlyAtmosphere')}</span>
                         </div>
                     </motion.div>
                 </section>
