@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface Reservation {
     id: string;
@@ -11,10 +12,11 @@ interface Reservation {
 }
 
 const AdminBookings: React.FC = () => {
+    const { t } = useTranslation();
     const [reservations, setReservations] = useState<Reservation[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const [view, setView] = useState<'today' | 'future'>('today');
+    const [view, setView] = useState<'today' | 'future' | 'history'>('today'); // Added 'history' view
     const API_BASE = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
@@ -28,18 +30,18 @@ const AdminBookings: React.FC = () => {
                     },
                 });
 
-                if (!res.ok) throw new Error('Failed to fetch reservations');
+                if (!res.ok) throw new Error(t('adminBookings.errorLoading'));
                 const data = await res.json();
                 setReservations(data);
             } catch (err) {
-                setError('Could not load reservations.');
+                setError(t('adminBookings.errorLoading'));
             } finally {
                 setLoading(false);
             }
         };
 
         fetchReservations();
-    }, []);
+    }, [t]);
 
     const formatDate = (dateStr: string) =>
         new Intl.DateTimeFormat('de-DE', {
@@ -53,7 +55,21 @@ const AdminBookings: React.FC = () => {
         return today.toDateString() === date.toDateString();
     };
 
+    const isFuture = (dateStr: string) => {
+        const now = new Date();
+        const date = new Date(dateStr);
+        return date > now; // Future bookings are those that are after the current time/date
+    };
+
+    const isPast = (dateStr: string) => {
+        const now = new Date();
+        const date = new Date(dateStr);
+        return date < now; // Past bookings are those that are before the current time/date
+    };
+
     const todayBookings = reservations.filter((res) => isToday(res.date));
+    const futureBookings = reservations.filter((res) => isFuture(res.date)); // Filter future bookings
+    const pastBookings = reservations.filter((res) => isPast(res.date)); // Filter past bookings
 
     const todayGroupedByEmployee = todayBookings.reduce((groups: Record<string, Reservation[]>, res) => {
         const empName = res.employee?.name || 'Unassigned';
@@ -62,10 +78,14 @@ const AdminBookings: React.FC = () => {
         return groups;
     }, {});
 
-
-    const futureBookings = reservations.filter((res) => !isToday(res.date));
-
     const groupedByEmployee = futureBookings.reduce((groups: Record<string, Reservation[]>, res) => {
+        const empName = res.employee?.name || 'Unassigned';
+        if (!groups[empName]) groups[empName] = [];
+        groups[empName].push(res);
+        return groups;
+    }, {});
+
+    const pastGroupedByEmployee = pastBookings.reduce((groups: Record<string, Reservation[]>, res) => {
         const empName = res.employee?.name || 'Unassigned';
         if (!groups[empName]) groups[empName] = [];
         groups[empName].push(res);
@@ -74,7 +94,7 @@ const AdminBookings: React.FC = () => {
 
     return (
         <div className="p-6 max-w-6xl mx-auto">
-            <h1 className="text-3xl font-bold mb-6">All Bookings</h1>
+            <h1 className="text-3xl font-bold mb-6">{t('adminBookings.title')}</h1>
 
             {/* 🔁 Toggle Buttons */}
             <div className="flex gap-4 mb-8">
@@ -86,7 +106,7 @@ const AdminBookings: React.FC = () => {
                     }`}
                     onClick={() => setView('today')}
                 >
-                    Today's Bookings
+                    {t('adminBookings.todayBookings')}
                 </button>
                 <button
                     className={`px-4 py-2 rounded font-semibold transition ${
@@ -96,26 +116,34 @@ const AdminBookings: React.FC = () => {
                     }`}
                     onClick={() => setView('future')}
                 >
-                    Future Bookings
+                    {t('adminBookings.futureBookings')}
+                </button>
+                <button
+                    className={`px-4 py-2 rounded font-semibold transition ${
+                        view === 'history'
+                            ? 'bg-orange-500 text-white'
+                            : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    }`}
+                    onClick={() => setView('history')}
+                >
+                    {t('adminBookings.historyBookings')}
                 </button>
             </div>
 
             {loading ? (
-                <p className="text-gray-500">Loading bookings...</p>
+                <p className="text-gray-500">{t('adminBookings.loading')}</p>
             ) : error ? (
                 <p className="text-red-500">{error}</p>
             ) : reservations.length === 0 ? (
-                <p className="text-gray-600">No reservations found.</p>
+                <p className="text-gray-600">{t('adminBookings.noBookingsFound')}</p>
             ) : view === 'today' ? (
                 // 🔶 TODAY'S BOOKINGS VIEW
                 todayBookings.length === 0 ? (
-                    <p className="text-gray-600">No bookings for today.</p>
+                    <p className="text-gray-600">{t('adminBookings.noBookingsForToday')}</p>
                 ) : (
                     Object.entries(todayGroupedByEmployee).map(([employeeName, bookings]) => (
                         <div key={employeeName} className="mb-10">
-
                             <h1 className="text-2xl font-bold mb-6 flex items-center gap-3">
-                                {/* Avatar Circle with Initials */}
                                 <div
                                     className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center text-white font-semibold text-sm">
                                     {employeeName.charAt(0).toUpperCase()}
@@ -123,16 +151,15 @@ const AdminBookings: React.FC = () => {
                                 {employeeName}
                             </h1>
 
-
                             <div className="overflow-x-auto">
                                 <table className="min-w-full bg-white shadow rounded border">
                                     <thead className="bg-gray-100 text-left text-sm font-medium text-gray-700">
                                     <tr>
-                                        <th className="px-4 py-2">Name</th>
-                                        <th className="px-4 py-2">Email</th>
-                                        <th className="px-4 py-2">Phone</th>
-                                        <th className="px-4 py-2">Service</th>
-                                        <th className="px-4 py-2">Time</th>
+                                        <th className="px-4 py-2">{t('adminBookings.name')}</th>
+                                        <th className="px-4 py-2">{t('adminBookings.email')}</th>
+                                        <th className="px-4 py-2">{t('adminBookings.phone')}</th>
+                                        <th className="px-4 py-2">{t('adminBookings.service')}</th>
+                                        <th className="px-4 py-2">{t('adminBookings.time')}</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -142,15 +169,13 @@ const AdminBookings: React.FC = () => {
                                             <tr key={res.id} className="border-t text-sm text-gray-800">
                                                 <td className="px-4 py-2">{res.customerName}</td>
                                                 <td className="px-4 py-2">
-                                                    <a href={`mailto:${res.email}`}
-                                                       className="text-blue-600 hover:underline">
+                                                    <a href={`mailto:${res.email}`} className="text-blue-600 hover:underline">
                                                         {res.email}
                                                     </a>
                                                 </td>
                                                 <td className="px-4 py-2">
                                                     {res.phone ? (
-                                                        <a href={`tel:${res.phone}`}
-                                                           className="text-blue-600 hover:underline">
+                                                        <a href={`tel:${res.phone}`} className="text-blue-600 hover:underline">
                                                             {res.phone}
                                                         </a>
                                                     ) : (
@@ -159,13 +184,12 @@ const AdminBookings: React.FC = () => {
                                                 </td>
                                                 <td className="px-4 py-2">{res.service}</td>
                                                 <td className="px-4 py-2">
-                                                <span
-                                                    className="inline-block  font-normal px-2 py-1 rounded text-sm">
-                                                 {new Date(res.date).toLocaleTimeString([], {
-                                                     hour: '2-digit',
-                                                     minute: '2-digit',
-                                                 })}
-  </span>
+                                                        <span className="inline-block font-normal px-2 py-1 rounded text-sm">
+                                                            {new Date(res.date).toLocaleTimeString([], {
+                                                                hour: '2-digit',
+                                                                minute: '2-digit',
+                                                            })}
+                                                        </span>
                                                 </td>
                                             </tr>
                                         ))}
@@ -174,14 +198,12 @@ const AdminBookings: React.FC = () => {
                             </div>
                         </div>
                     ))
-
                 )
-            ) : (
+            ) : view === 'future' ? (
                 // 🔷 FUTURE BOOKINGS VIEW
                 Object.entries(groupedByEmployee).map(([employeeName, bookings]) => (
                     <div key={employeeName} className="mb-10">
                         <h1 className="text-2xl font-bold mb-6 flex items-center gap-3">
-                            {/* Avatar Circle with Initials */}
                             <div
                                 className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-black font-semibold text-sm">
                                 {employeeName.charAt(0).toUpperCase()}
@@ -192,11 +214,50 @@ const AdminBookings: React.FC = () => {
                             <table className="min-w-full bg-white shadow rounded border">
                                 <thead>
                                 <tr className="bg-gray-100 text-left text-sm font-medium text-gray-700">
-                                    <th className="px-4 py-2">Name</th>
-                                    <th className="px-4 py-2">Email</th>
-                                    <th className="px-4 py-2">Phone</th>
-                                    <th className="px-4 py-2">Service</th>
-                                    <th className="px-4 py-2">Date</th>
+                                    <th className="px-4 py-2">{t('adminBookings.name')}</th>
+                                    <th className="px-4 py-2">{t('adminBookings.email')}</th>
+                                    <th className="px-4 py-2">{t('adminBookings.phone')}</th>
+                                    <th className="px-4 py-2">{t('adminBookings.service')}</th>
+                                    <th className="px-4 py-2">{t('adminBookings.date')}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {bookings
+                                    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+                                    .map((res) => (
+                                        <tr key={res.id} className="border-t text-sm text-gray-800">
+                                            <td className="px-4 py-2">{res.customerName}</td>
+                                            <td className="px-4 py-2">{res.email}</td>
+                                            <td className="px-4 py-2">{res.phone || '-'}</td>
+                                            <td className="px-4 py-2">{res.service}</td>
+                                            <td className="px-4 py-2">{formatDate(res.date)}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                ))
+            ) : (
+                // 🔶 HISTORY BOOKINGS VIEW
+                Object.entries(pastGroupedByEmployee).map(([employeeName, bookings]) => (
+                    <div key={employeeName} className="mb-10">
+                        <h1 className="text-2xl font-bold mb-6 flex items-center gap-3">
+                            <div
+                                className="w-8 h-8 rounded-full bg-gray-400 flex items-center justify-center text-black font-semibold text-sm">
+                                {employeeName.charAt(0).toUpperCase()}
+                            </div>
+                            {employeeName}
+                        </h1>
+                        <div className="overflow-x-auto">
+                            <table className="min-w-full bg-white shadow rounded border">
+                                <thead>
+                                <tr className="bg-gray-100 text-left text-sm font-medium text-gray-700">
+                                    <th className="px-4 py-2">{t('adminBookings.name')}</th>
+                                    <th className="px-4 py-2">{t('adminBookings.email')}</th>
+                                    <th className="px-4 py-2">{t('adminBookings.phone')}</th>
+                                    <th className="px-4 py-2">{t('adminBookings.service')}</th>
+                                    <th className="px-4 py-2">{t('adminBookings.date')}</th>
                                 </tr>
                                 </thead>
                                 <tbody>

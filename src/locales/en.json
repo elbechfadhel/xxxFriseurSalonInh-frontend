@@ -57,5 +57,22 @@
   "pm": "PM",
   "from": "From",
   "to": "To",
-  "noTimeSelected": "No time selected"
+  "noTimeSelected": "No time selected",
+  "adminBookings": {
+    "title": "All Bookings",
+    "todayBookings": "Today's Bookings",
+    "futureBookings": "Future Bookings",
+    "historyBookings": "Booking History",
+    "noBookingsFound": "No reservations found.",
+    "noBookingsForToday": "No bookings for today.",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "service": "Service",
+    "time": "Time",
+    "date": "Date",
+    "loading": "Loading bookings...",
+    "errorLoading": "Could not load reservations.",
+    "noBookingsForHistory": "No past bookings found."
+  }
 }

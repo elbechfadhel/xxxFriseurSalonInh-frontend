@@ -57,5 +57,24 @@
   "pm": "Nachm.",
   "from": "Von",
   "to": "Bis",
-  "noTimeSelected": "Kein Zeitpunkt ausgewählt"
+  "noTimeSelected": "Kein Zeitpunkt ausgewählt",
+  "adminBookings": {
+    "title": "Alle Buchungen",
+    "todayBookings": "Heutige Buchungen",
+    "futureBookings": "Zukünftige Buchungen",
+    "historyBookings": "Buchungsverlauf",
+    "noBookingsFound": "Keine Reservierungen gefunden.",
+    "noBookingsForToday": "Keine Buchungen für heute.",
+    "name": "Name",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "service": "Dienstleistung",
+    "time": "Zeit",
+    "date": "Datum",
+    "loading": "Lade Buchungen...",
+    "errorLoading": "Fehler beim Laden der Reservierungen.",
+    "noBookingsForHistory": "Keine vergangenen Buchungen gefunden."
+  }
+
+
 }
