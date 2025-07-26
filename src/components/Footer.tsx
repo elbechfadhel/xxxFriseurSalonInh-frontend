@@ -20,16 +20,16 @@ const Footer: React.FC = () => {
                 <div>
                     <h4 className="text-lg font-semibold mb-2 text-white">{t('contact')}</h4>
                     <div className="flex items-center gap-2 mb-1">
-                        <Mail className="w-4 h-4 text-orange-400" />
+                        <Mail className="w-4 h-4 text-[#8bc99e]" />
                         <a
                             href="mailto:info@nejibbarbershop.com"
-                            className="hover:underline hover:text-orange-400"
+                            className="hover:underline hover:text-[#8bc99e]"
                         >
                             info@nejibbarbershop.com
                         </a>
                     </div>
                     <div className="flex items-center gap-2 mb-1">
-                        <Phone className="w-4 h-4 text-orange-400" />
+                        <Phone className="w-4 h-4 text-[#8bc99e]" />
                         <span>01694363101</span>
                     </div>
                 </div>
@@ -38,7 +38,7 @@ const Footer: React.FC = () => {
                 <div>
                     <h4 className="text-lg font-semibold mb-0 text-white">{t('location')}</h4>
                     <div className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4 text-orange-400" />
+                        <MapPin className="w-4 h-4 text-[#8bc99e]" />
                         <span>{t('address')}</span>
                     </div>
                 </div>

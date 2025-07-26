@@ -1,41 +1,78 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { CalendarDays, Clock, Scissors, Smile } from 'lucide-react';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from 'react-i18next';
+import CustomerFeedback from './CustomerFeedback';
 
 const HomePage: React.FC = () => {
-    const { t } = useTranslation(); // Get the translation function
+    const { t } = useTranslation();
+
+    const gridSize = 6;
+    const totalSquares = gridSize * gridSize;
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+    // Randomly highlight a square every second
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const randomIndex = Math.floor(Math.random() * totalSquares);
+            setHoveredIndex(randomIndex);
+        }, 1000); // change every 1 second
+
+        return () => clearInterval(interval);
+    }, []);
+
+    const feedbacks = [
+        {
+            name: 'John M.',
+            message: 'Die Buchung war einfach, und der Friseur hat genau verstanden, was ich wollte.',
+            image: '/images/customer1.jpg',
+            rating: 5,
+        },
+        {
+            name: 'Sarah K.',
+            message: 'Booking was easy, and the barber really understood what I wanted.',
+            image: '/images/customer2.jpg',
+            rating: 4,
+        },
+        {
+            name: 'Ali R.',
+            message:
+                'Toller Service und freundliches Personal! Ich verlasse den Salon immer mit einem frischen Haarschnitt.',
+            image: '/images/customer3.jpg',
+            rating: 5,
+        },
+    ];
 
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="flex flex-col items-center justify-start px-6 text-center w-full"
+            className="flex flex-col px-4 sm:px-6 w-full"
         >
-            <div className="max-w-4xl py-20">
-                {/* Hero Section */}
-                <div>
-                    <h1 className="text-5xl font-extrabold text-gray-900 mb-4">
-                        {t('welcomeTitle')} <span className="text-orange-500">{t('barberShopName')}</span>
+            {/* Hero Section */}
+            <div className="flex flex-col md:flex-row items-start justify-between max-w-5xl mx-auto mt-10 gap-8">
+                {/* Left Text Content */}
+                <div className="flex-1 text-center md:text-left">
+                    <h1 className="text-1xl sm:text-1xl md:text-2xl font-extrabold text-gray-900 mb-4">
+                        {t('welcomeTitle')}
+                        <span className="text-[#4e9f66]"> {t('barberShopName')}</span>
                     </h1>
-                    <p className="text-xl text-gray-600 mb-8">
-                        {t('heroDescription')}
-                    </p>
+                    <p className="text-lg sm:text-xl text-gray-600 mb-6">{t('heroDescription')}</p>
 
                     {/* CTA Buttons */}
-                    <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+                    <div className="flex flex-col sm:flex-row justify-center md:justify-start items-center gap-4">
                         <Link
                             to="/booking"
-                            className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-3 rounded-lg transition"
+                            className="inline-flex items-center gap-2 bg-[#4e9f66] hover:bg-[#3e8455] text-white font-semibold px-6 py-3 rounded-lg shadow transition"
                         >
                             <CalendarDays className="w-5 h-5" />
                             {t('bookAppointment')}
                         </Link>
                         <Link
                             to="/services"
-                            className="inline-flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold px-6 py-3 rounded-lg transition"
+                            className="inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold px-6 py-3 rounded-lg shadow transition"
                         >
                             <Scissors className="w-5 h-5" />
                             {t('viewServices')}
@@ -43,37 +80,88 @@ const HomePage: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Why Choose Us */}
-                <section className="mt-20 max-w-3xl">
-                    <motion.h2
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4 }}
-                        className="text-2xl font-semibold text-gray-800 mb-4"
-                    >
-                        {t('whyChooseUs')}
-                    </motion.h2>
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.5 }}
-                        className="flex justify-center gap-8 flex-wrap text-gray-700 text-lg"
-                    >
-                        <div className="flex items-center gap-2">
-                            <Scissors className="w-5 h-5 text-orange-500" />
-                            <span>{t('expertBarbers')}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <Clock className="w-5 h-5 text-orange-500" />
-                            <span>{t('fastAppointments')}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <Smile className="w-5 h-5 text-orange-500" />
-                            <span>{t('friendlyAtmosphere')}</span>
-                        </div>
-                    </motion.div>
-                </section>
+                {/* Right: Random Highlight Grid */}
+                <div
+                    className="grid grid-cols-6 gap-[2px] shrink-0"
+                    style={{ width: 400, height: 400 }}
+                >
+                    {Array.from({ length: totalSquares }).map((_, i) => {
+                        const x = i % gridSize;
+                        const y = Math.floor(i / gridSize);
+                        const isHovered = hoveredIndex === i;
+
+                        return (
+                            <div
+                                key={i}
+                                className="relative w-full h-full overflow-hidden"
+                            >
+                                {/* Base image (faint and always visible) */}
+                                <div
+                                    className="absolute inset-0"
+                                    style={{
+                                        backgroundImage: `url(/images/logo-xxx.png)`,
+                                        backgroundSize: `${gridSize * 100}%`,
+                                        backgroundPosition: `${x * -100}% ${y * -100}%`,
+                                        opacity: 0.2,
+                                        transition: 'opacity 0.3s ease-in-out',
+                                        pointerEvents: 'none',
+                                    }}
+                                />
+
+                                {/* Highlighted image */}
+                                <div
+                                    className="absolute inset-0 transition-all duration-500 ease-in-out"
+                                    style={{
+                                        backgroundImage: `url(/images/logo-xxx.png)`,
+                                        backgroundSize: `${gridSize * 100}%`,
+                                        backgroundPosition: `${x * -100}% ${y * -100}%`,
+                                        transform: `scale(${isHovered ? 1.1 : 1})`,
+                                        opacity: isHovered ? 1 : 0,
+                                        pointerEvents: 'none',
+                                    }}
+                                />
+                            </div>
+                        );
+                    })}
+                </div>
             </div>
+
+            {/* Customer Feedback Section */}
+            <div className="mt-12 max-w-5xl mx-auto w-full">
+                <CustomerFeedback feedbacks={feedbacks} title={t('customerFeedbackTitle')} />
+            </div>
+
+            {/* Why Choose Us */}
+            <section className="mt-8 max-w-3xl mx-auto text-center">
+                <motion.h2
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="text-2xl sm:text-3xl font-semibold text-gray-800 mb-6"
+                >
+                    {t('whyChooseUs')}
+                </motion.h2>
+
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                    className="flex justify-center gap-8 flex-wrap text-gray-700 text-lg"
+                >
+                    <div className="flex items-center gap-2">
+                        <Scissors className="w-5 h-5 text-[#4e9f66]" />
+                        <span>{t('expertBarbers')}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Clock className="w-5 h-5 text-[#4e9f66]" />
+                        <span>{t('fastAppointments')}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Smile className="w-5 h-5 text-[#4e9f66]" />
+                        <span>{t('friendlyAtmosphere')}</span>
+                    </div>
+                </motion.div>
+            </section>
         </motion.div>
     );
 };

@@ -1,0 +1,17 @@
+/* src/styles/rtl.css */
+html[dir="rtl"] {
+    font-family: 'Cairo', sans-serif;
+}
+
+html[dir="rtl"] body {
+    direction: rtl;
+    text-align: right;
+}
+
+html[dir="rtl"] .text-left {
+    text-align: right !important;
+}
+html[dir="rtl"] .pl-4 {
+    padding-right: 1rem !important;
+    padding-left: 0 !important;
+}

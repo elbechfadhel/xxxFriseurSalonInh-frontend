@@ -5,7 +5,7 @@
   "booking": "Buchung",
   "admin": "Admin",
   "welcomeTitle": "Willkommen bei",
-  "barberShopName": "Najib’s Friseursalon",
+  "barberShopName": "XXXFriseursalon Inh. Najib Neffati",
   "heroDescription": "Klassische Haarschnitte. Moderner Stil. Buchen Sie Ihren nächsten Besuch in nur wenigen Klicks.",
   "bookAppointment": "Einen Termin buchen",
   "viewServices": "Dienstleistungen ansehen",
@@ -74,7 +74,56 @@
     "loading": "Lade Buchungen...",
     "errorLoading": "Fehler beim Laden der Reservierungen.",
     "noBookingsForHistory": "Keine vergangenen Buchungen gefunden."
-  }
+  },
+  "customerFeedbackTitle" : "Das sagen unsere Kunden",
+  "deleteModal": {
+    "title": "Reservierung löschen",
+    "message": "Bist du sicher, dass du dieses Element löschen möchtest?",
+    "messageWithName": "Bist du sicher, dass du {{name}} löschen möchtest?",
+    "cancel": "Abbrechen",
+    "confirm": "Löschen"
+  },
+  "editModal": {
+    "title": "Reservierung bearbeiten",
+    "customerName": "Kundenname",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "service": "Dienstleistung",
+    "unassigned": "Nicht zugewiesen",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "saving": "Wird gespeichert…",
+    "slotTaken": "Dieses Zeitfenster ist bereits belegt."
 
-
+  },
+  "buttons": {
+    "delete": "Löschen",
+    "edit": "Bearbeiten"
+  },
+  "adminServices": {
+    "title": "Dienstleistungen"
+  },
+  "adminEmployees": {
+    "title": "Mitarbeiter",
+    "addEmployee": "Mitarbeiter hinzufügen",
+    "loading": "Lade Mitarbeiter...",
+    "errorLoading": "Fehler beim Laden der Mitarbeiter.",
+    "noEmployeesFound": "Keine Mitarbeiter gefunden.",
+    "photo": "Foto",
+    "name": "Name",
+    "nameAr": "Name (Arabisch)",
+    "createdAt": "Erstellt am",
+    "actions": "Aktionen"
+  },
+  "editEmployeeModal": {
+    "titleEmployee": "Mitarbeiter bearbeiten",
+    "addEmployee": "Mitarbeiter hinzufügen",
+    "employeeName": "Name des Mitarbeiters",
+    "employeeNameAr": "Name des Mitarbeiters (Arabisch)",
+    "photo": "Foto",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "saving": "Speichert…"
+  },
+  "bookAppointmentTitle": "Termin buchen"
 }

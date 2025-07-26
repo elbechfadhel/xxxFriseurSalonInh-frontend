@@ -5,7 +5,7 @@
   "booking": "Booking",
   "admin": "Admin",
   "welcomeTitle": "Welcome to",
-  "barberShopName": "Najib’s Barber Shop",
+  "barberShopName": "XXXFriseursalon Inh. Najib Neffati",
   "heroDescription": "Classic cuts. Modern style. Book your next visit with just a few clicks.",
   "bookAppointment": "Book an Appointment",
   "viewServices": "View Services",
@@ -74,5 +74,56 @@
     "loading": "Loading bookings...",
     "errorLoading": "Could not load reservations.",
     "noBookingsForHistory": "No past bookings found."
-  }
+  },
+  "customerFeedbackTitle" : "What Our Customers Say",
+  "deleteModal": {
+    "title": "Delete Reservation",
+    "message": "Are you sure you want to delete this item?",
+    "messageWithName": "Are you sure you want to delete {{name}}?",
+    "cancel": "Cancel",
+    "confirm": "Delete"
+  },
+  "editModal": {
+    "title": "Edit Reservation",
+    "customerName": "Customer Name",
+    "email": "Email",
+    "phone": "Phone",
+    "service": "Service",
+    "unassigned": "Unassigned",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving…",
+    "slotTaken": "This time slot is already booked."
+  },
+  "buttons": {
+    "delete": "delete",
+    "edit": "edit"
+  },
+  "adminServices": {
+    "title": "Services"
+  },
+  "adminEmployees": {
+    "title": "Employees",
+    "addEmployee": "Add Employee",
+    "loading": "Loading employees...",
+    "errorLoading": "Failed to load employees.",
+    "noEmployeesFound": "No employees found.",
+    "photo": "Photo",
+    "name": "Name",
+    "nameAr": "Name (Arabic)",
+    "createdAt": "Created At",
+    "actions": "Actions"
+  },
+  "editEmployeeModal": {
+    "titleEmployee": "Edit Employee",
+    "addEmployee": "Add Employee",
+    "employeeName": "Employee Name",
+    "employeeNameAr": "Employee Name (Arabic)",
+    "photo": "Photo",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving…"
+  },
+  "bookAppointmentTitle": "Book Your Appointment"
 }
+

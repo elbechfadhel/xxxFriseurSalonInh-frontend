@@ -2,11 +2,10 @@ import React, { useEffect, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'react-calendar/dist/Calendar.css';
 import TimeSlotSelection from '@/components/TimeSlotSelection';
-import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
-import {CheckCircle, Info, XCircle} from "lucide-react";
-import {de, enUS} from "date-fns/locale";
-import DatePicker from "react-datepicker"; // Import useTranslation
+import { de, enUS } from 'date-fns/locale';
+import DatePicker from 'react-datepicker';
+import EmployeeSelector from '@/pages/EmployeeSelector.tsx';
 
 interface Employee {
     id: string;
@@ -14,7 +13,7 @@ interface Employee {
 }
 
 const BookingPage: React.FC = () => {
-    const { t, i18n } = useTranslation(); // Get the translation function
+    const { t, i18n } = useTranslation();
     const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
     const [selectedDateTime, setSelectedDateTime] = useState<string | null>(null);
     const [selectedEmployee, setSelectedEmployee] = useState<string | null>(null);
@@ -26,21 +25,11 @@ const BookingPage: React.FC = () => {
     const [codeSent, setCodeSent] = useState(false);
     const [emailCode, setEmailCode] = useState('');
     const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-    const [notification, setNotification] = useState<string | null>(null); // State for notification
-    const [notificationType, setNotificationType] = useState<'success' | 'error' | 'info' | null>(null); // Type of notification (success, error, info)
+    const [notification, setNotification] = useState<string | null>(null);
+    const [notificationType, setNotificationType] = useState<'success' | 'error' | 'info' | null>(null);
     const API_BASE = import.meta.env.VITE_API_URL;
 
-
-    const getLocale = () => {
-        switch (i18n.language) {
-            case 'de': // German
-                return de;  // Return the `de` locale from date-fns
-            case 'en': // English
-            default:
-                return enUS; // Return the `enUS` locale from date-fns
-        }
-    };
-
+    const getLocale = () => (i18n.language === 'de' ? de : enUS);
 
     useEffect(() => {
         const fetchEmployees = async () => {
@@ -49,18 +38,15 @@ const BookingPage: React.FC = () => {
                 const data = await res.json();
                 setEmployees(data);
             } catch (err) {
-                setNotification(t('failedLoadEmployees')); // Show error notification
+                setNotification(t('failedLoadEmployees'));
                 setNotificationType('error');
             }
         };
         fetchEmployees();
     }, []);
 
-    const isValidEmail = (value: string) =>
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-
-    const isValidGermanPhone = (number: string) =>
-        /^[1-9][0-9]{9}$/.test(number);
+    const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    const isValidGermanPhone = (number: string) => /^[1-9][0-9]{9}$/.test(number);
 
     const handleSendEmailCode = async () => {
         if (!isValidEmail(email)) {
@@ -68,22 +54,18 @@ const BookingPage: React.FC = () => {
             setNotificationType('error');
             return;
         }
-
-        if (!captchaToken) {
+     /*   if (!captchaToken) {
             setNotification(t('completeCaptcha'));
             setNotificationType('error');
             return;
-        }
-
+        }*/
         try {
             const res = await fetch(`${API_BASE}/verify-email/send-code`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, captchaToken }),
             });
-
             if (!res.ok) throw new Error('Failed to send verification email');
-
             setNotification(t('verificationCodeSent'));
             setNotificationType('success');
             setCodeSent(true);
@@ -100,26 +82,25 @@ const BookingPage: React.FC = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, code: emailCode }),
             });
-
             if (!verifyRes.ok) throw new Error('Invalid verification code');
 
             setNotification(t('emailVerified'));
             setNotificationType('success');
 
             const bookingRes = await fetch(`${API_BASE}/reservations`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     customerName,
                     email,
                     phone: phone ? `+49${phone}` : null,
-                    service: "Haircut",
+                    service: 'Haircut',
                     date: selectedDateTime,
                     employeeId: selectedEmployee,
                 }),
             });
 
-            if (!bookingRes.ok) throw new Error("Failed to book");
+            if (!bookingRes.ok) throw new Error('Failed to book');
 
             setNotification(t('bookingConfirmed'));
             setNotificationType('success');
@@ -130,7 +111,7 @@ const BookingPage: React.FC = () => {
             setCodeSent(false);
             setCaptchaToken(null);
             setSelectedDateTime(null);
-            setResetTrigger(prev => prev + 1);
+            setResetTrigger((prev) => prev + 1);
         } catch (err) {
             setNotification(t('bookingError'));
             setNotificationType('error');
@@ -144,53 +125,53 @@ const BookingPage: React.FC = () => {
         isValidEmail(email);
 
     return (
-        <div className="px-4 py-10">
-            <div className="text-center mb-12">
-                <h1 className="text-4xl font-extrabold text-gray-800 mb-4">
-                    {t('welcome')} <span className="text-orange-500">{t('barberShop')}</span>
+        <div className="px-4 py-8">
+            {/* Heading Section */}
+            <div className="w-full flex flex-col items-center text-center mb-8">
+                <h1 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-2">
+                    {t('bookAppointmentTitle')}
                 </h1>
-                <p className="text-lg text-gray-600">
+                <p className="text-base md:text-lg text-gray-600 max-w-2xl">
                     {t('bookAppointmentDesc')}
                 </p>
             </div>
 
-            <div className="max-w-5xl mx-auto bg-white grid grid-cols-1 md:grid-cols-3 gap-6 g p-6">
-                {/* Calendar */}
-                <div className="col-span-1 text-left">  {/* Add text-left to align the content to the left */}
-                    <h2 className="text-lg font-semibold text-gray-700 mb-2">{t('pickDate')}</h2>
+            {/* Container */}
+            <div className="max-w-6xl bg-white rounded-lg shadow-md flex flex-col md:flex-row gap-6 p-6 mx-auto">
+                {/* Left panel - Date Picker */}
+                <div className="w-full md:w-[320px] shrink-0 text-left">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">{t('pickDate')}</label>
                     <DatePicker
                         selected={selectedDate}
-                        onChange={(date: Date | null) => setSelectedDate(date)}  // Accept Date | null
-                        locale={getLocale()}  // Pass locale dynamically
-                        dateFormat="P"  // Date format (you can customize this)
-                        className="rounded-lg border shadow-md p-2 w-full"  // Add w-full to make DatePicker full width
+                        onChange={(date: Date | null) => setSelectedDate(date)}
+                        locale={getLocale()}
+                        dateFormat="P"
+                        className="rounded-lg border shadow-md p-2 w-full"
                         inline
                         minDate={new Date()}
                     />
                 </div>
 
-                {/* Right Panel */}
-                <div className="col-span-2">
-                    <h2 className="text-lg font-semibold text-gray-700 mb-4 text-center">{t('pickTime')}</h2>
-
-
+                {/* Right panel */}
+                <div className="flex-1">
+                {/* Employee Selector */}
                     <div className="mb-6">
                         <label className="block text-sm font-medium text-gray-700 mb-1">{t('chooseBarber')}</label>
-                        <select
-                            value={selectedEmployee ?? ''}
-                            onChange={(e) => {
-                                setSelectedEmployee(e.target.value);
-                                setResetTrigger(prev => prev + 1);
-                            }}
-                            className="w-full border rounded px-3 py-2"
-                        >
-                            <option value="" disabled>{t('selectBarber')}</option>
-                            {employees.map(emp => (
-                                <option key={emp.id} value={emp.id}>{emp.name}</option>
-                            ))}
-                        </select>
+                        <div className="flex gap-4 flex-nowrap overflow-x-auto">
+                            <EmployeeSelector
+                                employees={employees}
+                                selectedEmployee={selectedEmployee}
+                                onChange={(id) => {
+                                    setSelectedEmployee(id);
+                                    setResetTrigger((prev) => prev + 1);
+                                }}
+                                apiBase={API_BASE}
+                            />
+                        </div>
                     </div>
 
+                    {/* Time Slots */}
+                    <label className="block text-sm font-medium text-gray-700 mb-2">{t('pickTime')}</label>
                     <TimeSlotSelection
                         selectedDate={selectedDate || new Date()}
                         selectedEmployeeId={selectedEmployee}
@@ -199,7 +180,8 @@ const BookingPage: React.FC = () => {
                     />
 
                     {/* Customer Info */}
-                    <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="mt-6 mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {/* Full Name */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">{t('fullName')}</label>
                             <input
@@ -214,14 +196,11 @@ const BookingPage: React.FC = () => {
                             )}
                         </div>
 
+                        {/* Phone */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">{t('phoneNumber')}</label>
                             <div className="flex items-center border rounded px-3 py-2 shadow-sm">
-                                <img
-                                    src="https://flagcdn.com/w40/de.png"
-                                    alt="Germany"
-                                    className="w-5 h-4 mr-2"
-                                />
+                                <img src="https://flagcdn.com/w40/de.png" alt="Germany" className="w-5 h-4 mr-2" />
                                 <span className="mr-2 text-sm text-gray-700">+49</span>
                                 <input
                                     type="tel"
@@ -236,7 +215,8 @@ const BookingPage: React.FC = () => {
                             )}
                         </div>
 
-                        <div className="md:col-span-2">
+                        {/* Email */}
+                        <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">{t('email')}</label>
                             <input
                                 type="email"
@@ -251,25 +231,19 @@ const BookingPage: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* CAPTCHA */}
-                    <div className="mt-6 mb-2">
-                        <ReCAPTCHA
-                            sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" // test site key from Google
-                            onChange={(token: any) => setCaptchaToken(token)}
-                        />
-                    </div>
-
-                    {/* Display notification here */}
+                    {/* Notifications */}
                     {notification && (
                         <div
-                            className={`mb-6 p-4 font-normal border ${notificationType === 'success' ? 'border-green-500 text-green-500' : notificationType === 'error' ? 'border-red-500 text-red-500' : 'border-blue-500 text-blue-500'}`}>
+                            className={`mb-6 p-2 font-bold border ${
+                                notificationType === 'success'
+                                    ? 'border-green-500 text-green-500'
+                                    : notificationType === 'error'
+                                        ? 'border-red-500 text-red-500'
+                                        : 'border-blue-500 text-blue-500'
+                            }`}
+                        >
                             <div className="flex items-center gap-3">
-                                {/* Display the icon based on notificationType */}
-                                {notificationType === 'success' && <CheckCircle className="w-6 h-6"/>}
-                                {notificationType === 'error' && <XCircle className="w-6 h-6"/>}
-                                {notificationType === 'info' && <Info className="w-6 h-6"/>}
-
-                                <span>{notification}</span>
+                                <span className="ml-2 text-sm">{notification}</span>
                             </div>
                         </div>
                     )}
@@ -279,11 +253,13 @@ const BookingPage: React.FC = () => {
                         {!codeSent ? (
                             <button
                                 onClick={handleSendEmailCode}
-                                disabled={!isBookingInfoValid || !captchaToken}
+                                disabled={!isBookingInfoValid}
                                 className={`w-full py-3 rounded-lg text-lg font-semibold 
-                                    ${!isBookingInfoValid
-                                    ? 'bg-gray-200 text-gray-500 border border-gray-300 shadow-inner cursor-not-allowed'
-                                    : 'bg-orange-500 hover:bg-orange-600 text-white'}`}
+                                    ${
+                                    !isBookingInfoValid
+                                        ? 'bg-gray-200 text-gray-500 border border-gray-300 shadow-inner cursor-not-allowed'
+                                        : 'bg-[#4e9f66] hover:bg-[#3e8455] text-white'
+                                }`}
                             >
                                 {t('sendVerificationCode')}
                             </button>
@@ -299,7 +275,7 @@ const BookingPage: React.FC = () => {
                                 />
                                 <button
                                     onClick={handleVerifyCodeAndBook}
-                                    className="w-full mt-3 bg-orange-500 hover:bg-orange-600 text-white py-2 rounded font-semibold"
+                                    className="w-full mt-3 bg-[#4e9f66] hover:bg-[#3e8455] text-white py-2 rounded font-semibold"
                                 >
                                     {t('verifyAndBook')}
                                 </button>
