@@ -43,6 +43,14 @@ const EditModal: React.FC<EditModalProps> = ({
     const [form, setForm] = useState<UpdateReservationPayload>({});
     const [error, setError] = useState<string | null>(null);
 
+    const toLocalInputValue = (dateString: string) => {
+        const d = new Date(dateString);
+        d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+        return d.toISOString().slice(0, 16); // yyyy-MM-ddTHH:mm
+    };
+
+
+
     useEffect(() => {
         if (reservation) {
             setForm({
@@ -50,7 +58,7 @@ const EditModal: React.FC<EditModalProps> = ({
                 email: reservation.email,
                 phone: reservation.phone,
                 service: reservation.service,
-                date: new Date(reservation.date).toISOString().slice(0, 16),
+                date: toLocalInputValue(reservation.date),
                 employeeId: reservation.employeeId || '',
             });
             setError(null);

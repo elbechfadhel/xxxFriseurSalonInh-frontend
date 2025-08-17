@@ -73,7 +73,9 @@
     "date": "Date",
     "loading": "Loading bookings...",
     "errorLoading": "Could not load reservations.",
-    "noBookingsForHistory": "No past bookings found."
+    "noBookingsForHistory": "No past bookings found.",
+    "booked": "Booked",
+    "free":"Free"
   },
   "customerFeedbackTitle" : "What Our Customers Say",
   "deleteModal": {
@@ -95,6 +97,15 @@
     "saving": "Saving…",
     "slotTaken": "This time slot is already booked."
   },
+
+  "createModal": {
+    "title": "Create Reservation",
+    "cancel": "Cancel",
+    "save": "Save"
+  },
+
+
+
   "buttons": {
     "delete": "delete",
     "edit": "edit"
@@ -122,8 +133,24 @@
     "photo": "Photo",
     "cancel": "Cancel",
     "save": "Save",
-    "saving": "Saving…"
+    "saving": "Saving…",
+    "selectBarber": "Select a barber"
   },
-  "bookAppointmentTitle": "Book Your Appointment"
+  "bookAppointmentTitle": "Book Your Appointment",
+  "privacyPolicy": {
+    "title": "Privacy Policy",
+    "intro": "This policy describes how we collect, use, and protect your personal data in the context of booking appointments.",
+    "section1Title": "1. Data Controller",
+    "section1Text": "Your company / Name, contact email, address…",
+    "section2Title": "2. Data Collected",
+    "section2Text": "Name, email, phone number – required to manage your bookings.",
+    "section3Title": "3. Purpose",
+    "section3Text": "Used only for confirmation, reminders, and managing appointments.",
+    "section4Title": "4. Data Retention",
+    "section4Text": "Retention period (e.g., 12 months after your last appointment).",
+    "section5Title": "5. Your Rights",
+    "section5Text": "You may request access, rectification, or deletion of your data by contacting us at [your email]."
+  }
+
 }
 

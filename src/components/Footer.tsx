@@ -1,6 +1,7 @@
 import React from 'react';
 import { Mail, Phone, MapPin } from 'lucide-react';
-import { useTranslation } from 'react-i18next'; // Import useTranslation
+import { useTranslation } from 'react-i18next';
+import {Link} from "react-router-dom"; // Import useTranslation
 
 const Footer: React.FC = () => {
     const { t } = useTranslation(); // Get the translation function
@@ -42,6 +43,17 @@ const Footer: React.FC = () => {
                         <span>{t('address')}</span>
                     </div>
                 </div>
+            </div>
+            {/* Bottom Links */}
+            <div className="mt-6 border-t border-gray-500 pt-4 text-center text-xs text-gray-300">
+                <Link
+                    to="/privacy-policy"
+                    className="hover:underline hover:text-[#8bc99e] mx-2"
+                >
+                    {t('privacyPolicy.title')}
+                </Link>
+
+
             </div>
         </footer>
     );

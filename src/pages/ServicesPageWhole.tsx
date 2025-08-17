@@ -86,9 +86,43 @@ const ServicesPage: React.FC = () => {
                 {t('ourServices')} {/* Translate the title */}
             </h1>
 
+            <div ref={sliderContainerRef} className="relative">
+                <div ref={sliderRef} className="keen-slider">
+                    {services.map((service, index) => (
+                        <div
+                            key={index}
+                            className="keen-slider__slide bg-white border shadow rounded-lg p-6"
+                        >
+                            <div className="flex items-center gap-4 mb-3">
+                                {service.icon}
+                                <h3 className="text-xl font-semibold text-gray-800">
+                                    {t(service.name)} {/* Translate service names */}
+                                </h3>
+                            </div>
+                            <p className="text-gray-600 mb-2">
+                                {t(service.description)} {/* Translate descriptions */}
+                            </p>
+                            <p className="text-gray-800 font-bold">
+                                {t('price')}: {service.price} {/* Translate price label */}
+                            </p>
+                        </div>
+                    ))}
+                </div>
+
                 {/* Navigation Arrows */}
-
-
+                <button
+                    onClick={() => instanceRef.current?.prev()}
+                    className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white shadow rounded-full p-2 hover:bg-gray-100 z-10"
+                >
+                    <ChevronLeft className="w-5 h-5"/>
+                </button>
+                <button
+                    onClick={() => instanceRef.current?.next()}
+                    className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white shadow rounded-full p-2 hover:bg-gray-100 z-10"
+                >
+                    <ChevronRight className="w-5 h-5"/>
+                </button>
+            </div>
         </div>
     );
 };

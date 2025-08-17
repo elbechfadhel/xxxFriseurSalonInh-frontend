@@ -73,7 +73,9 @@
     "date": "Datum",
     "loading": "Lade Buchungen...",
     "errorLoading": "Fehler beim Laden der Reservierungen.",
-    "noBookingsForHistory": "Keine vergangenen Buchungen gefunden."
+    "noBookingsForHistory": "Keine vergangenen Buchungen gefunden.",
+    "booked": "Gebucht",
+    "free":"Frei"
   },
   "customerFeedbackTitle" : "Das sagen unsere Kunden",
   "deleteModal": {
@@ -93,7 +95,8 @@
     "cancel": "Abbrechen",
     "save": "Speichern",
     "saving": "Wird gespeichert…",
-    "slotTaken": "Dieses Zeitfenster ist bereits belegt."
+    "slotTaken": "Dieses Zeitfenster ist bereits belegt.",
+    "selectBarber": "Wählen Sie einen Friseur"
 
   },
   "buttons": {
@@ -123,7 +126,28 @@
     "photo": "Foto",
     "cancel": "Abbrechen",
     "save": "Speichern",
-    "saving": "Speichert…"
+    "saving": "Speichert…",
+    "selectBarber": "Wählen Sie einen Friseur"
   },
-  "bookAppointmentTitle": "Termin buchen"
+  "createModal": {
+    "title": "Buchung Erstellen",
+    "cancel": "Abbrechen",
+    "save": "Speichern"
+  },
+
+  "bookAppointmentTitle": "Termin buchen",
+  "privacyPolicy": {
+    "title": "Datenschutzerklärung",
+    "intro": "Diese Richtlinie beschreibt, wie wir Ihre personenbezogenen Daten im Rahmen der Terminbuchung erheben, verwenden und schützen.",
+    "section1Title": "1. Verantwortlicher",
+    "section1Text": "Ihr Unternehmen / Name, Kontakt-E-Mail, Adresse…",
+    "section2Title": "2. Erhobene Daten",
+    "section2Text": "Name, E-Mail, Telefonnummer – erforderlich zur Verwaltung Ihrer Buchungen.",
+    "section3Title": "3. Zweck",
+    "section3Text": "Nur für Bestätigung, Erinnerungen und Terminverwaltung.",
+    "section4Title": "4. Aufbewahrung",
+    "section4Text": "Aufbewahrungsfrist (z. B. 12 Monate nach Ihrem letzten Termin).",
+    "section5Title": "5. Ihre Rechte",
+    "section5Text": "Sie können Auskunft, Berichtigung oder Löschung Ihrer Daten verlangen, indem Sie uns unter [Ihre E-Mail] kontaktieren."
+  }
 }

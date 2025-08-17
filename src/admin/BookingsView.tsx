@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import EditModal from "@/common/EditModal.tsx";
 import DeleteModal from "@/common/DeleteModal.tsx";
-import CreateModal, { CreateReservationPayload } from "@/common/CreateModal.tsx";
-import DayScheduleGrid from "@/admin/DayScheduleGrid.tsx";
+import CreateModal, { CreateReservationPayload } from "@/common/CreateModal.tsx"; // <-- NEW
 
 interface Employee { id: string; name: string; }
 interface Reservation {
@@ -29,8 +28,7 @@ const AdminBookings: React.FC = () => {
     const [view, setView] = useState<'today' | 'future' | 'history'>('today');
     const [editing, setEditing] = useState<Reservation | null>(null);
     const [deleting, setDeleting] = useState<Reservation | null>(null);
-    const [creating, setCreating] = useState<boolean>(false);
-    const [createPrefill, setCreatePrefill] = useState<Partial<CreateReservationPayload> | null>(null); // NEW
+    const [creating, setCreating] = useState<boolean>(false);               // <-- NEW
     const [saving, setSaving] = useState(false);
 
     const API_BASE = import.meta.env.VITE_API_URL;
@@ -114,6 +112,7 @@ const AdminBookings: React.FC = () => {
         }
     };
 
+    // NEW: Create handler
     const handleCreate = async (payload: CreateReservationPayload) => {
         setSaving(true);
         try {
@@ -133,7 +132,6 @@ const AdminBookings: React.FC = () => {
             ]);
 
             setCreating(false);
-            setCreatePrefill(null);
         } catch (e) {
             console.error('Failed to create reservation:', e);
         } finally {
@@ -145,20 +143,9 @@ const AdminBookings: React.FC = () => {
         new Intl.DateTimeFormat('de-DE', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(dateStr));
 
     const today = new Date();
-    const now = new Date();
-    const startOfToday = new Date(now);
-    startOfToday.setHours(0, 0, 0, 0);
-
-    const endOfToday = new Date(now);
-    endOfToday.setHours(23, 59, 59, 999);
-
-    const todayBookings = reservations.filter(r => {
-        const d = new Date(r.date);
-        return d >= startOfToday && d <= endOfToday;
-    });
-
-    const futureBookings = reservations.filter(r => new Date(r.date) > endOfToday);
-    const pastBookings = reservations.filter(r => new Date(r.date) < startOfToday);
+    const todayBookings = reservations.filter(r => new Date(r.date).toDateString() === today.toDateString());
+    const futureBookings = reservations.filter(r => new Date(r.date) > today);
+    const pastBookings = reservations.filter(r => new Date(r.date) < today);
 
     const groupByEmployee = (data: Reservation[]) =>
         data.reduce((groups: Record<string, Reservation[]>, res) => {
@@ -168,16 +155,14 @@ const AdminBookings: React.FC = () => {
             return groups;
         }, {});
 
-    const toInputMinutes = (s: string) => s.includes('T') ? s.slice(0, 16) : s;
-
     return (
-        <div className="mx-auto">
+        <div className="p-6 max-w-6xl mx-auto">
             {/* header + create button */}
             <div className="mb-6 flex items-center justify-between">
                 <h1 className="text-3xl font-bold">{t('adminBookings.title')}</h1>
                 <button
                     className="rounded bg-[#4e9f66] px-4 py-2 font-semibold text-white hover:bg-[#3e8455]"
-                    onClick={() => { setCreating(true); setCreatePrefill(null); }}
+                    onClick={() => setCreating(true)}
                 >
                     {t('createModal.title') || 'New Booking'}
                 </button>
@@ -207,16 +192,11 @@ const AdminBookings: React.FC = () => {
             ) : (
                 <>
                     {view === 'today' && (
-                        <DayScheduleGrid
-                            date={today}
-                            employees={employees}
-                            reservations={todayBookings}
+                        <BookingTable
+                            groups={groupByEmployee(todayBookings)}
                             onEdit={setEditing}
-                            onEmptyClick={({ employeeId, dateISO }) => {
-                                setCreatePrefill({ employeeId, date: toInputMinutes(dateISO) });
-                                setCreating(true);
-                            }}
-                            apiBase={API_BASE}
+                            onDelete={setDeleting}
+                            formatDate={formatDate}
                         />
                     )}
                     {view === 'future' && (
@@ -241,12 +221,11 @@ const AdminBookings: React.FC = () => {
             {/* Create Modal */}
             <CreateModal
                 isOpen={creating}
-                onClose={() => { setCreating(false); setCreatePrefill(null); }}
+                onClose={() => setCreating(false)}
                 onCreate={handleCreate}
                 employees={employees}
                 allReservations={reservations}
                 saving={saving}
-                initialValues={createPrefill ?? undefined}
             />
 
             {/* Edit Modal */}
