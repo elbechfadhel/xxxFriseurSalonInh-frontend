@@ -175,8 +175,14 @@ const DayScheduleGrid: React.FC<Props> = ({
                                 {/* Slots (grow evenly) */}
                                 {times.map((tstr) => {
                                     const res = bookings.get(tstr);
-                                    const tooltip = `${res?.customerName} • ${res?.service} • ${new Date(res?.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+
                                     if (res) {
+                                        const timeLabel = new Date(res.date).toLocaleTimeString([], {
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                        });
+                                        const tooltip = `${res.customerName} • ${res.service} • ${timeLabel}`;
+
                                         return (
                                             <button
                                                 key={`${emp.id}-${tstr}`}
@@ -186,14 +192,13 @@ const DayScheduleGrid: React.FC<Props> = ({
                                                 onClick={() => onEdit(res)}
                                                 className="relative m-1 h-8 rounded bg-[#4e9f66] transition hover:opacity-90"
                                             >
-                                                {/* Inline label (optional) */}
-                                                <span
-                                                    className="pointer-events-none absolute inset-0 flex items-center justify-center px-1 text-[10px] leading-none text-white truncate">
-    {res.customerName}
-  </span>
+                                         <span className="pointer-events-none absolute inset-0 flex items-center justify-center px-1 text-[10px] leading-none text-white truncate">
+                                               {res.customerName}
+                                              </span>
                                             </button>
                                         );
                                     }
+
                                     if (onEmptyClick) {
                                         return (
                                             <button
@@ -205,8 +210,10 @@ const DayScheduleGrid: React.FC<Props> = ({
                                             />
                                         );
                                     }
+
                                     return <div key={`${emp.id}-${tstr}`} className="m-1 h-8 rounded border bg-white" />;
                                 })}
+
                             </div>
                         );
                     })}

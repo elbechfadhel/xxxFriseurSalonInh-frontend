@@ -1,84 +1,16 @@
-import React, { useEffect, useRef } from "react";
-import { useKeenSlider } from "keen-slider/react";
+import React from "react";
 import "keen-slider/keen-slider.min.css";
-import {
-    Scissors,
-    Sparkles,
-    BadgeEuro,
-    ChevronLeft,
-    ChevronRight,
-} from "lucide-react";
+
 import { useTranslation } from 'react-i18next'; // Import useTranslation
 
-interface Service {
-    name: string;
-    description: string;
-    price: string;
-    icon: JSX.Element;
-}
 
-const services: Service[] = [
-    {
-        name: "Classic Haircut",
-        description: "A traditional men’s haircut.",
-        price: "20€",
-        icon: <Scissors className="w-6 h-6 text-blue-600" />,
-    },
-    {
-        name: "Beard Trim",
-        description: "Shape and trim your beard.",
-        price: "15€",
-        icon: <Sparkles className="w-6 h-6 text-green-600" />,
-    },
-    {
-        name: "Shaving",
-        description: "Classic shaving with a razor.",
-        price: "10€",
-        icon: <BadgeEuro className="w-6 h-6 text-yellow-500" />,
-    },
-];
+
+
 
 const ServicesPage: React.FC = () => {
     const { t } = useTranslation(); // Get the translation function
-    const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
-        loop: true,
-        slides: { perView: 1, spacing: 15 },
-        breakpoints: {
-            "(min-width: 768px)": {
-                slides: { perView: 2, spacing: 20 },
-            },
-        },
-    });
 
-    const sliderContainerRef = useRef<HTMLDivElement>(null);
-    const autoplayRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-    useEffect(() => {
-        const sliderEl = sliderContainerRef.current;
-
-        const startAutoplay = () => {
-            autoplayRef.current = setInterval(() => {
-                instanceRef.current?.next();
-            }, 3000);
-        };
-
-        const stopAutoplay = () => {
-            if (autoplayRef.current) clearInterval(autoplayRef.current);
-        };
-
-        if (sliderEl) {
-            sliderEl.addEventListener("mouseenter", stopAutoplay);
-            sliderEl.addEventListener("mouseleave", startAutoplay);
-        }
-
-        startAutoplay();
-
-        return () => {
-            stopAutoplay();
-            sliderEl?.removeEventListener("mouseenter", stopAutoplay);
-            sliderEl?.removeEventListener("mouseleave", startAutoplay);
-        };
-    }, [instanceRef]);
 
     return (
         <div className="max-w-5xl mx-auto px-4 py-12">
