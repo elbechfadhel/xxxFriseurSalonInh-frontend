@@ -1,7 +1,7 @@
 {
   "ownerName": "نجيب النفاتي",
   "home": "الرئيسية",
-  "services": "الخدمات",
+
   "booking": "الحجز",
   "admin": "الإدارة",
   "welcomeTitle": "مرحبًا بك في",
@@ -147,5 +147,29 @@
     "section4Text": "مدة الاحتفاظ (مثلاً 12 شهرًا بعد آخر موعد).",
     "section5Title": "5. حقوقك",
     "section5Text": "يمكنك طلب الوصول إلى بياناتك أو تصحيحها أو حذفها عبر التواصل معنا على [بريدك الإلكتروني]."
+  },
+
+  "services": {
+    "menu": "الخدمات",
+    "title": "خدماتنا",
+    "subtitle": "أسعار واضحة. جودة عالية. اختر خدمتك:",
+    "select": "اختيار",
+    "selectAria": "اختيار: {{service}}"
+  },
+  "serviceNames": {
+    "trocken-schnitt": "قَصّ جاف",
+    "waschen-schneiden": "غسل وقص",
+    "schneiden-bart-rasur": "قص مع حلاقة اللحية",
+    "augenbrauen-zupfen": "تنظيف الحواجب",
+    "bart-rasur": "حلاقة اللحية",
+    "nasen-ohrenhaare": "شعر الأنف والأذن"
+  },
+  "serviceDescriptions": {
+    "trocken-schnitt": "",
+    "waschen-schneiden": "",
+    "schneiden-bart-rasur": "",
+    "augenbrauen-zupfen": "",
+    "bart-rasur": "",
+    "nasen-ohrenhaare": ""
   }
 }

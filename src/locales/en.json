@@ -1,7 +1,6 @@
 {
   "ownerName": "Najib Neffati",
   "home": "Home",
-  "services": "Services",
   "booking": "Booking",
   "admin": "Admin",
   "welcomeTitle": "Welcome to",
@@ -150,6 +149,30 @@
     "section4Text": "Retention period (e.g., 12 months after your last appointment).",
     "section5Title": "5. Your Rights",
     "section5Text": "You may request access, rectification, or deletion of your data by contacting us at [your email]."
+  },
+
+  "services": {
+    "menu": "Services",
+    "title": "Our Services",
+    "subtitle": "Transparent prices. Top quality. Choose your service:",
+    "select": "Select",
+    "selectAria": "Select: {{service}}"
+  },
+  "serviceNames": {
+    "trocken-schnitt": "Dry Cut",
+    "waschen-schneiden": "Wash & Cut",
+    "schneiden-bart-rasur": "Cut with Beard Shave",
+    "augenbrauen-zupfen": "Eyebrow Threading",
+    "bart-rasur": "Beard Shave",
+    "nasen-ohrenhaare": "Nose & Ear Hair"
+  },
+  "serviceDescriptions": {
+    "trocken-schnitt": "",
+    "waschen-schneiden": "",
+    "schneiden-bart-rasur": "",
+    "augenbrauen-zupfen": "",
+    "bart-rasur": "",
+    "nasen-ohrenhaare": ""
   }
 
 }

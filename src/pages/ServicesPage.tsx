@@ -1,27 +1,21 @@
+// pages/ServicesPage.tsx
 import React from "react";
-import "keen-slider/keen-slider.min.css";
-
-import { useTranslation } from 'react-i18next'; // Import useTranslation
-
+import ServicesGrid, { Service } from "./ServicesGrid";
 
 
 
 
 const ServicesPage: React.FC = () => {
-    const { t } = useTranslation(); // Get the translation function
-
-
+    const handleSelect = (service: Service) => {
+        // Example: route to booking with preselected service
+        // navigate(`/booking?service=${service.id}`);
+        console.log("Selected:", service);
+    };
 
     return (
-        <div className="max-w-5xl mx-auto px-4 py-12">
-            <h1 className="text-5xl font-extrabold text-gray-900 mb-4">
-                {t('ourServices')} {/* Translate the title */}
-            </h1>
-
-                {/* Navigation Arrows */}
-
-
-        </div>
+        <main style={{ maxWidth: 1100, margin: "0 auto", padding: "1rem" }}>
+            <ServicesGrid onSelect={handleSelect} />
+        </main>
     );
 };
 

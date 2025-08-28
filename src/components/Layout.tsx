@@ -49,7 +49,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                             {t('home')}
                         </Link>
                         <Link to="/services" className={navLinkClass('/services')}>
-                            {t('services')}
+                            {t('services.menu')}
                         </Link>
                         <Link to="/booking" className={navLinkClass('/booking')}>
                             {t('booking')}

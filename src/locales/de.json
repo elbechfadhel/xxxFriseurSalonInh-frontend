@@ -1,7 +1,7 @@
 {
   "ownerName": "Najib Neffati",
   "home": "Startseite",
-  "services": "Dienstleistungen",
+
   "booking": "Buchung",
   "admin": "Admin",
   "welcomeTitle": "Willkommen bei",
@@ -149,5 +149,30 @@
     "section4Text": "Aufbewahrungsfrist (z. B. 12 Monate nach Ihrem letzten Termin).",
     "section5Title": "5. Ihre Rechte",
     "section5Text": "Sie können Auskunft, Berichtigung oder Löschung Ihrer Daten verlangen, indem Sie uns unter [Ihre E-Mail] kontaktieren."
+  },
+  "services": {
+    "menu": "Dienstleistungen",
+    "title": "Unsere Leistungen",
+    "subtitle": "Transparente Preise. Top Qualität. Wähle deine Leistung:",
+    "select": "Auswählen",
+    "selectAria": "Auswählen: {{service}}"
+  },
+  "serviceNames": {
+    "trocken-schnitt": "Trocken Schnitt",
+    "waschen-schneiden": "Waschen & Schneiden",
+    "schneiden-bart-rasur": "Schneiden mit Bart-Rasur",
+    "augenbrauen-zupfen": "Augenbrauen zupfen",
+    "bart-rasur": "Bart-Rasur",
+    "nasen-ohrenhaare": "Nasen- & Ohrenhaare"
+  },
+  "serviceDescriptions": {
+    "trocken-schnitt": "",
+    "waschen-schneiden": "",
+    "schneiden-bart-rasur": "",
+    "augenbrauen-zupfen": "",
+    "bart-rasur": "",
+    "nasen-ohrenhaare": ""
   }
+
+
 }

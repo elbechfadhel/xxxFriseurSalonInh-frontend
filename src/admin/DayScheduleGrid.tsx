@@ -195,6 +195,9 @@ const DayScheduleGrid: React.FC<Props> = ({
                                          <span className="pointer-events-none absolute inset-0 flex items-center justify-center px-1 text-[10px] leading-none text-white truncate">
                                                {res.customerName}
                                               </span>
+
+
+
                                             </button>
                                         );
                                     }

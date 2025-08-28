@@ -1,0 +1,124 @@
+/* Theme tokens */
+.wrapper {
+    --card-bg: #111418;
+    --card-bg-2: #0d1116;
+    --text: #e9edf3;
+    --muted: #9aa3b2;
+    --ring: rgba(110,231,183,0.28);
+    --border: rgba(255,255,255,0.08);
+    --shadow: 0 8px 28px rgba(0,0,0,0.35);
+    color: var(--text);
+    background: transparent;
+}
+
+.header { text-align: center; margin: 1.25rem 0 0.5rem; }
+.title {
+    margin: 0;
+    font-size: 2rem;       /* bigger font size */
+    font-weight: 700;      /* make it bold */
+    color: #4e9f66;        /* mint green, example */
+    text-align: center;    /* optional: center it */
+}
+.subtitle { margin: 0.35rem 0 0; color: var(--muted); }
+
+/* Responsive grid of horizontal cards */
+.grid {
+    display: grid;
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 2rem;
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 760px) {
+    .grid { grid-template-columns: 1fr 1fr; }
+}
+@media (min-width: 1120px) {
+    .grid { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+/* Card */
+.card {
+    display: flex;
+    gap: 1rem;
+    align-items: stretch;
+    background: linear-gradient(180deg, var(--card-bg), var(--card-bg-2));
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    outline: none;
+}
+.card:hover,
+.card:focus-visible {
+    transform: translateY(-3px);
+    border-color: var(--ring);
+    box-shadow: 0 14px 36px rgba(0,0,0,0.45), 0 0 0 6px var(--ring);
+}
+
+/* Flip layout automatically for RTL */
+[dir="rtl"] .card { flex-direction: row-reverse; }
+
+/* Image side */
+.imageWrap {
+    position: relative;
+    width: 44%;
+    min-height: 180px;
+    overflow: hidden;
+    isolation: isolate;
+}
+.image {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transform: scale(1.02);
+    transition: transform .35s ease;
+}
+.card:hover .image { transform: scale(1.07); }
+
+/* Price badge on image */
+.badge {
+    position: absolute;
+    top: .65rem;
+    inset-inline-end: .65rem; /* supports LTR + RTL */
+    background: rgba(17,24,39,0.7);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.18);
+    color: var(--text);
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: .35rem .6rem;
+    border-radius: 999px;
+}
+
+/* Text side */
+.content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0.9rem 1rem;
+    justify-content: center;
+    min-width: 0; /* prevent overflow */
+}
+.name {
+    margin: 0 0 .35rem 0;
+    font-size: 1.05rem;
+    line-height: 1.25;
+}
+.desc {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+/* Mobile: stack image on top */
+@media (max-width: 540px) {
+    .card { flex-direction: column; }
+    .imageWrap { width: 100%; min-height: 200px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .card, .image { transition: none; }
+}
