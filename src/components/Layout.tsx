@@ -87,6 +87,14 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                                     {t('adminEmployees.title')}
                                 </Link>
 
+                                <Link
+                                    to="/admin/feedbacks"
+                                    className="block px-4 py-2 hover:bg-gray-100 text-gray-800"
+                                    onClick={() => setIsAdminOpen(false)}
+                                >
+                                    {t('adminEmployees.Feedbacks')}
+                                </Link>
+
                                 {/* Submenu Toggle */}
                                 <div className="relative">
                                     <button

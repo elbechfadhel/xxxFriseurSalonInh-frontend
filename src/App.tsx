@@ -9,6 +9,7 @@ import { Toaster } from 'react-hot-toast';
 import AdminLogin from "@/admin/AdminLogin.tsx";
 import ProtectedRoute from './pages/ProtectedRoute';
 import AdminEmployees from "@/admin/AdminEmployees.tsx";
+import AdminFeedbacks from "@/admin/AdminFeedbacks.tsx";
 import PrivacyPolicy from "@/components/PrivacyPolicy.tsx";
 
 const App: React.FC = () => {
@@ -29,6 +30,12 @@ const App: React.FC = () => {
                         path="/admin/employees"
                         element={<ProtectedRoute><AdminEmployees /></ProtectedRoute>}
                     />
+
+                    <Route
+                        path="/admin/feedbacks"
+                        element={<ProtectedRoute><AdminFeedbacks /></ProtectedRoute>}
+                    />
+
                     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                    {/* <Route
                         path="/admin/services/*"
