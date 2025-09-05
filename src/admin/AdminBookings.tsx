@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import EditModal from "@/common/EditModal.tsx";
 import DeleteModal from "@/common/DeleteModal.tsx";
@@ -20,6 +20,8 @@ type UpdateReservationPayload = Partial<
     Pick<Reservation, 'customerName' | 'email' | 'phone' | 'service' | 'date' | 'employeeId'>
 >;
 
+const POLL_MS = 15000; // 15s; increase to 30000 if you want less frequent polling
+
 const AdminBookings: React.FC = () => {
     const { t } = useTranslation();
     const [reservations, setReservations] = useState<Reservation[]>([]);
@@ -28,9 +30,11 @@ const AdminBookings: React.FC = () => {
     const [error, setError] = useState('');
     const [view, setView] = useState<'today' | 'future' | 'history'>('today');
     const [editing, setEditing] = useState<Reservation | null>(null);
-    const [deleting, setDeleting] = useState<Reservation | null>(null);
+    // was: const [deleting, setDeleting] = useState<Reservation | null>(null);
+    const [deleting, setDeleting] = useState<Pick<Reservation, 'id' | 'customerName'> | null>(null);
+
     const [creating, setCreating] = useState<boolean>(false);
-    const [createPrefill, setCreatePrefill] = useState<Partial<CreateReservationPayload> | null>(null); // NEW
+    const [createPrefill, setCreatePrefill] = useState<Partial<CreateReservationPayload> | null>(null);
     const [saving, setSaving] = useState(false);
 
     const API_BASE = import.meta.env.VITE_API_URL;
@@ -40,21 +44,71 @@ const AdminBookings: React.FC = () => {
         Authorization: `Bearer ${localStorage.getItem('admin_token')}`,
     });
 
-    const fetchReservations = async () => {
+    // --- Fetch reservations (stable, abortable) ---
+    const fetchReservations = useCallback(async (signal?: AbortSignal) => {
         try {
-            const res = await fetch(`${API_BASE}/reservations`, { headers: authHeaders() });
+            const res = await fetch(`${API_BASE}/reservations`, {
+                headers: authHeaders(),
+                signal,
+            });
             if (!res.ok) throw new Error(t('adminBookings.errorLoading'));
             const data = await res.json();
             setReservations(data);
-        } catch {
-            setError(t('adminBookings.errorLoading'));
+            setError('');
+        } catch (e: any) {
+            if (!signal || !signal.aborted) {
+                setError(t('adminBookings.errorLoading'));
+            }
         } finally {
             setLoading(false);
         }
-    };
+    }, [API_BASE, t]);
 
-    useEffect(() => { fetchReservations(); }, [t]);
+    // Initial load
+    useEffect(() => {
+        const ctrl = new AbortController();
+        fetchReservations(ctrl.signal);
+        return () => ctrl.abort();
+    }, [fetchReservations]);
 
+    // Polling with pause on tab hidden
+    useEffect(() => {
+        let timeoutId: number | undefined;
+        let stopped = false;
+        let ctrl: AbortController | null = null;
+
+        const tick = async () => {
+            ctrl?.abort(); // cancel previous in-flight request
+            ctrl = new AbortController();
+            await fetchReservations(ctrl.signal);
+            if (!stopped) {
+                timeoutId = window.setTimeout(tick, POLL_MS);
+            }
+        };
+
+        const onVisibilityChange = () => {
+            if (document.visibilityState === 'visible') {
+                clearTimeout(timeoutId);
+                tick(); // immediate refresh on resume
+            } else {
+                clearTimeout(timeoutId);
+                ctrl?.abort();
+            }
+        };
+
+        // Start according to current visibility
+        onVisibilityChange();
+        document.addEventListener('visibilitychange', onVisibilityChange);
+
+        return () => {
+            stopped = true;
+            clearTimeout(timeoutId);
+            ctrl?.abort();
+            document.removeEventListener('visibilitychange', onVisibilityChange);
+        };
+    }, [fetchReservations]);
+
+    // Employees load
     useEffect(() => {
         const fetchEmployees = async () => {
             try {
@@ -66,7 +120,7 @@ const AdminBookings: React.FC = () => {
             }
         };
         fetchEmployees();
-    }, []);
+    }, [API_BASE]);
 
     const handleDeleteConfirmed = async () => {
         if (!deleting) return;
@@ -223,7 +277,7 @@ const AdminBookings: React.FC = () => {
                         <BookingTable
                             groups={groupByEmployee(futureBookings)}
                             onEdit={setEditing}
-                            onDelete={setDeleting}
+                            onDelete={setDeleting}   // OK: Reservation is assignable to Pick<...>
                             formatDate={formatDate}
                         />
                     )}
@@ -258,6 +312,7 @@ const AdminBookings: React.FC = () => {
                 saving={saving}
                 onClose={() => setEditing(null)}
                 onSave={handleUpdate}
+                onRequestDelete={(res) => setDeleting(res)} // now types match
             />
 
             {/* Delete Modal */}
@@ -276,9 +331,10 @@ export default AdminBookings;
 interface BookingTableProps {
     groups: Record<string, Reservation[]>;
     onEdit: (res: Reservation) => void;
-    onDelete: (res: Reservation) => void;
+    onDelete: (res: Pick<Reservation, 'id' | 'customerName'>) => void; // <-- narrowed
     formatDate: (dateStr: string) => string;
 }
+
 
 const BookingTable: React.FC<BookingTableProps> = ({ groups, onEdit, onDelete, formatDate }) => {
     const { t } = useTranslation();

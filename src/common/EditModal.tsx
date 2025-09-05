@@ -24,10 +24,12 @@ interface EditModalProps {
     isOpen: boolean;
     reservation: Reservation | null;
     employees: Employee[];
-    allReservations: Reservation[]; // Added to check conflicts
+    allReservations: Reservation[]; // for conflict checks
     saving: boolean;
     onClose: () => void;
     onSave: (id: string, payload: UpdateReservationPayload) => Promise<void>;
+    /** NEW: ask parent to open DeleteModal for this reservation */
+    onRequestDelete: (reservation: Pick<Reservation, 'id' | 'customerName'>) => void;
 }
 
 const EditModal: React.FC<EditModalProps> = ({
@@ -38,6 +40,7 @@ const EditModal: React.FC<EditModalProps> = ({
                                                  saving,
                                                  onClose,
                                                  onSave,
+                                                 onRequestDelete,
                                              }) => {
     const { t } = useTranslation();
     const [form, setForm] = useState<UpdateReservationPayload>({});
@@ -48,8 +51,6 @@ const EditModal: React.FC<EditModalProps> = ({
         d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
         return d.toISOString().slice(0, 16); // yyyy-MM-ddTHH:mm
     };
-
-
 
     useEffect(() => {
         if (reservation) {
@@ -76,7 +77,7 @@ const EditModal: React.FC<EditModalProps> = ({
         e.preventDefault();
         if (!form.date) return;
 
-        // Check for time conflict with existing reservations for the same employee
+        // conflict check
         const conflict = allReservations.some(
             r =>
                 r.employeeId === (form.employeeId || reservation.employeeId) &&
@@ -92,15 +93,24 @@ const EditModal: React.FC<EditModalProps> = ({
         setError(null);
         onSave(reservation.id, {
             ...form,
-            date: new Date(form.date).toISOString(),
+            date: new Date(form.date as string).toISOString(),
             employeeId: form.employeeId ?? undefined,
         });
+    };
+
+    const handleDeleteClick = () => {
+        // close this modal, then ask parent to open DeleteModal
+        onClose();
+        onRequestDelete({ id: reservation.id, customerName: reservation.customerName });
     };
 
     return (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
             <div className="bg-white rounded p-6 w-full max-w-md">
-                <h2 className="text-xl font-semibold mb-4">{t('editModal.title', 'Edit Reservation')}</h2>
+                <h2 className="text-xl font-semibold mb-4">
+                    {t('editModal.title', 'Edit Reservation')}
+                </h2>
+
                 <form onSubmit={onSubmit} className="space-y-4">
                     {['customerName', 'email', 'phone', 'service'].map(field => (
                         <input
@@ -116,7 +126,7 @@ const EditModal: React.FC<EditModalProps> = ({
                     <div>
                         <input
                             name="date"
-                            value={form.date || ''}
+                            value={(form.date as string) || ''}
                             onChange={onChange}
                             className="w-full border p-2 rounded"
                             type="datetime-local"
@@ -126,7 +136,7 @@ const EditModal: React.FC<EditModalProps> = ({
 
                     <select
                         name="employeeId"
-                        value={form.employeeId || ''}
+                        value={(form.employeeId as string) || ''}
                         onChange={onChange}
                         className="w-full border p-2 rounded"
                     >
@@ -138,22 +148,34 @@ const EditModal: React.FC<EditModalProps> = ({
                         ))}
                     </select>
 
-                    <div className="flex justify-end gap-2 pt-2">
+                    {/* Footer: Delete on the left, Cancel/Save on the right */}
+                    <div className="flex items-center justify-between pt-2">
                         <button
                             type="button"
-                            onClick={onClose}
-                            className="px-4 py-2 rounded bg-gray-200"
+                            onClick={handleDeleteClick}
+                            className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700 disabled:opacity-60"
                             disabled={saving}
                         >
-                            {t('editModal.cancel', 'Cancel')}
+                            {t('editModal.delete', 'Delete')}
                         </button>
-                        <button
-                            type="submit"
-                            className="px-4 py-2 rounded bg-[#4e9f66] text-white disabled:opacity-60"
-                            disabled={saving}
-                        >
-                            {saving ? t('editModal.saving', 'Saving…') : t('editModal.save', 'Save')}
-                        </button>
+
+                        <div className="flex gap-2">
+                            <button
+                                type="button"
+                                onClick={onClose}
+                                className="px-4 py-2 rounded bg-gray-200"
+                                disabled={saving}
+                            >
+                                {t('editModal.cancel', 'Cancel')}
+                            </button>
+                            <button
+                                type="submit"
+                                className="px-4 py-2 rounded bg-[#4e9f66] text-white disabled:opacity-60"
+                                disabled={saving}
+                            >
+                                {saving ? t('editModal.saving', 'Saving…') : t('editModal.save', 'Save')}
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
