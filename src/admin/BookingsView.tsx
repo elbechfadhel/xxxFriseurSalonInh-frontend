@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import EditModal from "@/common/EditModal.tsx";
 import DeleteModal from "@/common/DeleteModal.tsx";
-import CreateModal, { CreateReservationPayload } from "@/common/CreateModal.tsx"; // <-- NEW
+import CreateModal, { CreateReservationPayload } from "@/common/CreateModal.tsx";
 
 interface Employee { id: string; name: string; }
 interface Reservation {
@@ -27,8 +27,11 @@ const AdminBookings: React.FC = () => {
     const [error, setError] = useState('');
     const [view, setView] = useState<'today' | 'future' | 'history'>('today');
     const [editing, setEditing] = useState<Reservation | null>(null);
-    const [deleting, setDeleting] = useState<Reservation | null>(null);
-    const [creating, setCreating] = useState<boolean>(false);               // <-- NEW
+
+    // NARROWED: only what DeleteModal/handler needs
+    const [deleting, setDeleting] = useState<Pick<Reservation, 'id' | 'customerName'> | null>(null);
+
+    const [creating, setCreating] = useState<boolean>(false);
     const [saving, setSaving] = useState(false);
 
     const API_BASE = import.meta.env.VITE_API_URL;
@@ -112,7 +115,7 @@ const AdminBookings: React.FC = () => {
         }
     };
 
-    // NEW: Create handler
+    // Create handler
     const handleCreate = async (payload: CreateReservationPayload) => {
         setSaving(true);
         try {
@@ -237,6 +240,7 @@ const AdminBookings: React.FC = () => {
                 saving={saving}
                 onClose={() => setEditing(null)}
                 onSave={handleUpdate}
+                onRequestDelete={(r) => setDeleting(r)}   // <-- NEW
             />
 
             {/* Delete Modal */}
@@ -255,7 +259,7 @@ export default AdminBookings;
 interface BookingTableProps {
     groups: Record<string, Reservation[]>;
     onEdit: (res: Reservation) => void;
-    onDelete: (res: Reservation) => void;
+    onDelete: (res: Pick<Reservation, 'id' | 'customerName'>) => void; // NARROWED
     formatDate: (dateStr: string) => string;
 }
 
@@ -297,7 +301,10 @@ const BookingTable: React.FC<BookingTableProps> = ({ groups, onEdit, onDelete, f
                                             <button className="text-blue-600 hover:underline" onClick={() => onEdit(res)}>
                                                 {t('buttons.edit') || 'Edit'}
                                             </button>
-                                            <button className="text-red-600 hover:underline" onClick={() => onDelete(res)}>
+                                            <button
+                                                className="text-red-600 hover:underline"
+                                                onClick={() => onDelete({ id: res.id, customerName: res.customerName })} // send minimal shape
+                                            >
                                                 {t('buttons.delete') || 'Delete'}
                                             </button>
                                         </td>
