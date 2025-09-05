@@ -11,6 +11,8 @@ import ProtectedRoute from './pages/ProtectedRoute';
 import AdminEmployees from "@/admin/AdminEmployees.tsx";
 import AdminFeedbacks from "@/admin/AdminFeedbacks.tsx";
 import PrivacyPolicy from "@/components/PrivacyPolicy.tsx";
+import FeedbackPage from "./pages/FeedbackPage.tsx";
+
 
 const App: React.FC = () => {
     return (
@@ -21,6 +23,7 @@ const App: React.FC = () => {
                     <Route path="/" element={<HomePage />} />
                     <Route path="/services" element={<ServicesPage />} />
                     <Route path="/booking" element={<BookingPage />} />
+                    <Route path="/feedback" element={<FeedbackPage />} />
                     <Route path="/admin/login" element={<AdminLogin />} />
                     <Route
                         path="/admin/bookings"

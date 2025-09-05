@@ -54,6 +54,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                         <Link to="/booking" className={navLinkClass('/booking')}>
                             {t('booking')}
                         </Link>
+                        <Link to="/feedback" className={navLinkClass('/feedback')}>
+                            {t('adminFeedbacks.title')}
+                        </Link>
 
                         {/* Admin Dropdown */}
                         <div className="relative" ref={menuRef}>
@@ -92,7 +95,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                                     className="block px-4 py-2 hover:bg-gray-100 text-gray-800"
                                     onClick={() => setIsAdminOpen(false)}
                                 >
-                                    {t('adminEmployees.Feedbacks')}
+                                    {t('adminFeedbacks.title')}
                                 </Link>
 
                                 {/* Submenu Toggle */}

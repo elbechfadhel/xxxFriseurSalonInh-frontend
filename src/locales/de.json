@@ -172,6 +172,51 @@
     "augenbrauen-zupfen": "",
     "bart-rasur": "",
     "nasen-ohrenhaare": ""
+  },
+  "adminFeedbacks": {
+  "title": "Rückmeldungen",
+  "filter": {
+    "all": "Alle",
+    "pending": "Ausstehend",
+    "validated": "Validiert"
+  },
+  "loading": "Lade Feedbacks...",
+  "errorLoading": "Fehler beim Laden der Feedbacks.",
+  "noFeedbacksFound": "Keine Feedbacks gefunden.",
+  "name": "Name",
+  "email": "E-Mail",
+  "message": "Nachricht",
+  "rating": "Bewertung",
+  "createdAt": "Erstellt am",
+  "status": "Status",
+  "actions": "Aktionen",
+  "validated": "Validiert",
+  "pending": "Ausstehend",
+  "validate": "Validieren",
+  "validating": "Validiere...",
+  "noActions": "—",
+  "errorValidate": "Validierung fehlgeschlagen.",
+  "errorDelete": "Löschen fehlgeschlagen.",
+  "feedback": "Feedback"
+},
+  "feedback": {
+    "title": "Dein Feedback",
+    "subtitle": "Sag uns bitte, wie zufrieden du warst und was wir besser machen können.",
+    "thankyou": "Danke! Dein Feedback wurde gesendet und wird nach Prüfung veröffentlicht.",
+    "form": {
+      "required": "Bitte fülle alle Felder aus.",
+      "invalidEmail": "Bitte gib eine gültige E-Mail ein.",
+      "successToast": "Vielen Dank für dein Feedback!",
+      "errorToast": "Senden fehlgeschlagen. Bitte versuche es später erneut.",
+      "name": "Name",
+      "namePh": "Dein Name",
+      "email": "E-Mail",
+      "message": "Nachricht",
+      "messagePh": "Erzähl uns von deinem Besuch…",
+      "sending": "Senden…",
+      "send": "Senden",
+      "info": "Wird nach Prüfung veröffentlicht."
+    }
   }
 
 

@@ -173,6 +173,51 @@
     "augenbrauen-zupfen": "",
     "bart-rasur": "",
     "nasen-ohrenhaare": ""
+  },
+  "adminFeedbacks": {
+    "title": "Customer Feedback",
+    "filter": {
+      "all": "All",
+      "pending": "Pending",
+      "validated": "Validated"
+    },
+    "loading": "Loading feedbacks...",
+    "errorLoading": "Failed to load feedbacks.",
+    "noFeedbacksFound": "No feedbacks found.",
+    "name": "Name",
+    "email": "Email",
+    "message": "Message",
+    "rating": "Rating",
+    "createdAt": "Created at",
+    "status": "Status",
+    "actions": "Actions",
+    "validated": "Validated",
+    "pending": "Pending",
+    "validate": "Validate",
+    "validating": "Validating...",
+    "noActions": "—",
+    "errorValidate": "Validation failed.",
+    "errorDelete": "Delete failed.",
+    "feedback": "Feedback"
+  },
+  "feedback": {
+    "title": "Your Feedback",
+    "subtitle": "Please tell us how satisfied you were and what we can improve.",
+    "thankyou": "Thanks! Your feedback has been sent and will be published after review.",
+    "form": {
+      "required": "Please fill out all fields.",
+      "invalidEmail": "Please enter a valid email address.",
+      "successToast": "Thank you for your feedback!",
+      "errorToast": "Failed to send. Please try again later.",
+      "name": "Name",
+      "namePh": "Your name",
+      "email": "Email",
+      "message": "Message",
+      "messagePh": "Tell us about your visit…",
+      "sending": "Sending…",
+      "send": "Send",
+      "info": "Will be published after review."
+    }
   }
 
 }

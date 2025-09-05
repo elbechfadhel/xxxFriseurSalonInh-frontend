@@ -171,5 +171,50 @@
     "augenbrauen-zupfen": "",
     "bart-rasur": "",
     "nasen-ohrenhaare": ""
+  },
+  "adminFeedbacks": {
+    "title": "آراء العملاء",
+    "filter": {
+      "all": "الكل",
+      "pending": "قيد المراجعة",
+      "validated": "تمت الموافقة"
+    },
+    "loading": "جارٍ تحميل الآراء...",
+    "errorLoading": "فشل في تحميل الآراء.",
+    "noFeedbacksFound": "لا توجد آراء.",
+    "name": "الاسم",
+    "email": "البريد الإلكتروني",
+    "message": "الرسالة",
+    "rating": "التقييم",
+    "createdAt": "تاريخ الإنشاء",
+    "status": "الحالة",
+    "actions": "الإجراءات",
+    "validated": "تمت الموافقة",
+    "pending": "قيد المراجعة",
+    "validate": "اعتماد",
+    "validating": "جارٍ الاعتماد...",
+    "noActions": "—",
+    "errorValidate": "فشل الاعتماد.",
+    "errorDelete": "فشل الحذف.",
+    "feedback": "رأي"
+  },
+  "feedback": {
+    "title": "رأيك يهمنا",
+    "subtitle": "من فضلك أخبرنا عن مدى رضاك وما الذي يمكننا تحسينه.",
+    "thankyou": "شكرًا لك! تم إرسال رأيك وسيُنشر بعد المراجعة.",
+    "form": {
+      "required": "يرجى تعبئة جميع الحقول.",
+      "invalidEmail": "يرجى إدخال بريد إلكتروني صالح.",
+      "successToast": "شكرًا لملاحظاتك!",
+      "errorToast": "فشل الإرسال. يرجى المحاولة لاحقًا.",
+      "name": "الاسم",
+      "namePh": "اسمك",
+      "email": "البريد الإلكتروني",
+      "message": "الرسالة",
+      "messagePh": "حدِّثنا عن زيارتك…",
+      "sending": "جارٍ الإرسال…",
+      "send": "إرسال",
+      "info": "سيتم النشر بعد المراجعة."
+    }
   }
 }
