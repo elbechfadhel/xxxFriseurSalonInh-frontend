@@ -96,7 +96,8 @@
     "save": "حفظ",
     "saving": "جاري الحفظ…",
     "slotTaken": "هذا الموعد محجوز بالفعل.",
-    "selectBarber": "حدد الحلاق"
+    "selectBarber": "حدد الحلاق",
+    "delete": "حذف"
   },
   "buttons": {
     "delete": "حذف",

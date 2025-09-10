@@ -96,8 +96,8 @@
     "save": "Speichern",
     "saving": "Wird gespeichert…",
     "slotTaken": "Dieses Zeitfenster ist bereits belegt.",
-    "selectBarber": "Wählen Sie einen Friseur"
-
+    "selectBarber": "Wählen Sie einen Friseur",
+    "delete": "Löschen"
   },
   "buttons": {
     "delete": "Löschen",
