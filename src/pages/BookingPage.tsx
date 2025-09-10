@@ -63,8 +63,9 @@ const BookingPage: React.FC = () => {
             const res = await fetch(`${API_BASE}/verify-email/send-code`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, captchaToken }),
+                body: JSON.stringify({ email, captchaToken, lang: i18n.language?.startsWith("de") ? "de" : "en" }),
             });
+
             if (!res.ok) throw new Error('Failed to send verification email');
             setNotification(t('verificationCodeSent'));
             setNotificationType('success');
@@ -80,7 +81,7 @@ const BookingPage: React.FC = () => {
             const verifyRes = await fetch(`${API_BASE}/verify-email/confirm-code`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, code: emailCode }),
+                body: JSON.stringify({ email, code: emailCode, lang: i18n.language.startsWith("de") ? "de" : "en" }),
             });
             if (!verifyRes.ok) throw new Error('Invalid verification code');
 
