@@ -182,16 +182,16 @@ const KioskBusBoard: React.FC = () => {
         const s = new Date(slotIso).getTime();
         return list.find((r) => new Date(r.date).getTime() === s);
     };
-    const [currentTime, setCurrentTime] = useState(
+   /* const [currentTime, setCurrentTime] = useState(
         new Intl.DateTimeFormat(i18n.language, {
             hour: "2-digit",
             minute: "2-digit",
             hour12: false,
         }).format(new Date())
-    );
+    );*/
 
     // update clock every minute
-    useEffect(() => {
+   /* useEffect(() => {
         const interval = setInterval(() => {
             setCurrentTime(
                 new Intl.DateTimeFormat(i18n.language, {
@@ -202,12 +202,12 @@ const KioskBusBoard: React.FC = () => {
             );
         }, 60 * 1000);
         return () => clearInterval(interval);
-    }, [i18n.language]);
+    }, [i18n.language]);*/
 
     return (
         <div className="min-h-screen w-full bg-black  text-white" dir={i18n.dir()}>
             {/* Header */}
-            <header className="flex justify-between items-center px-8 py-4 bg-black">
+          {/*  <header className="flex justify-between items-center px-8 py-4 bg-black">
                 <div className="flex items-baseline gap-6">
                     <h1 className="text-3xl font-bold">{t("adminBookings.today")}</h1>
                     <span className="text-lg text-gray-300">
@@ -220,7 +220,7 @@ const KioskBusBoard: React.FC = () => {
           </span>
                 </div>
                 <span className="text-2xl font-bold">{currentTime}</span>
-            </header>
+            </header>*/}
 
             <main className="px-6 py-6">
                 {loading ? (
@@ -265,9 +265,6 @@ const KioskBusBoard: React.FC = () => {
                                                             <div className="text-lg font-semibold">
                                                                 {booking.customerName}
                                                             </div>
-                                                            <div className="text-sm text-white/70">
-                                                                {booking.service}
-                                                            </div>
                                                         </div>
                                                     ) : (
                                                         <div className="text-white/60">
@@ -307,9 +304,7 @@ const KioskBusBoard: React.FC = () => {
                                                             <div className="text-lg font-semibold">
                                                                 {booking.customerName}
                                                             </div>
-                                                            <div className="text-sm text-white/70">
-                                                                {booking.service}
-                                                            </div>
+                                                            
                                                         </div>
                                                     ) : (
                                                         <div className="text-white/60">
