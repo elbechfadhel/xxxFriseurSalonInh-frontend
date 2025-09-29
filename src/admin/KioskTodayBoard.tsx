@@ -186,7 +186,7 @@ const KioskBusBoard: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen w-full bg-[#0b0f14] text-white" dir={i18n.dir()}>
+        <div className="min-h-screen w-full bg-black  text-white" dir={i18n.dir()}>
             {/* Header */}
             <header className="px-8 py-6 border-b border-white/10 flex items-end justify-between">
                 <div>

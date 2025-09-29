@@ -75,7 +75,8 @@
     "errorLoading": "Fehler beim Laden der Reservierungen.",
     "noBookingsForHistory": "Keine vergangenen Buchungen gefunden.",
     "booked": "Gebucht",
-    "free":"Frei"
+    "free":"Frei",
+    "today": "Heutige Buchungen"
   },
   "customerFeedbackTitle" : "Das sagen unsere Kunden",
   "deleteModal": {

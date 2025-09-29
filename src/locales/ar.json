@@ -75,7 +75,8 @@
     "errorLoading": "تعذر تحميل الحجوزات.",
     "noBookingsForHistory": "لا توجد حجوزات سابقة.",
     "booked": "محجوز",
-    "free":"متاح"
+    "free":"متاح",
+    "today": "حجوزات اليوم"
   },
   "customerFeedbackTitle": "آراء عملائنا",
   "deleteModal": {

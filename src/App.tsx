@@ -19,6 +19,14 @@ const App: React.FC = () => {
     return (
         <Router>
             <Toaster position="top-center" toastOptions={{ duration: 4000 }} />
+
+            <Routes>
+                <Route
+                    path="/admin/kioskTodayBoard"
+                    element={<ProtectedRoute><KioskTodayBoard /></ProtectedRoute>}
+                />
+            </Routes>
+
             <Layout>
                 <Routes>
                     <Route path="/" element={<HomePage />} />
@@ -27,10 +35,7 @@ const App: React.FC = () => {
                     <Route path="/feedback" element={<FeedbackPage />} />
                     <Route path="/admin/login" element={<AdminLogin />} />
 
-                    <Route
-                        path="/admin/kioskTodayBoard"
-                        element={<ProtectedRoute><KioskTodayBoard /></ProtectedRoute>}
-                    />
+
                     <Route
                         path="/admin/bookings"
                         element={<ProtectedRoute><AdminBookings /></ProtectedRoute>}

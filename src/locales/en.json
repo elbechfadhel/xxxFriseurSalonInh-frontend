@@ -74,7 +74,8 @@
     "errorLoading": "Could not load reservations.",
     "noBookingsForHistory": "No past bookings found.",
     "booked": "Booked",
-    "free":"Free"
+    "free":"Free",
+    "today": "Today's Bookings"
   },
   "customerFeedbackTitle" : "What Our Customers Say",
   "deleteModal": {
