@@ -56,8 +56,11 @@ const HomePage: React.FC = () => {
 
                     {/* Right: Random Highlight Grid */}
                     <div className="md:col-span-4 lg:col-span-3 place-self-center md:place-self-auto">
-                        <div className="grid grid-cols-6 gap-[2px] w-[280px] h-[280px] md:w-[320px] md:h-[320px] lg:w-[360px] lg:h-[360px]">
-                            {Array.from({ length: totalSquares }).map((_, i) => {
+                        <div className="grid grid-cols-6 gap-[2px]
+                          w-[200px] h-[200px]
+                            md:w-[220px] md:h-[220px]
+                             lg:w-[240px] lg:h-[240px]">
+                            {Array.from({length: totalSquares}).map((_, i) => {
                                 const x = i % gridSize;
                                 const y = Math.floor(i / gridSize);
                                 const isHovered = hoveredIndex === i;
