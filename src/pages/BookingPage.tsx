@@ -12,6 +12,17 @@ interface Employee {
     name: string;
 }
 
+// --- helpers ---
+const isValidGermanPhone = (number: string) => /^[1-9][0-9]{9,10}$/.test(number); // 10 digits, no leading 0
+
+async function isSlotStillFree(apiBase: string, employeeId: string, slotISO: string) {
+    const dayStr = new Date(slotISO).toISOString().slice(0, 10);
+    const res = await fetch(`${apiBase}/reservations/availability?date=${dayStr}&employeeId=${employeeId}`);
+    if (!res.ok) return false;
+    const takenISO: string[] = await res.json();
+    return !takenISO.includes(new Date(slotISO).toISOString());
+}
+
 const BookingPage: React.FC = () => {
     const { t, i18n } = useTranslation();
     const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
@@ -19,17 +30,19 @@ const BookingPage: React.FC = () => {
     const [selectedEmployee, setSelectedEmployee] = useState<string | null>(null);
     const [resetTrigger, setResetTrigger] = useState(0);
     const [employees, setEmployees] = useState<Employee[]>([]);
+
     const [customerName, setCustomerName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
+    const [phone, setPhone] = useState(''); // national, 10 digits, no leading 0
+
     const [codeSent, setCodeSent] = useState(false);
-    const [emailCode, setEmailCode] = useState('');
-    const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+    const [smsCode, setSmsCode] = useState('');
+    const [busy, setBusy] = useState(false);
+
     const [notification, setNotification] = useState<string | null>(null);
     const [notificationType, setNotificationType] = useState<'success' | 'error' | 'info' | null>(null);
-    const API_BASE = import.meta.env.VITE_API_URL;
 
-    const getLocale = () => (i18n.language === 'de' ? de : enUS);
+    const API_BASE = import.meta.env.VITE_API_URL;
+    const getLocale = () => (i18n.language?.startsWith('de') ? de : enUS);
 
     useEffect(() => {
         const fetchEmployees = async () => {
@@ -37,7 +50,7 @@ const BookingPage: React.FC = () => {
                 const res = await fetch(`${API_BASE}/employees`);
                 const data = await res.json();
                 setEmployees(data);
-            } catch (err) {
+            } catch {
                 setNotification(t('failedLoadEmployees'));
                 setNotificationType('error');
             }
@@ -45,85 +58,163 @@ const BookingPage: React.FC = () => {
         fetchEmployees();
     }, []);
 
-    const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-    const isValidGermanPhone = (number: string) => /^[1-9][0-9]{9}$/.test(number);
+    const clearNotice = () => {
+        setNotification(null);
+        setNotificationType(null);
+    };
 
-    const handleSendEmailCode = async () => {
-        if (!isValidEmail(email)) {
-            setNotification(t('invalidEmail'));
+    const handleSendSmsCode = async () => {
+        clearNotice();
+
+        if (!selectedDateTime || !selectedEmployee || !customerName.trim()) {
+            setNotification(t('bookingInfoMissing') || 'Please complete the booking info first.');
             setNotificationType('error');
             return;
         }
-     /*   if (!captchaToken) {
-            setNotification(t('completeCaptcha'));
+
+        if (!isValidGermanPhone(phone)) {
+            setNotification(t('invalidPhone') || 'Bitte gib eine gültige deutsche Nummer ein.');
             setNotificationType('error');
             return;
-        }*/
+        }
+
         try {
-            const res = await fetch(`${API_BASE}/verify-email/send-code`, {
+            setBusy(true);
+
+            // 1) check slot availability first
+            const free = await isSlotStillFree(API_BASE, selectedEmployee, selectedDateTime);
+            if (!free) {
+                setNotification(t('booking.slotTaken') || 'This time slot has just been taken. Please pick another.');
+                setNotificationType('error');
+                setSelectedDateTime(null);
+                setResetTrigger((p) => p + 1);
+                return;
+            }
+
+            // 2) send SMS
+            const national = phone.replace(/[^\d]/g, '');
+            const fullPhone = `+49${national}`;
+            const res = await fetch(`${API_BASE}/verify-phone/start`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, captchaToken, lang: i18n.language?.startsWith("de") ? "de" : "en" }),
+                body: JSON.stringify({
+                    phone: fullPhone,
+                    lang: i18n.language?.startsWith('de') ? 'de' : 'en',
+                }),
             });
+            const j = await res.json().catch(() => ({}));
 
-            if (!res.ok) throw new Error('Failed to send verification email');
-            setNotification(t('verificationCodeSent'));
-            setNotificationType('success');
+            if (!res.ok || j?.success !== true) {
+                throw new Error(j?.error || 'Failed to send SMS');
+            }
+
             setCodeSent(true);
-        } catch (err) {
-            setNotification(t('sendEmailError'));
+            setNotification(t('verificationCodeSent') || 'Verification code sent via SMS.');
+            setNotificationType('success');
+        } catch {
+            setNotification(t('booking.errors.sendCodeFailed') || 'Failed to send SMS code.');
             setNotificationType('error');
+        } finally {
+            setBusy(false);
         }
     };
 
     const handleVerifyCodeAndBook = async () => {
+        clearNotice();
+
+        if (!smsCode.trim()) {
+            setNotification(t('enterCode') || 'Please enter the code.');
+            setNotificationType('error');
+            return;
+        }
+        if (!selectedDateTime || !selectedEmployee) {
+            setNotification(t('bookingInfoMissing') || 'Booking info missing.');
+            setNotificationType('error');
+            return;
+        }
+
         try {
-            const verifyRes = await fetch(`${API_BASE}/verify-email/confirm-code`, {
+            setBusy(true);
+
+            // normalize phone to E.164 (+49…)
+            const national = phone.replace(/[^\d]/g, '');
+            const fullPhone = `+49${national}`;
+
+            // 1) confirm SMS code (⚠️ correct endpoint = /verify-phone/check)
+            const verifyRes = await fetch(`${API_BASE}/verify-phone/check`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, code: emailCode, lang: i18n.language.startsWith("de") ? "de" : "en" }),
+                body: JSON.stringify({
+                    phone: fullPhone,
+                    code: smsCode.trim(),
+                    lang: i18n.language?.startsWith('de') ? 'de' : 'en',
+                }),
             });
-            if (!verifyRes.ok) throw new Error('Invalid verification code');
 
-            setNotification(t('emailVerified'));
-            setNotificationType('success');
+            const verifyJson = await verifyRes.json();
+            console.log("verify-phone/check response:", verifyJson);
 
+            if (!verifyRes.ok || verifyJson?.success !== true) {
+                throw new Error('Invalid verification code');
+            }
+
+            // 2) recheck slot before final booking
+            const free = await isSlotStillFree(API_BASE, selectedEmployee, selectedDateTime);
+            if (!free) {
+                setNotification(t('booking.slotTaken') || 'This time slot has just been taken. Please pick another.');
+                setNotificationType('error');
+                setSelectedDateTime(null);
+                setResetTrigger((p) => p + 1);
+                return;
+            }
+
+            // 3) create reservation
             const bookingRes = await fetch(`${API_BASE}/reservations`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     customerName,
-                    email,
-                    phone: phone ? `+49${phone}` : null,
-                    service: 'Haircut',
+                    phone: fullPhone,
+                    service: 'Haircut', // 🔧 replace with real serviceId like in mobile
                     date: selectedDateTime,
                     employeeId: selectedEmployee,
+                    verificationMethod: 'sms',
                 }),
             });
 
-            if (!bookingRes.ok) throw new Error('Failed to book');
+            if (!bookingRes.ok) {
+                const errText = await bookingRes.text();
+                console.error("Booking failed:", bookingRes.status, errText);
+                throw new Error('Failed to book');
+            }
 
-            setNotification(t('bookingConfirmed'));
+            setNotification(t('bookingConfirmed') || 'Your booking is confirmed!');
             setNotificationType('success');
+
+            // reset form
             setCustomerName('');
-            setEmail('');
             setPhone('');
-            setEmailCode('');
+            setSmsCode('');
             setCodeSent(false);
-            setCaptchaToken(null);
             setSelectedDateTime(null);
-            setResetTrigger((prev) => prev + 1);
+            setSelectedEmployee(null);
+            setSelectedDate(new Date());
+            setResetTrigger((p) => p + 1);
         } catch (err) {
-            setNotification(t('bookingError'));
+            console.error("handleVerifyCodeAndBook error:", err);
+            setNotification(t('bookingError') || 'Booking failed. Please try again.');
             setNotificationType('error');
+        } finally {
+            setBusy(false);
         }
     };
 
+
     const isBookingInfoValid =
-        selectedDateTime &&
-        selectedEmployee &&
-        customerName.trim() &&
-        isValidEmail(email);
+        !!selectedDateTime &&
+        !!selectedEmployee &&
+        !!customerName.trim() &&
+        isValidGermanPhone(phone);
 
     return (
         <div className="px-4 py-8">
@@ -155,7 +246,7 @@ const BookingPage: React.FC = () => {
 
                 {/* Right panel */}
                 <div className="flex-1">
-                {/* Employee Selector */}
+                    {/* Employee Selector */}
                     <div className="mb-6">
                         <label className="block text-sm font-medium text-gray-700 mb-1">{t('chooseBarber')}</label>
                         <div className="flex gap-4 flex-nowrap overflow-x-auto">
@@ -166,22 +257,28 @@ const BookingPage: React.FC = () => {
                                     setSelectedEmployee(id);
                                     setResetTrigger((prev) => prev + 1);
                                 }}
-                                apiBase={API_BASE}
+                                apiBase={import.meta.env.VITE_API_URL}
                             />
                         </div>
                     </div>
 
                     {/* Time Slots */}
-                    <label className="block text-sm font-medium text-gray-700 mb-2">{t('pickTime')}</label>
-                    <TimeSlotSelection
-                        selectedDate={selectedDate || new Date()}
-                        selectedEmployeeId={selectedEmployee}
-                        onSlotSelected={setSelectedDateTime}
-                        resetTrigger={resetTrigger}
-                    />
+                    {selectedEmployee && (
+                        <>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                {t('pickTime')}
+                            </label>
+                            <TimeSlotSelection
+                                selectedDate={selectedDate || new Date()}
+                                selectedEmployeeId={selectedEmployee}
+                                onSlotSelected={setSelectedDateTime}
+                                resetTrigger={resetTrigger}
+                            />
+                        </>
+                    )}
 
                     {/* Customer Info */}
-                    <div className="mt-6 mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="mt-6 mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
                         {/* Full Name */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">{t('fullName')}</label>
@@ -215,21 +312,6 @@ const BookingPage: React.FC = () => {
                                 <p className="text-sm text-red-500 mt-1">{t('invalidPhone')}</p>
                             )}
                         </div>
-
-                        {/* Email */}
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">{t('email')}</label>
-                            <input
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                placeholder={t('emailPlaceholder')}
-                                className={`w-full border rounded px-3 py-2 shadow-sm ${!isValidEmail(email) && email ? 'border-red-500' : ''}`}
-                            />
-                            {!isValidEmail(email) && email && (
-                                <p className="text-sm text-red-500 mt-1">{t('invalidEmailFormat')}</p>
-                            )}
-                        </div>
                     </div>
 
                     {/* Notifications */}
@@ -253,30 +335,30 @@ const BookingPage: React.FC = () => {
                     <div className="mt-6 mb-2">
                         {!codeSent ? (
                             <button
-                                onClick={handleSendEmailCode}
-                                disabled={!isBookingInfoValid}
-                                className={`w-full py-3 rounded-lg text-lg font-semibold 
-                                    ${
-                                    !isBookingInfoValid
+                                onClick={handleSendSmsCode}
+                                disabled={!isBookingInfoValid || busy}
+                                className={`w-full py-3 rounded-lg text-lg font-semibold ${
+                                    !isBookingInfoValid || busy
                                         ? 'bg-gray-200 text-gray-500 border border-gray-300 shadow-inner cursor-not-allowed'
                                         : 'bg-[#4e9f66] hover:bg-[#3e8455] text-white'
                                 }`}
                             >
-                                {t('sendVerificationCode')}
+                                {busy ? t('booking.sending') || 'Sending...' : t('sendVerificationCode') || 'Send SMS Code'}
                             </button>
                         ) : (
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mt-2">{t('enterCode')}</label>
                                 <input
                                     type="text"
-                                    value={emailCode}
-                                    onChange={(e) => setEmailCode(e.target.value)}
+                                    value={smsCode}
+                                    onChange={(e) => setSmsCode(e.target.value)}
                                     placeholder={t('codePlaceholder')}
                                     className="w-full border rounded px-3 py-2 shadow-sm mt-1"
                                 />
                                 <button
                                     onClick={handleVerifyCodeAndBook}
-                                    className="w-full mt-3 bg-[#4e9f66] hover:bg-[#3e8455] text-white py-2 rounded font-semibold"
+                                    disabled={busy || !smsCode.trim()}
+                                    className="w-full mt-3 bg-[#4e9f66] hover:bg-[#3e8455] text-white py-2 rounded font-semibold disabled:opacity-50"
                                 >
                                     {t('verifyAndBook')}
                                 </button>
