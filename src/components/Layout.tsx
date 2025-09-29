@@ -80,7 +80,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                                     className="block px-4 py-2 hover:bg-gray-100 text-gray-800"
                                     onClick={() => setIsAdminOpen(false)}
                                 >
-                                    {t('adminBookings.title')}
+                                    {t('adminBookings.today')}
                                 </Link>
 
                                 <Link
