@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { CalendarDays, Clock, Scissors, Smile } from 'lucide-react';
@@ -9,17 +9,10 @@ import ServicesGrid from "./ServicesGrid";
 const HomePage: React.FC = () => {
     const { t } = useTranslation();
 
-    const gridSize = 6;
-    const totalSquares = gridSize * gridSize;
-    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            const randomIndex = Math.floor(Math.random() * totalSquares);
-            setHoveredIndex(randomIndex);
-        }, 1000);
-        return () => clearInterval(interval);
-    }, []);
+
+
+
 
     return (
         <motion.div
@@ -47,7 +40,7 @@ const HomePage: React.FC = () => {
                                 to="/booking"
                                 className="inline-flex items-center gap-2 bg-[#4e9f66] hover:bg-[#3e8455] text-white font-semibold px-6 py-3 rounded-lg shadow transition"
                             >
-                                <CalendarDays className="w-5 h-5" />
+                                <CalendarDays className="w-5 h-5"/>
                                 {t('bookAppointment')}
                             </Link>
 
@@ -56,45 +49,11 @@ const HomePage: React.FC = () => {
 
                     {/* Right: Random Highlight Grid */}
                     <div className="md:col-span-4 lg:col-span-3 place-self-center md:place-self-auto">
-                        <div className="grid grid-cols-6 gap-[2px]
-                          w-[150px] h-[150px]
-                            md:w-[150px] md:h-[150px]
-                             lg:w-[200px] lg:h-[200px]">
-                            {Array.from({length: totalSquares}).map((_, i) => {
-                                const x = i % gridSize;
-                                const y = Math.floor(i / gridSize);
-                                const isHovered = hoveredIndex === i;
-
-                                return (
-                                    <div key={i} className="relative w-full h-full overflow-hidden">
-                                        {/* Base image (faint and always visible) */}
-                                        <div
-                                            className="absolute inset-0"
-                                            style={{
-                                                backgroundImage: `url(/images/logo-xxx.png)`,
-                                                backgroundSize: `${gridSize * 100}%`,
-                                                backgroundPosition: `${x * -100}% ${y * -100}%`,
-                                                opacity: 0.2,
-                                                transition: 'opacity 0.3s ease-in-out',
-                                                pointerEvents: 'none',
-                                            }}
-                                        />
-                                        {/* Highlighted image */}
-                                        <div
-                                            className="absolute inset-0 transition-all duration-500 ease-in-out"
-                                            style={{
-                                                backgroundImage: `url(/images/logo-xxx.png)`,
-                                                backgroundSize: `${gridSize * 100}%`,
-                                                backgroundPosition: `${x * -100}% ${y * -100}%`,
-                                                transform: `scale(${isHovered ? 1.1 : 1})`,
-                                                opacity: isHovered ? 1 : 0,
-                                                pointerEvents: 'none',
-                                            }}
-                                        />
-                                    </div>
-                                );
-                            })}
-                        </div>
+                        <img
+                            src="/images/logo-xxx.png"
+                            alt="Barbershop Logo"
+                            className="w-[150px] md:w-[180px] lg:w-[220px] h-auto opacity-90"
+                        />
                     </div>
                 </div>
             </div>
