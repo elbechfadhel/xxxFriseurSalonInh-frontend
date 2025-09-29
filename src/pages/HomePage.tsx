@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { CalendarDays, Clock, Scissors, Smile } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import CustomerFeedback from './CustomerFeedback';
+
+import ServicesGrid from "./ServicesGrid";
 
 const HomePage: React.FC = () => {
     const { t } = useTranslation();
@@ -20,28 +21,6 @@ const HomePage: React.FC = () => {
         return () => clearInterval(interval);
     }, []);
 
-    const feedbacks = [
-        {
-            name: 'John M.',
-            message: 'Die Buchung war einfach, und der Friseur hat genau verstanden, was ich wollte.',
-            image: '/images/customer1.jpg',
-            rating: 5,
-        },
-        {
-            name: 'Sarah K.',
-            message: 'Booking was easy, and the barber really understood what I wanted.',
-            image: '/images/customer2.jpg',
-            rating: 4,
-        },
-        {
-            name: 'Ali R.',
-            message:
-                'Toller Service und freundliches Personal! Ich verlasse den Salon immer mit einem frischen Haarschnitt.',
-            image: '/images/customer3.jpg',
-            rating: 5,
-        },
-    ];
-
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -50,7 +29,7 @@ const HomePage: React.FC = () => {
             className="flex flex-col px-4 sm:px-6 w-full"
         >
             {/* Hero Section */}
-            <div className="max-w-6xl mx-auto mt-10">
+            <div className="max-w-6xl mx-auto mt-4">
                 <div className="grid gap-8 md:grid-cols-12 items-start">
                     {/* Left Text Content — wider via col-span */}
                     <div className="md:col-span-8 lg:col-span-9 text-center md:text-left min-w-0">
@@ -71,13 +50,7 @@ const HomePage: React.FC = () => {
                                 <CalendarDays className="w-5 h-5" />
                                 {t('bookAppointment')}
                             </Link>
-                            <Link
-                                to="/services"
-                                className="inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold px-6 py-3 rounded-lg shadow transition"
-                            >
-                                <Scissors className="w-5 h-5" />
-                                {t('viewServices')}
-                            </Link>
+
                         </div>
                     </div>
 
@@ -123,10 +96,20 @@ const HomePage: React.FC = () => {
                 </div>
             </div>
 
-            {/* Customer Feedback Section */}
-            <div className="mt-12 max-w-5xl mx-auto w-full">
-                <CustomerFeedback feedbacks={feedbacks} title={t('customerFeedbackTitle')} />
-            </div>
+            {/* SERVICES SECTION (using ServicesGrid) */}
+            <section className="px-4 sm:px-6 mt-0">
+                <div className="max-w-6xl mx-auto">
+
+                    <div className="max-w-5xl mx-auto">
+                        <ServicesGrid />
+                    </div>
+
+                </div>
+            </section>
+
+            {/* TESTIMONIALS */}
+
+
 
             {/* Why Choose Us */}
             <section className="mt-8 max-w-3xl mx-auto text-center">
