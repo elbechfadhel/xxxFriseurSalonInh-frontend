@@ -173,9 +173,7 @@ const KioskBusBoard: React.FC = () => {
                     ? t("unassigned") || "Unassigned"
                     : id),
         }));
-        rows.sort((a, b) =>
-            a.name.localeCompare(b.name, i18n.language)
-        );
+
         return rows;
     }, [employees, byEmp, i18n.language, t]);
 
@@ -184,27 +182,44 @@ const KioskBusBoard: React.FC = () => {
         const s = new Date(slotIso).getTime();
         return list.find((r) => new Date(r.date).getTime() === s);
     };
+    const [currentTime, setCurrentTime] = useState(
+        new Intl.DateTimeFormat(i18n.language, {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+        }).format(new Date())
+    );
+
+    // update clock every minute
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentTime(
+                new Intl.DateTimeFormat(i18n.language, {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false,
+                }).format(new Date())
+            );
+        }, 60 * 1000);
+        return () => clearInterval(interval);
+    }, [i18n.language]);
 
     return (
         <div className="min-h-screen w-full bg-black  text-white" dir={i18n.dir()}>
             {/* Header */}
-            <header className="px-8 py-6 border-b border-white/10 flex items-end justify-between">
-                <div>
-                    <h1 className="text-4xl font-extrabold tracking-tight">
-                        {t("adminBookings.today") || "Heutige Termine"}
-                    </h1>
-                    <p className="text-white/70 text-xl mt-1">
-                        {new Intl.DateTimeFormat(i18n.language, {
-                            weekday: "long",
-                            day: "2-digit",
-                            month: "long",
-                            year: "numeric",
-                        }).format(new Date())}
-                    </p>
+            <header className="flex justify-between items-center px-8 py-4 bg-black">
+                <div className="flex items-baseline gap-6">
+                    <h1 className="text-3xl font-bold">{t("adminBookings.today")}</h1>
+                    <span className="text-lg text-gray-300">
+            {new Intl.DateTimeFormat(i18n.language, {
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+            }).format(new Date)}
+          </span>
                 </div>
-                <div className="text-5xl font-bold tabular-nums">
-                    {fmtTime(new Date(), i18n.language)}
-                </div>
+                <span className="text-2xl font-bold">{currentTime}</span>
             </header>
 
             <main className="px-6 py-6">
@@ -224,7 +239,8 @@ const KioskBusBoard: React.FC = () => {
                         {employeeList.map((emp) => (
                             <React.Fragment key={emp.id}>
                                 {/* AM Column */}
-                                <section className="rounded-3xl bg-white/5 ring-1 ring-white/10 shadow-xl overflow-hidden">
+                                <section
+                                    className="rounded-3xl bg-white/5 ring-1 ring-white/10 shadow-xl overflow-hidden">
                                     <div className="px-4 py-2 bg-white/10 text-center font-semibold">
                                         {emp.name} – AM
                                     </div>
@@ -265,7 +281,8 @@ const KioskBusBoard: React.FC = () => {
                                 </section>
 
                                 {/* PM Column */}
-                                <section className="rounded-3xl bg-white/5 ring-1 ring-white/10 shadow-xl overflow-hidden">
+                                <section
+                                    className="rounded-3xl bg-white/5 ring-1 ring-white/10 shadow-xl overflow-hidden">
                                     <div className="px-4 py-2 bg-white/10 text-center font-semibold">
                                         {emp.name} – PM
                                     </div>
@@ -296,7 +313,7 @@ const KioskBusBoard: React.FC = () => {
                                                         </div>
                                                     ) : (
                                                         <div className="text-white/60">
-                                                            {t("free") || "Frei"}
+
                                                         </div>
                                                     )}
                                                 </li>
@@ -310,10 +327,7 @@ const KioskBusBoard: React.FC = () => {
                 )}
             </main>
 
-            <footer className="px-8 py-4 text-center text-white/40 text-lg">
-                {t("kiosk.autorefresh") ||
-                    "Aktualisiert automatisch alle 30 Sekunden"}
-            </footer>
+
         </div>
     );
 };
