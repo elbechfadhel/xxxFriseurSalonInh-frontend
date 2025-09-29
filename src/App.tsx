@@ -12,6 +12,7 @@ import AdminEmployees from "@/admin/AdminEmployees.tsx";
 import AdminFeedbacks from "@/admin/AdminFeedbacks.tsx";
 import PrivacyPolicy from "@/components/PrivacyPolicy.tsx";
 import FeedbackPage from "./pages/FeedbackPage.tsx";
+import KioskTodayBoard from "@/admin/KioskTodayBoard.tsx";
 
 
 const App: React.FC = () => {
@@ -25,6 +26,11 @@ const App: React.FC = () => {
                     <Route path="/booking" element={<BookingPage />} />
                     <Route path="/feedback" element={<FeedbackPage />} />
                     <Route path="/admin/login" element={<AdminLogin />} />
+
+                    <Route
+                        path="/admin/kioskTodayBoard"
+                        element={<ProtectedRoute><KioskTodayBoard /></ProtectedRoute>}
+                    />
                     <Route
                         path="/admin/bookings"
                         element={<ProtectedRoute><AdminBookings /></ProtectedRoute>}
