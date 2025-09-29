@@ -26,7 +26,7 @@ const defaultServices: Service[] = [
 
 const ServicesGrid: React.FC<ServicesGridProps> = ({
                                                        services = defaultServices,
-                                                       showHeader = true,
+
                                                    }) => {
     const { t, i18n } = useTranslation();
 
@@ -42,14 +42,7 @@ const ServicesGrid: React.FC<ServicesGridProps> = ({
             aria-labelledby="services-heading"
             dir={i18n.dir()}
         >
-            {showHeader && (
-                <header className={styles.header}>
-                    <h1 id="services-heading" className={styles.title}>
-                        {t("services.title")}
-                    </h1>
-                    <p className={styles.subtitle}>{t("services.subtitle")}</p>
-                </header>
-            )}
+
 
             <ul className={styles.grid} role="list">
                 {services.map((s) => {
