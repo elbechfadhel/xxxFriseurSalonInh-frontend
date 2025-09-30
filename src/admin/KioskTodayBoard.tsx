@@ -148,7 +148,7 @@ const KioskBusBoard: React.FC = () => {
             // clear flash highlight
             setTimeout(() => {
                 setFlashIds([]);
-            }, 2000);
+            }, 5000);
 
             // remove banners after 5s
             newBanners.forEach(b => {

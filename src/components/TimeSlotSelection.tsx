@@ -134,17 +134,28 @@ const TimeSlotSelection: React.FC<TimeSlotSelectionProps> = ({
             <button
                 onClick={() => setSelectedSlotId(slot.id)}
                 disabled={!slot.isAvailable}
-                className={`w-8 h-8 text-xs font-semibold transition-all duration-200 ${
+                title={!slot.isAvailable ? t("notAvailable") : ""}
+                className={`w-8 h-8 text-xs font-semibold flex items-center justify-center rounded transition-all duration-200 ${
                     selectedSlotId === slot.id
                         ? 'bg-[#4e9f66] text-white'
                         : slot.isAvailable
                             ? 'bg-[#8bc99e] hover:bg-[#4e9f66] text-white'
-                            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                            : 'bg-gray-300 text-gray-500 opacity-70 cursor-not-allowed'
                 }`}
-            />
-            <div className="text-[10px] mt-1 text-gray-600 whitespace-nowrap">{slot.time}</div>
+            >
+                {!slot.isAvailable ? "✕" : ""}
+            </button>
+            <div
+                className={`text-[10px] mt-1 whitespace-nowrap ${
+                    slot.isAvailable ? 'text-gray-600' : 'text-gray-400 opacity-50'
+                }`}
+            >
+                {slot.time}
+            </div>
         </div>
     );
+
+
 
     return (
         <div className="w-full">
