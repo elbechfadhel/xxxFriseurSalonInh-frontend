@@ -9,7 +9,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { pathname } = useLocation();
 
     const [isAdminOpen, setIsAdminOpen] = useState(false);
-    const [isServicesOpen, setIsServicesOpen] = useState(false);
+   /* const [isServicesOpen, setIsServicesOpen] = useState(false);*/
     const menuRef = useRef<HTMLDivElement | null>(null);
 
     const navLinkClass = (path: string) =>
@@ -22,7 +22,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         const handleClickOutside = (e: MouseEvent) => {
             if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
                 setIsAdminOpen(false);
-                setIsServicesOpen(false);
+              //  setIsServicesOpen(false);
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
@@ -48,9 +48,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                         <Link to="/" className={navLinkClass('/')}>
                             {t('home')}
                         </Link>
-                        <Link to="/services" className={navLinkClass('/services')}>
+                      {/*  <Link to="/services" className={navLinkClass('/services')}>
                             {t('services.menu')}
-                        </Link>
+                        </Link>*/}
                         <Link to="/booking" className={navLinkClass('/booking')}>
                             {t('booking')}
                         </Link>
@@ -107,7 +107,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                                 </Link>
 
                                 {/* Submenu Toggle */}
-                                <div className="relative">
+                               {/* <div className="relative">
                                     <button
                                         className="w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-800 flex justify-between items-center"
                                         onClick={() => setIsServicesOpen(!isServicesOpen)}
@@ -115,7 +115,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                                         {t('adminServices.title')}
                                     </button>
 
-                                    {/* Submenu */}
+                                     Submenu
                                     <div
                                         className={`absolute left-full top-0 mt-0 w-48 bg-white shadow-lg border rounded z-50 transition-all duration-200 transform origin-left ${
                                             isServicesOpen
@@ -144,7 +144,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                                             {t('services.nails')}
                                         </Link>
                                     </div>
-                                </div>
+                                </div>*/}
                             </div>
                         </div>
                     </nav>
