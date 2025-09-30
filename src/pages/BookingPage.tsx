@@ -241,6 +241,7 @@ const BookingPage: React.FC = () => {
                         className="rounded-lg border shadow-md p-2 w-full"
                         inline
                         minDate={new Date()}
+                        filterDate={(d: Date) => d.getDay() !== 0}
                     />
                 </div>
 
