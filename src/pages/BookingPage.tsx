@@ -13,7 +13,12 @@ interface Employee {
 }
 
 // --- helpers ---
-const isValidGermanPhone = (number: string) => /^[1-9][0-9]{9,10}$/.test(number); // 10 digits, no leading 0
+const isValidGermanPhone = (v: string) => {
+    // Nettoyer et retirer un éventuel zéro de tête
+    const digits = v.replace(/\D/g, "").replace(/^0/, "");
+    // Les mobiles allemands : commencent par 1 et font entre 7 et 11 chiffres
+    return /^1[5-7,6,9][0-9]{6,9}$/.test(digits);
+};// 10 digits, no leading 0
 
 async function isSlotStillFree(apiBase: string, employeeId: string, slotISO: string) {
     const dayStr = new Date(slotISO).toISOString().slice(0, 10);

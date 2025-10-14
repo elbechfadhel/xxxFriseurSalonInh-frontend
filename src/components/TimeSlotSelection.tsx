@@ -25,24 +25,24 @@ const TimeSlotSelection: React.FC<TimeSlotSelectionProps> = ({
     const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
     const API_BASE = import.meta.env.VITE_API_URL;
 
-    // Generate half-hour slots from 08:00 to 20:00
     const generateTimeSlots = (): string[] => {
         const times: string[] = [];
-        let start = new Date();
-        start.setHours(8, 0, 0, 0);
+        const start = new Date();
+        start.setHours(9, 30, 0, 0); // 👈 Début à 09:30
         const end = new Date();
-        end.setHours(20, 0, 0, 0);
+        end.setHours(19, 0, 0, 0);   // 👈 Dernier créneau à 19:00
 
         while (start <= end) {
             times.push(
                 start.toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: false, // 24-hour format
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false, // format 24h
                 })
             );
             start.setMinutes(start.getMinutes() + 30);
         }
+
         return times;
     };
 
@@ -132,23 +132,24 @@ const TimeSlotSelection: React.FC<TimeSlotSelectionProps> = ({
     const renderSlotButton = (slot: Slot) => (
         <div key={slot.id} className="text-center relative flex-shrink-0">
             <button
-                onClick={() => setSelectedSlotId(slot.id)}
+                onClick={() => slot.isAvailable && setSelectedSlotId(slot.id)}
                 disabled={!slot.isAvailable}
+                aria-disabled={!slot.isAvailable}
                 title={!slot.isAvailable ? t("notAvailable") : ""}
-                className={`w-8 h-8 text-xs font-semibold flex items-center justify-center rounded transition-all duration-200 ${
+                className={`w-8 h-8 text-xs font-semibold flex items-center justify-center rounded transition-all duration-200
+        ${
                     selectedSlotId === slot.id
-                        ? 'bg-[#4e9f66] text-white'
+                        ? "bg-[#4e9f66] text-white"
                         : slot.isAvailable
-                            ? 'bg-[#8bc99e] hover:bg-[#4e9f66] text-white'
-                            : 'bg-gray-300 text-gray-500 opacity-70 cursor-not-allowed'
+                            ? "bg-[#8bc99e] hover:bg-[#4e9f66] text-white"
+                            : "bg-[#b91c1c] text-white cursor-not-allowed"
                 }`}
             >
-                {!slot.isAvailable ? "✕" : ""}
+                {/* Pas d'icône/texte pour rester cohérent avec le mobile */}
             </button>
             <div
-                className={`text-[10px] mt-1 whitespace-nowrap ${
-                    slot.isAvailable ? 'text-gray-600' : 'text-gray-400 opacity-50'
-                }`}
+                className={`text-[10px] mt-1 whitespace-nowrap
+        ${slot.isAvailable ? "text-gray-600" : "text-gray-400 line-through"}`}
             >
                 {slot.time}
             </div>

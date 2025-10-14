@@ -31,7 +31,7 @@ const Footer: React.FC = () => {
                     </div>
                     <div className="flex items-center gap-2 mb-1">
                         <Phone className="w-4 h-4 text-[#8bc99e]" />
-                        <span>01694363101</span>
+                        <span>01634363101</span>
                     </div>
                 </div>
 
