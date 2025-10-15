@@ -23,7 +23,7 @@ type Slot = {
 
 type Banner = { id: string; message: string };
 
-const POLL_MS = 15000;
+const POLL_MS = 5000;
 const SLOT_MINUTES = 30;
 const DAY_START = { h: 8, m: 30 };   // start 08:30
 const DAY_END = { h: 20, m: 0 };
