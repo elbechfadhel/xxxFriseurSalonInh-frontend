@@ -25,8 +25,8 @@ type Banner = { id: string; message: string };
 
 const POLL_MS = 5000;
 const SLOT_MINUTES = 30;
-const DAY_START = { h: 8, m: 30 };   // start 08:30
-const DAY_END = { h: 20, m: 0 };
+const DAY_START = { h: 9, m: 30 };   // start 08:30
+const DAY_END = { h: 19, m: 0 };
 
 function startOfTodayAt(h: number, m = 0) {
     const d = new Date();
