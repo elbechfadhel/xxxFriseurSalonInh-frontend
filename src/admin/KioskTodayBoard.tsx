@@ -25,7 +25,7 @@ type Banner = { id: string; message: string };
 
 const POLL_MS = 5000;
 const SLOT_MINUTES = 30;
-const DAY_START = { h: 9, m: 30 };   // start 08:30
+const DAY_START = { h: 9, m: 30 };   // start 09:30
 const DAY_END = { h: 19, m: 0 };
 
 function startOfTodayAt(h: number, m = 0) {
@@ -52,8 +52,6 @@ function fmtTime(d: Date, locale: string) {
     }).format(d);
 }
 
-
-
 const KioskBusBoard: React.FC = () => {
     const { t, i18n } = useTranslation();
     const API_BASE = import.meta.env.VITE_API_URL;
@@ -66,12 +64,13 @@ const KioskBusBoard: React.FC = () => {
     const [banners, setBanners] = useState<Banner[]>([]);
     const prevReservations = useRef<Reservation[]>([]);
     const [now, setNow] = useState<Date>(new Date());
+
     const authHeaders = () => ({
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("admin_token") || ""}`,
     });
 
-
+    // Horloge temps réel
     useEffect(() => {
         const timer = setInterval(() => setNow(new Date()), 1000);
         return () => clearInterval(timer);
@@ -194,12 +193,12 @@ const KioskBusBoard: React.FC = () => {
         }));
     }, [start, end, i18n.language]);
 
-    // AM: 08:30 → 14:00
+    // AM: 09:30 → 14:00
     const amSlots = allSlots.filter(
         (s) => s.hour < 14 || (s.hour === 14 && s.minutes === 0)
     );
 
-    // PM: AFTER 14:00
+    // PM: after 14:00
     const pmSlots = allSlots.filter(
         (s) => s.hour > 14 || (s.hour === 14 && s.minutes > 0)
     );
@@ -242,30 +241,34 @@ const KioskBusBoard: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen w-full bg-black text-white" dir={i18n.dir()}>
+        <div className="min-h-screen w-full bg-gray-100 text-gray-900" dir={i18n.dir()}>
             <main className="px-6 py-6">
-                <header className="w-full flex items-center justify-center gap-6 py-0 mb-6 border-b border-white/10">
+                {/* HEADER */}
+                <header className="w-full flex items-center justify-center gap-6 py-2 mb-6 border-b border-gray-200">
                     {/* Logo à gauche */}
                     <img
                         src="/images/logo-xxx.png"
                         alt="Logo"
-                        className="h-20 w-auto object-contain"
+                        className="w-auto"
+                        style={{height: "100px"}}
                     />
-
-
                     <div className="text-center">
-                        <h1 className="text-2xl font-bold">Willkommen im Barbershop</h1>
-                        <p className="text-lg text-white/70">
+                        <h1 className="text-1xl sm:text-1xl md:text-2xl font-extrabold text-gray-900 mb-4">
+                            {t('welcomeTitle')}
+                            <span className="text-[#4e9f66] "> {t('barberShopName')}</span>
+                        </h1>
+                        <p className="text-lg text-gray-600 font-extrabold ">
                             {todayDateStr} – {timeStr}
                         </p>
                     </div>
                 </header>
+
                 {loading ? (
-                    <p className="text-white/70 text-2xl">
-                    {t("adminBookings.loading")}
+                    <p className="text-gray-600 text-2xl">
+                        {t("adminBookings.loading")}
                     </p>
                 ) : error ? (
-                    <p className="text-red-400 text-2xl">{error}</p>
+                    <p className="text-red-600 text-2xl">{error}</p>
                 ) : (
                     <div
                         className="grid gap-4"
@@ -276,9 +279,11 @@ const KioskBusBoard: React.FC = () => {
                         {employeeList.map((emp) => (
                             <React.Fragment key={emp.id}>
                                 {/* AM Column */}
-                                <section
-                                    className="rounded-3xl bg-white/5 ring-1 ring-white/10 shadow-xl overflow-hidden">
-                                    <div className="px-4 py-2 bg-white/10 text-center font-semibold">
+                                <section className="rounded-3xl bg-white border border-gray-200 shadow-md overflow-hidden">
+                                    <div
+                                        className="px-4 py-2 text-center font-semibold text-white"
+                                        style={{ backgroundColor: "#374151" }} // gris très foncé
+                                    >
                                         {emp.name} – AM
                                     </div>
                                     <ul className="p-3 space-y-2">
@@ -292,9 +297,9 @@ const KioskBusBoard: React.FC = () => {
                             ${
                                                         booking
                                                             ? isFlash
-                                                                ? "bg-yellow-400 text-black"
-                                                                : "bg-emerald-600/25 ring-1 ring-emerald-400/40"
-                                                            : "bg-black/30 ring-1 ring-white/10"
+                                                                ? "bg-yellow-300 text-black"
+                                                                : "bg-gray-200 text-gray-800 border border-gray-400"
+                                                            : "bg-white text-gray-600 border border-gray-200"
                                                     }`}
                                                 >
                                                     <div className="w-[64px] text-lg font-bold tabular-nums">
@@ -307,7 +312,7 @@ const KioskBusBoard: React.FC = () => {
                                                             </div>
                                                         </div>
                                                     ) : (
-                                                        <div className="text-white/60"></div>
+                                                        <div className="text-gray-400"></div>
                                                     )}
                                                 </li>
                                             );
@@ -316,9 +321,11 @@ const KioskBusBoard: React.FC = () => {
                                 </section>
 
                                 {/* PM Column */}
-                                <section
-                                    className="rounded-3xl bg-white/5 ring-1 ring-white/10 shadow-xl overflow-hidden">
-                                    <div className="px-4 py-2 bg-white/10 text-center font-semibold">
+                                <section className="rounded-3xl bg-white border border-gray-200 shadow-md overflow-hidden">
+                                    <div
+                                        className="px-4 py-2 text-center font-semibold text-white"
+                                        style={{ backgroundColor: "#374151" }} // gris très foncé
+                                    >
                                         {emp.name} – PM
                                     </div>
                                     <ul className="p-3 space-y-2">
@@ -329,10 +336,14 @@ const KioskBusBoard: React.FC = () => {
                                                 <li
                                                     key={slot.iso}
                                                     className={`rounded-xl px-3 py-2 flex items-center gap-3 transition-colors duration-500
-    ${booking ? (isFlash ? "animate-flashFade" : "bg-emerald-600/25 ring-1 ring-emerald-400/40") : "bg-black/30 ring-1 ring-white/10"}
-  `}
+                            ${
+                                                        booking
+                                                            ? isFlash
+                                                                ? "bg-yellow-300 text-black"
+                                                                : "bg-gray-200 text-gray-800 border border-gray-400"
+                                                            : "bg-white text-gray-600 border border-gray-200"
+                                                    }`}
                                                 >
-
                                                     <div className="w-[64px] text-lg font-bold tabular-nums">
                                                         {slot.label}
                                                     </div>
@@ -343,7 +354,7 @@ const KioskBusBoard: React.FC = () => {
                                                             </div>
                                                         </div>
                                                     ) : (
-                                                        <div className="text-white/60"></div>
+                                                        <div className="text-gray-400"></div>
                                                     )}
                                                 </li>
                                             );
@@ -361,7 +372,8 @@ const KioskBusBoard: React.FC = () => {
                 {banners.map(b => (
                     <div
                         key={b.id}
-                        className="bg-emerald-500 text-white px-4 py-2 rounded-lg shadow-lg animate-slideIn"
+                        className="text-white px-4 py-2 rounded-lg shadow-lg"
+                        style={{ backgroundColor: "#374151" }} // gris très foncé
                     >
                         {b.message}
                     </div>
