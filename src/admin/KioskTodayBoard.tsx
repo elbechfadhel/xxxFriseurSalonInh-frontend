@@ -52,6 +52,8 @@ function fmtTime(d: Date, locale: string) {
     }).format(d);
 }
 
+
+
 const KioskBusBoard: React.FC = () => {
     const { t, i18n } = useTranslation();
     const API_BASE = import.meta.env.VITE_API_URL;
@@ -63,10 +65,29 @@ const KioskBusBoard: React.FC = () => {
     const [flashIds, setFlashIds] = useState<string[]>([]);
     const [banners, setBanners] = useState<Banner[]>([]);
     const prevReservations = useRef<Reservation[]>([]);
-
+    const [now, setNow] = useState<Date>(new Date());
     const authHeaders = () => ({
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("admin_token") || ""}`,
+    });
+
+
+    useEffect(() => {
+        const timer = setInterval(() => setNow(new Date()), 1000);
+        return () => clearInterval(timer);
+    }, []);
+
+    const todayDateStr = now.toLocaleDateString("de-DE", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+    });
+
+    const timeStr = now.toLocaleTimeString("de-DE", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
     });
 
     // --- load employees once ---
@@ -223,9 +244,25 @@ const KioskBusBoard: React.FC = () => {
     return (
         <div className="min-h-screen w-full bg-black text-white" dir={i18n.dir()}>
             <main className="px-6 py-6">
+                <header className="w-full flex items-center justify-center gap-6 py-0 mb-6 border-b border-white/10">
+                    {/* Logo à gauche */}
+                    <img
+                        src="/images/logo-xxx.png"
+                        alt="Logo"
+                        className="h-20 w-auto object-contain"
+                    />
+
+
+                    <div className="text-center">
+                        <h1 className="text-2xl font-bold">Willkommen im Barbershop</h1>
+                        <p className="text-lg text-white/70">
+                            {todayDateStr} – {timeStr}
+                        </p>
+                    </div>
+                </header>
                 {loading ? (
                     <p className="text-white/70 text-2xl">
-                        {t("adminBookings.loading")}
+                    {t("adminBookings.loading")}
                     </p>
                 ) : error ? (
                     <p className="text-red-400 text-2xl">{error}</p>
@@ -239,7 +276,8 @@ const KioskBusBoard: React.FC = () => {
                         {employeeList.map((emp) => (
                             <React.Fragment key={emp.id}>
                                 {/* AM Column */}
-                                <section className="rounded-3xl bg-white/5 ring-1 ring-white/10 shadow-xl overflow-hidden">
+                                <section
+                                    className="rounded-3xl bg-white/5 ring-1 ring-white/10 shadow-xl overflow-hidden">
                                     <div className="px-4 py-2 bg-white/10 text-center font-semibold">
                                         {emp.name} – AM
                                     </div>
@@ -278,7 +316,8 @@ const KioskBusBoard: React.FC = () => {
                                 </section>
 
                                 {/* PM Column */}
-                                <section className="rounded-3xl bg-white/5 ring-1 ring-white/10 shadow-xl overflow-hidden">
+                                <section
+                                    className="rounded-3xl bg-white/5 ring-1 ring-white/10 shadow-xl overflow-hidden">
                                     <div className="px-4 py-2 bg-white/10 text-center font-semibold">
                                         {emp.name} – PM
                                     </div>
