@@ -220,6 +220,24 @@
       "send": "Send",
       "info": "Will be published after review."
     }
+  },
+  "blocks": {
+    "title": "Block time slots"
+  },
+  "adminBlockSlots": {
+    "title": "Block time slots",
+    "employee": "Employee",
+    "date": "Date",
+    "slots": "Day slots",
+    "selectAll": "Select all",
+    "unselectAll": "Unselect all",
+    "noSlots": "No available slots",
+    "booked": "Booked",
+    "selectedCount": "{{count}} slot(s) selected",
+    "block": "Block",
+    "saving": "Saving…",
+    "success": "{{count}} slot(s) blocked",
+    "error": "Error while blocking slots"
   }
 
 }

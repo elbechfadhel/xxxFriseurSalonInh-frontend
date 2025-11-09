@@ -218,7 +218,23 @@
       "send": "Senden",
       "info": "Wird nach Prüfung veröffentlicht."
     }
+  },
+  "blocks": {
+    "title": "Zeitfenster sperren"
+ },
+  "adminBlockSlots": {
+    "title": "Zeitslots sperren",
+    "employee": "Mitarbeiter",
+    "date": "Datum",
+    "slots": "Tages-Slots",
+    "selectAll": "Alle auswählen",
+    "unselectAll": "Alle abwählen",
+    "noSlots": "Keine freien Slots",
+    "booked": "Belegt",
+    "selectedCount": "{{count}} Slot(s) ausgewählt",
+    "block": "Sperren",
+    "saving": "Speichern…",
+    "success": "{{count}} Slot(s) gesperrt",
+    "error": "Fehler beim Sperren der Slots"
   }
-
-
 }
