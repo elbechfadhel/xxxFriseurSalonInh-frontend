@@ -3,3 +3,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+:root {
+    color-scheme: light;
+}
+
+/* Prevent iOS/Android dark-mode auto-theming on inputs */
+input,
+textarea,
+select {
+    background-color: #ffffff !important;
+    color: #111827 !important;     /* Tailwind gray-900 */
+    -webkit-text-fill-color: #111827 !important; /* Safari fix */
+}
