@@ -112,6 +112,17 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                                 >
                                     {t('adminFeedbacks.title')}
                                 </Link>
+                                <Link
+                                    to="/admin/sms-logs"
+                                    className="block px-4 py-2 hover:bg-gray-100 text-gray-800"
+                                    onClick={() => setIsAdminOpen(false)}
+                                >
+                                    SMS-Verlauf
+                                </Link>
+
+
+
+
 
                                 {/* Submenu Toggle */}
                                {/* <div className="relative">

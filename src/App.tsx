@@ -14,6 +14,7 @@ import PrivacyPolicy from "@/components/PrivacyPolicy.tsx";
 import FeedbackPage from "./pages/FeedbackPage.tsx";
 import KioskTodayBoard from "@/admin/KioskTodayBoard.tsx";
 import AdminBlockSlots from "@/admin/AdminBlockSlots.tsx";
+import AdminSmsLogs from "@/admin/AdminSmsLogs.tsx";
 
 
 const App: React.FC = () => {
@@ -55,6 +56,11 @@ const App: React.FC = () => {
                         path="/admin/feedbacks"
                         element={<ProtectedRoute><AdminFeedbacks /></ProtectedRoute>}
                     />
+                    <Route
+                        path="/admin/sms-logs"
+                        element={<ProtectedRoute><AdminSmsLogs /></ProtectedRoute>}
+                    />
+
 
                     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                    {/* <Route
