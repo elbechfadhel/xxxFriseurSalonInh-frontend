@@ -44,8 +44,8 @@ const DayScheduleGrid: React.FC<Props> = ({
                                               reservations,
                                               onEdit,
                                               onEmptyClick,
-                                              openHour = 8,
-                                              closeHour = 20,
+                                              openHour = 9,
+                                              closeHour = 19,
                                               slotMinutes = 30,
                                               includeUnassigned = true,
                                               employeeColWidth = 180,
@@ -58,7 +58,7 @@ const DayScheduleGrid: React.FC<Props> = ({
     const times = useMemo(() => {
         const out: string[] = [];
         const d = new Date(date);
-        d.setHours(openHour, 0, 0, 0);
+        d.setHours(openHour, 30, 0, 0);  // start at 09:30
         const end = new Date(date);
         end.setHours(closeHour, 0, 0, 0);
         while (d <= end) {
@@ -67,6 +67,7 @@ const DayScheduleGrid: React.FC<Props> = ({
         }
         return out;
     }, [date, openHour, closeHour, slotMinutes]);
+
 
     // employeeId -> "HH:MM" -> reservation
     const byEmpTime = useMemo(() => {

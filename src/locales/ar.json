@@ -76,7 +76,8 @@
     "noBookingsForHistory": "لا توجد حجوزات سابقة.",
     "booked": "محجوز",
     "free":"متاح",
-    "today": "حجوزات اليوم"
+    "today": "حجوزات اليوم",
+    "conflictWarning": "الموظف المختار لديه حجز في هذا الوقت بالفعل."
   },
   "customerFeedbackTitle": "آراء عملائنا",
   "deleteModal": {

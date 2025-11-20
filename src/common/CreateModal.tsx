@@ -51,7 +51,7 @@ const CreateModal: React.FC<Props> = ({ isOpen, onClose, onCreate, employees, al
         }
         return value.length >= 16 ? value.slice(0, 16) : value;
     };
-    
+
     const [form, setForm] = useState<CreateReservationPayload>({
         customerName: '',
         email: '',
@@ -62,15 +62,22 @@ const CreateModal: React.FC<Props> = ({ isOpen, onClose, onCreate, employees, al
     });
     useEffect(() => {
         if (!isOpen) return;
-        setForm(prev => ({
-            customerName: (initialValues?.customerName ?? prev.customerName) || '',
-            email: (initialValues?.email ?? prev.email) || '',
-            phone: (initialValues?.phone ?? prev.phone) || '',
-            service: (initialValues?.service ?? prev.service) || '',
-            employeeId: (initialValues?.employeeId ?? prev.employeeId) || '',
-            date: toInputValue(initialValues?.date ?? prev.date),
-        }));
-    }, [isOpen, initialValues]);
+
+        setForm(prev => {
+            const defaultEmployeeId = employees[0]?.id ?? '';
+
+            return {
+                customerName: (initialValues?.customerName ?? prev.customerName) || '',
+                email: (initialValues?.email ?? prev.email) || '',
+                phone: (initialValues?.phone ?? prev.phone) || '',
+                service: (initialValues?.service ?? prev.service) || '',
+                employeeId:
+                    (initialValues?.employeeId ?? prev.employeeId) || defaultEmployeeId,
+                date: toInputValue(initialValues?.date ?? prev.date ?? defaultDate),
+            };
+        });
+    }, [isOpen, initialValues, employees, defaultDate]);
+
     const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setForm((f) => ({ ...f, [name]: value }));

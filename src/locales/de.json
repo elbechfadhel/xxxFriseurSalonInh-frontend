@@ -76,7 +76,8 @@
     "noBookingsForHistory": "Keine vergangenen Buchungen gefunden.",
     "booked": "Gebucht",
     "free":"Frei",
-    "today": "Heutige Buchungen"
+    "today": "Heutige Buchungen",
+    "conflictWarning": "Der ausgewählte Mitarbeiter hat zu dieser Zeit bereits eine Buchung."
   },
   "customerFeedbackTitle" : "Das sagen unsere Kunden",
   "deleteModal": {
