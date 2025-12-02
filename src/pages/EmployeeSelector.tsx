@@ -33,10 +33,19 @@ const EmployeeSelector: React.FC<EmployeeSelectorProps> = ({
                     >
                         <img
                             src={`${apiBase}/employees/${emp.id}/photo`}
-                            onError={(e) =>
-                                ((e.target as HTMLImageElement).src =
-                                    '/images/avatar-placeholder.png')
-                            }
+                            onLoad={() => {
+                                console.log(`✅ Image loaded for employee ${emp.id}`);
+                            }}
+                            onError={(e) => {
+                                console.error(`❌ Image FAILED for employee ${emp.id}`);
+                                console.log("Requested URL:", `${apiBase}/employees/${emp.id}/photo`);
+
+                                // prevent infinite loop
+                                (e.target as HTMLImageElement).onerror = null;
+
+                                // set placeholder
+                                (e.target as HTMLImageElement).src = '/images/avatar-placeholder.png';
+                            }}
                             alt={emp.name}
                             className="w-16 h-16 object-cover rounded-full mb-2"
                         />

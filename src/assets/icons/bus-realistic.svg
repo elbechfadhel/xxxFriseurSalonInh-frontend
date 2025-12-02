@@ -1,0 +1,44 @@
+<svg viewBox="0 0 120 60" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bus">
+    <!-- shadow -->
+    <ellipse cx="60" cy="50" rx="44" ry="4" fill="rgba(0,0,0,0.35)" />
+
+    <!-- main body -->
+    <rect x="8" y="18" width="104" height="26" rx="4" fill="#f4f4f4" />
+    <!-- front mask -->
+    <path d="M8 18h16c5 0 9 3 10 8v18H8z" fill="#1f2530" />
+    <!-- lower blue stripe -->
+    <rect x="8" y="37" width="104" height="7" fill="#1f4f9c" />
+
+    <!-- front glass -->
+    <path d="M11 20h13c4 0 7 3 7 7v10H11z" fill="#3a4854" />
+    <!-- front windows vertical bars -->
+    <rect x="18" y="20" width="2" height="17" fill="#f4f4f4" opacity="0.35" />
+
+    <!-- side windows -->
+    <rect x="30" y="20" width="70" height="12" fill="#3a4854" />
+    <rect x="32" y="20" width="3" height="12" fill="#f4f4f4" opacity="0.4" />
+    <rect x="40" y="20" width="3" height="12" fill="#f4f4f4" opacity="0.4" />
+    <rect x="48" y="20" width="3" height="12" fill="#f4f4f4" opacity="0.4" />
+    <rect x="56" y="20" width="3" height="12" fill="#f4f4f4" opacity="0.4" />
+    <rect x="64" y="20" width="3" height="12" fill="#f4f4f4" opacity="0.4" />
+    <rect x="72" y="20" width="3" height="12" fill="#f4f4f4" opacity="0.4" />
+    <rect x="80" y="20" width="3" height="12" fill="#f4f4f4" opacity="0.4" />
+    <rect x="88" y="20" width="3" height="12" fill="#f4f4f4" opacity="0.4" />
+
+    <!-- door hint -->
+    <rect x="68" y="20" width="2" height="17" fill="#1f2530" opacity="0.7" />
+
+    <!-- lights -->
+    <circle cx="16" cy="36" r="1.7" fill="#ffcf33" />
+    <circle cx="22" cy="36" r="1.7" fill="#ffcf33" />
+
+    <!-- wheels -->
+    <circle cx="32" cy="45" r="4" fill="#1d1f24" />
+    <circle cx="88" cy="45" r="4" fill="#1d1f24" />
+    <!-- wheel centers -->
+    <circle cx="32" cy="45" r="1.4" fill="#b5bcc5" />
+    <circle cx="88" cy="45" r="1.4" fill="#b5bcc5" />
+
+    <!-- roof line -->
+    <rect x="20" y="15" width="70" height="3" rx="1.5" fill="#1f2530" />
+</svg>

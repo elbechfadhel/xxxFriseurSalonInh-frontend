@@ -1,0 +1,62 @@
+<svg viewBox="0 0 120 60" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tram">
+    <!-- shadow -->
+    <ellipse cx="60" cy="50" rx="46" ry="4" fill="rgba(0,0,0,0.35)" />
+
+    <!-- body main -->
+    <rect x="10" y="18" width="100" height="26" rx="4" fill="#f4f4f4" />
+    <!-- lower blue stripe -->
+    <rect x="10" y="37" width="100" height="7" fill="#1f4f9c" />
+
+    <!-- articulation joint -->
+    <rect x="55" y="20" width="10" height="22" fill="#d3d3d3" />
+
+    <!-- front mask -->
+    <path d="M10 18h18c5 0 8 3 9 8v18H10z" fill="#2a2d34" />
+    <!-- front glass -->
+    <path d="M13 20h14c4 0 7 3 7 7v10H13z" fill="#3a4854" />
+    <!-- wipers -->
+    <path d="M16 28l7 7M22 27l7 8" stroke="#cfd6de" stroke-width="1.5" stroke-linecap="round" />
+
+    <!-- side windows left section -->
+    <rect x="32" y="20" width="22" height="12" fill="#3a4854" />
+    <rect x="32" y="20" width="3" height="12" fill="#f4f4f4" opacity="0.4" />
+    <rect x="41" y="20" width="3" height="12" fill="#f4f4f4" opacity="0.4" />
+    <rect x="50" y="20" width="3" height="12" fill="#f4f4f4" opacity="0.4" />
+
+    <!-- side windows right section -->
+    <rect x="65" y="20" width="32" height="12" fill="#3a4854" />
+    <rect x="67" y="20" width="3" height="12" fill="#f4f4f4" opacity="0.4" />
+    <rect x="76" y="20" width="3" height="12" fill="#f4f4f4" opacity="0.4" />
+    <rect x="85" y="20" width="3" height="12" fill="#f4f4f4" opacity="0.4" />
+    <rect x="94" y="20" width="3" height="12" fill="#f4f4f4" opacity="0.4" />
+
+    <!-- door hints -->
+    <rect x="38" y="20" width="2" height="17" fill="#2a2d34" opacity="0.6" />
+    <rect x="80" y="20" width="2" height="17" fill="#2a2d34" opacity="0.6" />
+
+    <!-- lights -->
+    <circle cx="18" cy="36" r="1.7" fill="#ffcf33" />
+    <circle cx="24" cy="36" r="1.7" fill="#ffcf33" />
+
+    <!-- wheels -->
+    <circle cx="32" cy="45" r="4" fill="#1d1f24" />
+    <circle cx="88" cy="45" r="4" fill="#1d1f24" />
+    <circle cx="60" cy="45" r="3.5" fill="#1d1f24" />
+
+    <!-- wheel centers -->
+    <circle cx="32" cy="45" r="1.4" fill="#b5bcc5" />
+    <circle cx="88" cy="45" r="1.4" fill="#b5bcc5" />
+    <circle cx="60" cy="45" r="1.2" fill="#b5bcc5" />
+
+    <!-- roof -->
+    <rect x="20" y="15" width="70" height="3" rx="1.5" fill="#2a2d34" />
+
+    <!-- pantograph base -->
+    <rect x="52" y="10" width="16" height="3" rx="1.5" fill="#2a2d34" />
+
+    <!-- pantograph arms -->
+    <path d="M60 10L52 4M60 10L68 4" stroke="#c7322b" stroke-width="1.8" stroke-linecap="round" />
+
+    <!-- pantograph bar -->
+    <rect x="48" y="3" width="24" height="2" rx="1" fill="#2a2d34" />
+</svg>

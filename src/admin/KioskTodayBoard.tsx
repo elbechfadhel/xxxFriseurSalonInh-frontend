@@ -365,7 +365,7 @@ const KioskBusBoard: React.FC = () => {
                                                             booking
                                                                 ? isFlash
                                                                     ? "bg-yellow-300 text-black"
-                                                                    : "bg-gray-200 text-gray-800 border border-gray-400"
+                                                                    : "bg-[#3d7f52] text-white border border-[#3d7f52]"
                                                                 : "bg-white text-gray-600 border border-gray-200"
                                                         }`}
                                                     >
@@ -414,7 +414,7 @@ const KioskBusBoard: React.FC = () => {
                                                             booking
                                                                 ? isFlash
                                                                     ? "bg-yellow-300 text-black"
-                                                                    : "bg-gray-200 text-gray-800 border border-gray-400"
+                                                                    : "bg-[#3d7f52] text-white border border-[#3d7f52]"
                                                                 : "bg-white text-gray-600 border border-gray-200"
                                                         }`}
                                                     >

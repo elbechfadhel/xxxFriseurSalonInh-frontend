@@ -15,7 +15,8 @@ import FeedbackPage from "./pages/FeedbackPage.tsx";
 import KioskTodayBoard from "@/admin/KioskTodayBoard.tsx";
 import AdminBlockSlots from "@/admin/AdminBlockSlots.tsx";
 import AdminSmsLogs from "@/admin/AdminSmsLogs.tsx";
-import RathausWidget from "./pages/RathausWidget.tsx";
+
+import WidgetsPage from './pages/WidgetsPage.tsx';
 
 
 const App: React.FC = () => {
@@ -64,7 +65,7 @@ const App: React.FC = () => {
 
                     <Route
                         path="/widget"
-                        element={<RathausWidget />}
+                        element={<WidgetsPage />}
                     />
 
 
