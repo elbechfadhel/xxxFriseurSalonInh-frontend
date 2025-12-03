@@ -66,7 +66,11 @@ const KioskBusBoard: React.FC = () => {
     const [flashIds, setFlashIds] = useState<string[]>([]);
     const [banners, setBanners] = useState<Banner[]>([]);
     const prevReservations = useRef<Reservation[]>([]);
-    const [now, setNow] = useState<Date>(new Date());
+    const [now, setNow] = useState<Date>(() => {
+        const d = new Date();
+        d.setHours(d.getHours() - 1);  // ⬅️ subtract 1 hour
+        return d;
+    });
 
     // scaling
     const containerRef = useRef<HTMLDivElement | null>(null);
@@ -78,8 +82,12 @@ const KioskBusBoard: React.FC = () => {
     });
 
     // real-time clock
-   useEffect(() => {
-        const timer = setInterval(() => setNow(new Date()), 1000);
+    useEffect(() => {
+        const timer = setInterval(() => {
+            const d = new Date();
+            d.setHours(d.getHours() - 1);  // ⬅️ subtract 1 hour continuously
+            setNow(d);
+        }, 1000);
         return () => clearInterval(timer);
     }, []);
 
