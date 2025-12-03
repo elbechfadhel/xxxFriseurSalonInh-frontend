@@ -78,7 +78,7 @@ const KioskBusBoard: React.FC = () => {
     });
 
     // real-time clock
-    useEffect(() => {
+   useEffect(() => {
         const timer = setInterval(() => setNow(new Date()), 1000);
         return () => clearInterval(timer);
     }, []);
@@ -253,6 +253,11 @@ const KioskBusBoard: React.FC = () => {
         return list.find((r) => new Date(r.date).getTime() === s);
     };
 
+    // Past slot: strictly before now
+    const isPastSlot = (slotIso: string) => {
+        return new Date(slotIso).getTime() < now.getTime();
+    };
+
     // --- auto-scale to fit screen (no scroll) ---
     useEffect(() => {
         const applyScale = () => {
@@ -296,20 +301,19 @@ const KioskBusBoard: React.FC = () => {
                 <main className="px-6 py-0">
                     {/* HEADER */}
                     <header className="w-full flex items-center justify-between mb-0 border-b border-gray-200 pb-2">
-
                         {/* LEFT SIDE: Logo + Title */}
                         <div className="flex items-center gap-4">
                             <img
                                 src="/images/logo-xxx.png"
                                 alt="Logo"
-                                className="h-20 w-auto"   // adjust size
+                                className="h-20 w-auto"
                             />
 
                             <div className="text-2xl font-extrabold text-gray-900 flex items-center gap-2">
                                 {t("welcomeTitle")}
                                 <span className="text-[#4e9f66]">
-                {t("barberShopName")}
-            </span>
+                                    {t("barberShopName")}
+                                </span>
                             </div>
                         </div>
 
@@ -320,7 +324,6 @@ const KioskBusBoard: React.FC = () => {
                             <span>{timeStr}</span>
                         </div>
                     </header>
-
 
                     {loading ? (
                         <p className="text-gray-600 text-2xl">
@@ -340,15 +343,14 @@ const KioskBusBoard: React.FC = () => {
                             {employeeList.map((emp) => (
                                 <React.Fragment key={emp.id}>
                                     {/* AM Column */}
-                                    <section
-                                        className="rounded-3xl bg-white border border-gray-200 shadow-md overflow-hidden">
+                                    <section className="border border-gray-200 shadow-md overflow-hidden bg-transparent">
                                         <div
                                             className="px-4 py-2 text-center font-semibold text-white"
-                                            style={{backgroundColor: "#374151"}}
+                                            style={{ backgroundColor: "#374151" }}
                                         >
                                             {emp.name} – AM
                                         </div>
-                                        <ul className="p-3 space-y-2">
+                                        <ul className="p-3 space-y-2 bg-transparent">
                                             {amSlots.map((slot) => {
                                                 const booking = findBooking(
                                                     emp.id,
@@ -357,27 +359,31 @@ const KioskBusBoard: React.FC = () => {
                                                 const isFlash =
                                                     booking &&
                                                     flashIds.includes(booking.id);
+
                                                 return (
                                                     <li
                                                         key={slot.iso}
-                                                        className={`  px-3 py-1 flex items-center gap-3 transition-colors duration-500
-                                                        ${
-                                                            booking
-                                                                ? isFlash
-                                                                    ? "bg-yellow-300 text-black"
-                                                                    : "bg-[#3d7f52] text-white border border-[#3d7f52]"
-                                                                : "bg-white text-gray-600 border border-gray-200"
-                                                        }`}
+                                                        className={`
+                                                            px-3 py-1 flex items-center gap-3 transition-all duration-500
+                                                            ${
+                                                            isPastSlot(slot.iso)
+                                                                ? "bg-transparent text-transparent border-0"
+                                                                : booking
+                                                                    ? isFlash
+                                                                        ? "bg-yellow-300 text-black border border-yellow-300"
+                                                                        : "bg-[#3d7f52] text-white border border-[#3d7f52]"
+                                                                    : "bg-white text-gray-600 border border-gray-200"
+                                                        }
+                                                        `}
                                                     >
                                                         <div className="w-[64px] text-lg font-bold tabular-nums">
                                                             {slot.label}
                                                         </div>
                                                         {booking ? (
-                                                            <div
-                                                                className="text-lg font-semibold truncate max-w-[180px]">
-                                                                {
-                                                                    getFirstName(booking.customerName)
-                                                                }
+                                                            <div className="text-lg font-semibold truncate max-w-[180px]">
+                                                                {getFirstName(
+                                                                    booking.customerName
+                                                                )}
                                                             </div>
                                                         ) : (
                                                             <div className="text-gray-400"></div>
@@ -389,15 +395,14 @@ const KioskBusBoard: React.FC = () => {
                                     </section>
 
                                     {/* PM Column */}
-                                    <section
-                                        className="rounded-3xl bg-white border border-gray-200 shadow-md overflow-hidden">
+                                    <section className=" border border-gray-200 shadow-md overflow-hidden bg-transparent">
                                         <div
                                             className="px-4 py-2 text-center font-semibold text-white"
-                                            style={{backgroundColor: "#374151"}}
+                                            style={{ backgroundColor: "#374151" }}
                                         >
                                             {emp.name} – PM
                                         </div>
-                                        <ul className="p-3 space-y-2">
+                                        <ul className="p-3 space-y-2 bg-transparent">
                                             {pmSlots.map((slot) => {
                                                 const booking = findBooking(
                                                     emp.id,
@@ -406,27 +411,31 @@ const KioskBusBoard: React.FC = () => {
                                                 const isFlash =
                                                     booking &&
                                                     flashIds.includes(booking.id);
+
                                                 return (
                                                     <li
                                                         key={slot.iso}
-                                                        className={`  px-3 py-1 flex items-center gap-3 transition-colors duration-500
-                                                        ${
-                                                            booking
-                                                                ? isFlash
-                                                                    ? "bg-yellow-300 text-black"
-                                                                    : "bg-[#3d7f52] text-white border border-[#3d7f52]"
-                                                                : "bg-white text-gray-600 border border-gray-200"
-                                                        }`}
+                                                        className={`
+                                                            px-3 py-1 flex items-center gap-3 transition-all duration-500
+                                                            ${
+                                                            isPastSlot(slot.iso)
+                                                                ? "bg-transparent text-transparent border-0"
+                                                                : booking
+                                                                    ? isFlash
+                                                                        ? "bg-yellow-300 text-black border border-yellow-300"
+                                                                        : "bg-[#3d7f52] text-white border border-[#3d7f52]"
+                                                                    : "bg-white text-gray-600 border border-gray-200"
+                                                        }
+                                                        `}
                                                     >
                                                         <div className="w-[64px] text-lg font-bold tabular-nums">
                                                             {slot.label}
                                                         </div>
                                                         {booking ? (
-                                                            <div
-                                                                className="text-lg font-semibold truncate max-w-[180px]">
-                                                                {
-                                                                    getFirstName(booking.customerName)
-                                                                }
+                                                            <div className="text-lg font-semibold truncate max-w-[180px]">
+                                                                {getFirstName(
+                                                                    booking.customerName
+                                                                )}
                                                             </div>
                                                         ) : (
                                                             <div className="text-gray-400"></div>
@@ -449,7 +458,7 @@ const KioskBusBoard: React.FC = () => {
                     <div
                         key={b.id}
                         className="text-white px-4 py-2 rounded-lg shadow-lg"
-                        style={{backgroundColor: "#374151"}}
+                        style={{ backgroundColor: "#374151" }}
                     >
                         {b.message}
                     </div>
