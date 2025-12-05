@@ -66,11 +66,7 @@ const KioskBusBoard: React.FC = () => {
     const [flashIds, setFlashIds] = useState<string[]>([]);
     const [banners, setBanners] = useState<Banner[]>([]);
     const prevReservations = useRef<Reservation[]>([]);
-    const [now, setNow] = useState<Date>(() => {
-        const d = new Date();
-        d.setHours(d.getHours() - 1);  // ⬅️ subtract 1 hour
-        return d;
-    });
+    const [now, setNow] = useState<Date>(() => new Date());
 
     // scaling
     const containerRef = useRef<HTMLDivElement | null>(null);
@@ -84,9 +80,7 @@ const KioskBusBoard: React.FC = () => {
     // real-time clock
     useEffect(() => {
         const timer = setInterval(() => {
-            const d = new Date();
-            d.setHours(d.getHours() - 1);  // ⬅️ subtract 1 hour continuously
-            setNow(d);
+            setNow(new Date());   // no -1 here
         }, 1000);
         return () => clearInterval(timer);
     }, []);
@@ -263,7 +257,9 @@ const KioskBusBoard: React.FC = () => {
 
     // Past slot: strictly before now
     const isPastSlot = (slotIso: string) => {
-        return new Date(slotIso).getTime() < now.getTime();
+        const cutoff = new Date(now);
+        cutoff.setHours(cutoff.getHours() - 1);  // shift only for slot logic
+        return new Date(slotIso).getTime() < cutoff.getTime();
     };
 
     // --- auto-scale to fit screen (no scroll) ---
