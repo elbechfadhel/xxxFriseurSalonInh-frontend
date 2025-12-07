@@ -9,14 +9,18 @@ interface EmployeeSelectorProps {
     employees: Employee[];
     selectedEmployee: string | null;
     onChange: (id: string) => void;
-    apiBase: string;
 }
+
+const employeeImages: Record<string, string> = {
+    '77f080f7-b1a2-4ad1-8230-234280b8fc75': '/employees/nejib.jpeg',
+    'd756ef8e-2c11-45a0-87a6-237b0a526f27': '/employees/houssem.jpeg',
+};
 
 const EmployeeSelector: React.FC<EmployeeSelectorProps> = ({
                                                                employees,
                                                                selectedEmployee,
                                                                onChange,
-                                                               apiBase,
+
                                                            }) => {
     return (
         <div className="w-full overflow-x-auto">
@@ -32,20 +36,7 @@ const EmployeeSelector: React.FC<EmployeeSelectorProps> = ({
                         }`}
                     >
                         <img
-                            src={`${apiBase}/employees/${emp.id}/photo`}
-                            onLoad={() => {
-                                console.log(`✅ Image loaded for employee ${emp.id}`);
-                            }}
-                            onError={(e) => {
-                                console.error(`❌ Image FAILED for employee ${emp.id}`);
-                                console.log("Requested URL:", `${apiBase}/employees/${emp.id}/photo`);
-
-                                // prevent infinite loop
-                                (e.target as HTMLImageElement).onerror = null;
-
-                                // set placeholder
-                                (e.target as HTMLImageElement).src = '/images/avatar-placeholder.png';
-                            }}
+                            src={employeeImages[emp.id] ?? '/images/avatar-placeholder.png'}
                             alt={emp.name}
                             className="w-16 h-16 object-cover rounded-full mb-2"
                         />

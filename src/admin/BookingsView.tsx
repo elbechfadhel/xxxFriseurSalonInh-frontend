@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import EditModal from "@/common/EditModal.tsx";
 import DeleteModal from "@/common/DeleteModal.tsx";
 import CreateModal, { CreateReservationPayload } from "@/common/CreateModal.tsx";
+import EmployeeService from "@/services/EmployeeService.ts";
 
 interface Employee { id: string; name: string; }
 interface Reservation {
@@ -59,13 +60,13 @@ const AdminBookings: React.FC = () => {
     useEffect(() => {
         const fetchEmployees = async () => {
             try {
-                const res = await fetch(`${API_BASE}/employees`);
-                const data = await res.json();
+                const data = await EmployeeService.getAll();
                 setEmployees(data);
             } catch (err) {
                 console.error('Failed to load employees:', err);
             }
         };
+
         fetchEmployees();
     }, []);
 

@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { de, enUS } from 'date-fns/locale';
 import DatePicker from 'react-datepicker';
 import EmployeeSelector from '@/pages/EmployeeSelector.tsx';
+import EmployeeService from "@/services/EmployeeService.ts";
 
 interface Employee {
     id: string;
@@ -52,16 +53,17 @@ const BookingPage: React.FC = () => {
     useEffect(() => {
         const fetchEmployees = async () => {
             try {
-                const res = await fetch(`${API_BASE}/employees`);
-                const data = await res.json();
+                const data = await EmployeeService.getAll();
                 setEmployees(data);
             } catch {
                 setNotification(t('failedLoadEmployees'));
                 setNotificationType('error');
             }
         };
+
         fetchEmployees();
-    }, []);
+    }, [t]);
+
 
     const clearNotice = () => {
         setNotification(null);
@@ -263,7 +265,6 @@ const BookingPage: React.FC = () => {
                                     setSelectedEmployee(id);
                                     setResetTrigger((prev) => prev + 1);
                                 }}
-                                apiBase={import.meta.env.VITE_API_URL}
                             />
                         </div>
                     </div>

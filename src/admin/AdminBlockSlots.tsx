@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
+import EmployeeService from "@/services/EmployeeService.ts";
 
 type Employee = { id: string; name: string };
 type Reservation = {
@@ -74,19 +75,25 @@ const AdminBlockSlotsTwoCols: React.FC = () => {
 
     // ---------------- load employees once
     useEffect(() => {
-        (async () => {
+        const loadEmployees = async () => {
             try {
-                const res = await fetch(`${API_BASE}/employees`);
-                const data: Employee[] = await res.json();
+                const data = await EmployeeService.getAll();
+
                 setEmployees(data);
-                if (data.length && !employeeId) setEmployeeId(data[0].id);
+
+                if (data.length && !employeeId) {
+                    setEmployeeId(data[0].id);
+                }
             } catch (e) {
-                console.error("Failed to load employees", e);
+                console.error('Failed to load employees', e);
             } finally {
                 setLoadingEmps(false);
             }
-        })();
-    }, [API_BASE]);
+        };
+
+        loadEmployees();
+    }, [employeeId]);
+
 
     // ---------------- reusable loader
     const loadSlots = useCallback(async () => {

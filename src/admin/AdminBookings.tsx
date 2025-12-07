@@ -5,6 +5,7 @@ import DeleteModal from "@/common/DeleteModal.tsx";
 import CreateModal, { CreateReservationPayload } from "@/common/CreateModal.tsx";
 import DayScheduleGrid from "@/admin/DayScheduleGrid.tsx";
 import { supabase } from '@/services/supabaseClient.ts';
+import EmployeeService from "@/services/EmployeeService.ts";
 
 interface Employee { id: string; name: string; }
 interface Reservation {
@@ -48,10 +49,10 @@ const AdminBookings: React.FC = () => {
     // --- Fetch reservations (stable, abortable) ---
     const fetchReservations = useCallback(async (signal?: AbortSignal) => {
         try {
-            const res = await fetch(`${API_BASE}/reservations`, {
-                headers: authHeaders(),
-                signal,
-            });
+
+
+            const res = await fetch(`${API_BASE}/reservations`);
+
             if (!res.ok) throw new Error(t('adminBookings.errorLoading'));
             const data = await res.json();
             setReservations(data);
@@ -145,19 +146,25 @@ const AdminBookings: React.FC = () => {
         };
     }, [fetchReservations]);*/
 
-    // Employees load
+
+
+
     useEffect(() => {
         const fetchEmployees = async () => {
             try {
-                const res = await fetch(`${API_BASE}/employees`);
-                const data = await res.json();
+                const data = await EmployeeService.getAll();
                 setEmployees(data);
             } catch (err) {
                 console.error('Failed to load employees:', err);
             }
         };
+
         fetchEmployees();
-    }, [API_BASE]);
+    }, []);
+
+
+
+
 
     const handleDeleteConfirmed = async () => {
         if (!deleting) return;

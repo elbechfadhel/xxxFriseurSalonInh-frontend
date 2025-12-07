@@ -50,7 +50,7 @@ const DayScheduleGrid: React.FC<Props> = ({
                                               includeUnassigned = true,
                                               employeeColWidth = 180,
                                               slotMinWidth = 44,
-                                              apiBase,                // <-- NEW
+                                              // <-- NEW
                                           }) => {
     const { t, i18n } = useTranslation();
     const lang = i18n.language;
@@ -109,15 +109,15 @@ const DayScheduleGrid: React.FC<Props> = ({
     // Compute display name per lang
     const displayName = (emp: Row) => (lang === 'ar' ? emp.nameAr || emp.name : emp.name);
 
-    // Build photo URL (fallback for Unassigned or missing)
-    const photoUrlFor = (emp: Row) =>
-        emp.id === 'unassigned'
-            ? '/images/avatar-placeholder.png'
-            : `${apiBase}/employees/${emp.id}/photo`;
 
-    const onImgError = (e: React.SyntheticEvent<HTMLImageElement>) => {
-        e.currentTarget.src = '/images/avatar-placeholder.png';
+
+    const employeeImages: Record<string, string> = {
+        '77f080f7-b1a2-4ad1-8230-234280b8fc75': '/employees/nejib.jpeg',
+        'd756ef8e-2c11-45a0-87a6-237b0a526f27': '/employees/houssem.jpeg',
     };
+
+
+
 
     return (
         <div className="w-full">
@@ -162,12 +162,15 @@ const DayScheduleGrid: React.FC<Props> = ({
                             >
                                 {/* Employee cell (fixed width) */}
                                 <div className="flex items-center px-3 py-2 text-sm font-medium text-gray-800">
+
+
                                     <img
-                                        src={photoUrlFor(emp)}
-                                        onError={onImgError}
-                                        alt={name}
+                                        src={employeeImages[emp.id] ?? '/images/avatar-placeholder.png'}
+                                        alt={emp.name}
                                         className="me-2 h-7 w-7 rounded-full object-cover"
                                     />
+
+
                                     <span className="truncate" title={name}>
                     {name}
                   </span>

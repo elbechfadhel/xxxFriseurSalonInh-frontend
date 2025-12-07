@@ -2,6 +2,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/services/supabaseClient.ts";
+import EmployeeService from "@/services/EmployeeService.ts";
 
 type Employee = { id: string; name: string };
 type Reservation = {
@@ -73,10 +74,7 @@ const KioskBusBoard: React.FC = () => {
     const containerRef = useRef<HTMLDivElement | null>(null);
     const [scale, setScale] = useState(1);
 
-    const authHeaders = () => ({
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("admin_token") || ""}`,
-    });
+
 
     // real-time clock
     useEffect(() => {
@@ -103,14 +101,14 @@ const KioskBusBoard: React.FC = () => {
     useEffect(() => {
         (async () => {
             try {
-                const res = await fetch(`${API_BASE}/employees`);
-                if (!res.ok) throw new Error("Failed to load employees");
-                setEmployees(await res.json());
+                const data = await EmployeeService.getAll();
+                setEmployees(data);
             } catch (err) {
-                console.error("Failed to load employees:", err);
+                console.error('Failed to load employees:', err);
             }
         })();
-    }, [API_BASE]);
+    }, []);
+
 
 
     // --- load reservations + subscribe to Realtime ---
@@ -120,9 +118,7 @@ const KioskBusBoard: React.FC = () => {
         const loadReservations = async () => {
             try {
                 setError("");
-                const res = await fetch(`${API_BASE}/reservations`, {
-                    headers: authHeaders(),
-                });
+                const res = await fetch(`${API_BASE}/reservations`);
                 if (!res.ok) throw new Error("Failed to load reservations");
 
                 const data: Reservation[] = await res.json();
