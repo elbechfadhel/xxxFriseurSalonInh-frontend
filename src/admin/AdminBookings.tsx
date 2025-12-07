@@ -4,6 +4,7 @@ import EditModal from "@/common/EditModal.tsx";
 import DeleteModal from "@/common/DeleteModal.tsx";
 import CreateModal, { CreateReservationPayload } from "@/common/CreateModal.tsx";
 import DayScheduleGrid from "@/admin/DayScheduleGrid.tsx";
+import { supabase } from '@/services/supabaseClient.ts';
 
 interface Employee { id: string; name: string; }
 interface Reservation {
@@ -20,7 +21,7 @@ type UpdateReservationPayload = Partial<
     Pick<Reservation, 'customerName' | 'email' | 'phone' | 'service' | 'date' | 'employeeId'>
 >;
 
-const POLL_MS = 15000; // 15s; increase to 30000 if you want less frequent polling
+/*const POLL_MS = 15000;*/ // 15s; increase to 30000 if you want less frequent polling
 
 const AdminBookings: React.FC = () => {
     const { t } = useTranslation();
@@ -71,8 +72,44 @@ const AdminBookings: React.FC = () => {
         return () => ctrl.abort();
     }, [fetchReservations]);
 
-    // Polling with pause on tab hidden
+
+
+    // Initial load (keep this as you have it)
     useEffect(() => {
+        const ctrl = new AbortController();
+        fetchReservations(ctrl.signal);
+        return () => ctrl.abort();
+    }, [fetchReservations]);
+
+// Realtime: refetch whenever Reservation changes
+    useEffect(() => {
+        const channel = supabase
+            .channel('reservation_changes')
+            .on(
+                'postgres_changes',
+                {
+                    event: '*',           // listen to INSERT, UPDATE, DELETE
+                    schema: 'public',
+                    table: 'Reservation', // exactly the table name in Supabase
+                },
+                () => {
+                    // Just refetch from your backend when something changes
+                    fetchReservations();
+                }
+            )
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(channel);
+        };
+    }, [fetchReservations]);
+
+
+
+
+
+    // Polling with pause on tab hidden
+   /* useEffect(() => {
         let timeoutId: number | undefined;
         let stopped = false;
         let ctrl: AbortController | null = null;
@@ -106,7 +143,7 @@ const AdminBookings: React.FC = () => {
             ctrl?.abort();
             document.removeEventListener('visibilitychange', onVisibilityChange);
         };
-    }, [fetchReservations]);
+    }, [fetchReservations]);*/
 
     // Employees load
     useEffect(() => {

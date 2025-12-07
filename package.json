@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",
+    "@supabase/supabase-js": "^2.86.2",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.20.5",
     "i18next": "^25.3.2",

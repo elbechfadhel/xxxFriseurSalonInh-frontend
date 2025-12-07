@@ -1,6 +1,7 @@
 // src/admin/KioskBusBoard.tsx
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { supabase } from "@/services/supabaseClient.ts";
 
 type Employee = { id: string; name: string };
 type Reservation = {
@@ -23,7 +24,7 @@ type Slot = {
 
 type Banner = { id: string; message: string };
 
-const POLL_MS = 5000;
+/*const POLL_MS = 5000;*/
 const SLOT_MINUTES = 30;
 const DAY_START = { h: 9, m: 30 }; // start 09:30
 const DAY_END = { h: 19, m: 0 };
@@ -111,8 +112,67 @@ const KioskBusBoard: React.FC = () => {
         })();
     }, [API_BASE]);
 
-    // --- load reservations with polling ---
+
+    // --- load reservations + subscribe to Realtime ---
     useEffect(() => {
+        let isMounted = true;
+
+        const loadReservations = async () => {
+            try {
+                setError("");
+                const res = await fetch(`${API_BASE}/reservations`, {
+                    headers: authHeaders(),
+                });
+                if (!res.ok) throw new Error("Failed to load reservations");
+
+                const data: Reservation[] = await res.json();
+                if (isMounted) {
+                    setReservations(data);
+                    setLoading(false);
+                }
+            } catch (err) {
+                if (!isMounted) return;
+                console.error("[Kiosk] Failed to fetch reservations:", err);
+                setError(
+                    t("adminBookings.errorLoading") || "Fehler beim Laden"
+                );
+                setLoading(false);
+            }
+        };
+
+        // initial load
+        loadReservations();
+
+        // realtime subscription
+        const channel = supabase
+            .channel("kiosk-reservations")
+            .on(
+                "postgres_changes",
+                {
+                    event: "*",          // INSERT | UPDATE | DELETE
+                    schema: "public",
+                    table: "Reservation",
+                },
+                (payload) => {
+                    console.log("[Realtime Kiosk] change received:", payload);
+                    // re-load list whenever something changes
+                    loadReservations();
+                }
+            )
+            .subscribe((status) => {
+                console.log("[Realtime Kiosk] channel status:", status);
+            });
+
+        return () => {
+            isMounted = false;
+            supabase.removeChannel(channel);
+        };
+    }, [API_BASE, t]);
+
+
+
+    // --- load reservations with polling ---
+  /*  useEffect(() => {
         let timer: number | undefined;
         let ctrl: AbortController | null = null;
         let stopped = false;
@@ -151,7 +211,7 @@ const KioskBusBoard: React.FC = () => {
             if (timer) clearTimeout(timer);
             ctrl?.abort();
         };
-    }, [API_BASE, t]);
+    }, [API_BASE, t]);*/
 
     // --- detect new reservations (for flash + banner) ---
     useEffect(() => {
