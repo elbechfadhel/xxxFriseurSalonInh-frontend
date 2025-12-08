@@ -1,7 +1,6 @@
 // src/admin/KioskBusBoard.tsx
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { supabase } from "@/services/supabaseClient.ts";
 import EmployeeService from "@/services/EmployeeService.ts";
 
 type Employee = { id: string; name: string };
@@ -112,58 +111,52 @@ const KioskBusBoard: React.FC = () => {
 
 
     // --- load reservations + subscribe to Realtime ---
-    useEffect(() => {
-        let isMounted = true;
+    const POLL_MS = 5000;
 
-        const loadReservations = async () => {
+// --- load reservations with polling ---
+    useEffect(() => {
+        let timer: number | undefined;
+        let ctrl: AbortController | null = null;
+        let stopped = false;
+
+        const load = async () => {
+            ctrl?.abort();
+            ctrl = new AbortController();
             try {
                 setError("");
-                const res = await fetch(`${API_BASE}/reservations`);
+                const res = await fetch(`${API_BASE}/reservations`, {
+                    signal: ctrl.signal,
+                });
                 if (!res.ok) throw new Error("Failed to load reservations");
 
                 const data: Reservation[] = await res.json();
-                if (isMounted) {
-                    setReservations(data);
-                    setLoading(false);
-                }
+                setReservations(data);
             } catch (err) {
-                if (!isMounted) return;
-                console.error("[Kiosk] Failed to fetch reservations:", err);
-                setError(
-                    t("adminBookings.errorLoading") || "Fehler beim Laden"
-                );
+                if (!ctrl?.signal.aborted) {
+                    console.error("[Kiosk] Failed to fetch reservations:", err);
+                    setError(
+                        t("adminBookings.errorLoading") || "Fehler beim Laden"
+                    );
+                }
+            } finally {
                 setLoading(false);
             }
         };
 
-        // initial load
-        loadReservations();
+        const tick = async () => {
+            await load();
+            if (!stopped) timer = window.setTimeout(tick, POLL_MS);
+        };
 
-        // realtime subscription
-        const channel = supabase
-            .channel("kiosk-reservations")
-            .on(
-                "postgres_changes",
-                {
-                    event: "*",          // INSERT | UPDATE | DELETE
-                    schema: "public",
-                    table: "Reservation",
-                },
-                (payload) => {
-                    console.log("[Realtime Kiosk] change received:", payload);
-                    // re-load list whenever something changes
-                    loadReservations();
-                }
-            )
-            .subscribe((status) => {
-                console.log("[Realtime Kiosk] channel status:", status);
-            });
+        tick();
 
         return () => {
-            isMounted = false;
-            supabase.removeChannel(channel);
+            stopped = true;
+            if (timer) clearTimeout(timer);
+            ctrl?.abort();
         };
     }, [API_BASE, t]);
+
 
 
 

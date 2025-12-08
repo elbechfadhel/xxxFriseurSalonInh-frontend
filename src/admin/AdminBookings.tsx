@@ -4,7 +4,6 @@ import EditModal from "@/common/EditModal.tsx";
 import DeleteModal from "@/common/DeleteModal.tsx";
 import CreateModal, { CreateReservationPayload } from "@/common/CreateModal.tsx";
 import DayScheduleGrid from "@/admin/DayScheduleGrid.tsx";
-import { supabase } from '@/services/supabaseClient.ts';
 import EmployeeService from "@/services/EmployeeService.ts";
 
 interface Employee { id: string; name: string; }
@@ -49,8 +48,6 @@ const AdminBookings: React.FC = () => {
     // --- Fetch reservations (stable, abortable) ---
     const fetchReservations = useCallback(async (signal?: AbortSignal) => {
         try {
-
-
             const res = await fetch(`${API_BASE}/reservations`);
 
             if (!res.ok) throw new Error(t('adminBookings.errorLoading'));
@@ -82,28 +79,7 @@ const AdminBookings: React.FC = () => {
         return () => ctrl.abort();
     }, [fetchReservations]);
 
-// Realtime: refetch whenever Reservation changes
-    useEffect(() => {
-        const channel = supabase
-            .channel('reservation_changes')
-            .on(
-                'postgres_changes',
-                {
-                    event: '*',           // listen to INSERT, UPDATE, DELETE
-                    schema: 'public',
-                    table: 'Reservation', // exactly the table name in Supabase
-                },
-                () => {
-                    // Just refetch from your backend when something changes
-                    fetchReservations();
-                }
-            )
-            .subscribe();
 
-        return () => {
-            supabase.removeChannel(channel);
-        };
-    }, [fetchReservations]);
 
 
 
@@ -153,6 +129,7 @@ const AdminBookings: React.FC = () => {
         const fetchEmployees = async () => {
             try {
                 const data = await EmployeeService.getAll();
+                console.log(data);
                 setEmployees(data);
             } catch (err) {
                 console.error('Failed to load employees:', err);
@@ -258,9 +235,15 @@ const AdminBookings: React.FC = () => {
     const futureBookings = reservations.filter(r => new Date(r.date) > endOfToday);
     const pastBookings = reservations.filter(r => new Date(r.date) < startOfToday);
 
-    const groupByEmployee = (data: Reservation[]) =>
+    const groupByEmployee = (data: Reservation[], employees: Employee[]) =>
         data.reduce((groups: Record<string, Reservation[]>, res) => {
-            const empName = res.employee?.name || 'Unassigned';
+            console.log('➡️ reservation in groupByEmployee:', res);
+
+            const emp = employees.find(e => e.id === res.employeeId);
+            console.log('   ↳ matched employee:', emp);
+
+            const empName = emp?.name || 'Unassigned';
+
             if (!groups[empName]) groups[empName] = [];
             groups[empName].push(res);
             return groups;
@@ -319,7 +302,7 @@ const AdminBookings: React.FC = () => {
                     )}
                     {view === 'future' && (
                         <BookingTable
-                            groups={groupByEmployee(futureBookings)}
+                            groups={groupByEmployee(futureBookings, employees)}
                             onEdit={setEditing}
                             onDelete={setDeleting}   // OK: Reservation is assignable to Pick<...>
                             formatDate={formatDate}
@@ -327,7 +310,7 @@ const AdminBookings: React.FC = () => {
                     )}
                     {view === 'history' && (
                         <BookingTable
-                            groups={groupByEmployee(pastBookings)}
+                            groups={groupByEmployee(pastBookings, employees)}
                             onEdit={setEditing}
                             onDelete={setDeleting}
                             formatDate={formatDate}
