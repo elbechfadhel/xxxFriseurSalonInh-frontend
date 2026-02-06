@@ -1,11 +1,4 @@
 {
-  "redirects": [
-    {
-      "source": "/booking/:path*",
-      "destination": "https://www.xxxfriseursalon.de/booking/:path*",
-      "permanent": true
-    }
-  ],
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
