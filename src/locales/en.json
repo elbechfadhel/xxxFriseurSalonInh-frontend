@@ -229,16 +229,25 @@
     "title": "Block time slots",
     "employee": "Employee",
     "date": "Date",
+    "reason": "Reason",
     "slots": "Day slots",
     "selectAll": "Select all",
     "unselectAll": "Unselect all",
+    "loadingSlots": "Loading...",
     "noSlots": "No available slots",
     "booked": "Booked",
+    "blocked": "Blocked",
     "selectedCount": "{{count}} slot(s) selected",
     "block": "Block",
+    "apply": "Apply",
     "saving": "Saving…",
     "success": "{{count}} slot(s) blocked",
-    "error": "Error while blocking slots"
+    "error": "Error while blocking slots",
+    "loadError": "Error loading slots.",
+    "blockError": "No action performed (error).",
+    "networkError": "Network error.",
+    "hint1": "Check free slots to block them.",
+    "hint2": "Check slots marked as \"Blocked\" to unblock them."
   }
 
 }

@@ -227,15 +227,24 @@
     "title": "Zeitslots sperren",
     "employee": "Mitarbeiter",
     "date": "Datum",
+    "reason": "Grund",
     "slots": "Tages-Slots",
     "selectAll": "Alle auswählen",
     "unselectAll": "Alle abwählen",
+    "loadingSlots": "Lade...",
     "noSlots": "Keine freien Slots",
     "booked": "Belegt",
+    "blocked": "Gesperrt",
     "selectedCount": "{{count}} Slot(s) ausgewählt",
     "block": "Sperren",
+    "apply": "Anwenden",
     "saving": "Speichern…",
     "success": "{{count}} Slot(s) gesperrt",
-    "error": "Fehler beim Sperren der Slots"
+    "error": "Fehler beim Sperren der Slots",
+    "loadError": "Fehler beim Laden der Zeitfenster.",
+    "blockError": "Keine Aktion ausgeführt (Fehler).",
+    "networkError": "Netzwerkfehler.",
+    "hint1": "Wähle freie Zeitfenster aus, um sie zu sperren.",
+    "hint2": "Wähle als 'Gesperrt' markierte Zeitfenster aus, um sie freizugeben."
   }
 }
