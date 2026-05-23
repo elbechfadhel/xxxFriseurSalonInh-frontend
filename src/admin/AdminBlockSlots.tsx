@@ -25,6 +25,7 @@ type Slot = {
 };
 
 const BLOCK_REASONS: { value: string; label: string }[] = [
+    { value: "__BLOCK__", label: "Gesperrt" },
     { value: "urlaub", label: "Urlaub" },
     { value: "krankheit", label: "Krankheit" },
     { value: "feiertag", label: "Feiertag" },

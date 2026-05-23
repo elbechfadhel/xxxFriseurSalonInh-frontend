@@ -29,6 +29,20 @@ const SLOT_MINUTES = 30;
 const DAY_START = { h: 9, m: 30 }; // start 09:30
 const DAY_END = { h: 19, m: 0 };
 
+const BLOCK_REASON_COLORS: Record<string, string> = {
+    "__BLOCK__": "bg-gray-700 text-white border border-gray-700",
+    "urlaub":    "bg-gray-500 text-white border border-gray-500",
+    "krankheit": "bg-gray-400 text-white border border-gray-400",
+    "feiertag":  "bg-gray-200 text-gray-700 border border-gray-200",
+};
+
+const isBlockedBooking = (r: Reservation) =>
+    r.customerName === "__BLOCK__" ||
+    (r.customerName === r.service && r.customerName in BLOCK_REASON_COLORS);
+
+const getBlockColorClass = (r: Reservation) =>
+    BLOCK_REASON_COLORS[r.customerName] ?? "bg-gray-600 text-white border border-gray-600";
+
 function startOfTodayAt(h: number, m = 0) {
     const d = new Date();
     d.setHours(h, m, 0, 0);
@@ -50,6 +64,7 @@ function fmtTime(d: Date, locale: string) {
     return new Intl.DateTimeFormat(locale, {
         hour: "2-digit",
         minute: "2-digit",
+        hour12: false,
     }).format(d);
 }
 function getFirstName(fullName: string = "") {
@@ -424,7 +439,9 @@ const KioskBusBoard: React.FC = () => {
                                                                 : booking
                                                                     ? isFlash
                                                                         ? "bg-yellow-300 text-black border border-yellow-300"
-                                                                        : "bg-[#3d7f52] text-white border border-[#3d7f52]"
+                                                                        : isBlockedBooking(booking)
+                                                                            ? getBlockColorClass(booking)
+                                                                            : "bg-[#3d7f52] text-white border border-[#3d7f52]"
                                                                     : "bg-white text-gray-600 border border-gray-200"
                                                         }
                                                         `}
@@ -476,7 +493,9 @@ const KioskBusBoard: React.FC = () => {
                                                                 : booking
                                                                     ? isFlash
                                                                         ? "bg-yellow-300 text-black border border-yellow-300"
-                                                                        : "bg-[#3d7f52] text-white border border-[#3d7f52]"
+                                                                        : isBlockedBooking(booking)
+                                                                            ? getBlockColorClass(booking)
+                                                                            : "bg-[#3d7f52] text-white border border-[#3d7f52]"
                                                                     : "bg-white text-gray-600 border border-gray-200"
                                                         }
                                                         `}
