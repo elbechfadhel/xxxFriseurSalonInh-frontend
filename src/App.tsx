@@ -14,6 +14,7 @@ import PrivacyPolicy from "@/components/PrivacyPolicy.tsx";
 import FeedbackPage from "./pages/FeedbackPage.tsx";
 import KioskTodayBoard from "@/admin/KioskTodayBoard.tsx";
 import AdminBlockSlots from "@/admin/AdminBlockSlots.tsx";
+import AdminAbsences from "@/admin/AdminAbsences.tsx";
 import AdminSmsLogs from "@/admin/AdminSmsLogs.tsx";
 
 import WidgetsPage from './pages/WidgetsPage.tsx';
@@ -52,6 +53,10 @@ const App: React.FC = () => {
                     <Route
                         path="/admin/blocks"
                         element={<ProtectedRoute><AdminBlockSlots /></ProtectedRoute>}
+                    />
+                    <Route
+                        path="/admin/absences"
+                        element={<ProtectedRoute><AdminAbsences /></ProtectedRoute>}
                     />
 
                     <Route

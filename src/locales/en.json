@@ -248,7 +248,42 @@
     "networkError": "Network error.",
     "hint1": "Check free slots to block them.",
     "hint2": "Check slots marked as \"Blocked\" to unblock them."
+  },
+  "absences": {
+    "title": "Absences",
+    "employees": "Barber",
+    "from": "From",
+    "to": "To (inclusive)",
+    "reason": "Reason",
+    "reasons": {
+      "urlaub": "Vacation",
+      "krankheit": "Sickness",
+      "feiertag": "Public holiday"
+    },
+    "invalidDates": "The end date cannot be before the start date.",
+    "checking": "Checking existing appointments…",
+    "conflictsWarning_one": "1 existing appointment in this period. It will not be cancelled: please inform the customer.",
+    "conflictsWarning_other": "{{count}} existing appointments in this period. They will not be cancelled: please inform the customers.",
+    "savedConflicts_one": "Please inform this customer:",
+    "savedConflicts_other": "Please inform these {{count}} customers:",
+    "save": "Save absence",
+    "saving": "Saving…",
+    "saved": "Absence saved.",
+    "saveError": "Saving failed.",
+    "overlapError": "There is already an absence in this period. Please delete it first.",
+    "loginRequired": "Please log in again.",
+    "hint1": "During the absence, customers cannot book with this barber (website and app).",
+    "hint2": "For a few hours only, use the “Block time slots” page.",
+    "upcoming": "Current and planned absences",
+    "loading": "Loading…",
+    "loadError": "Absences could not be loaded.",
+    "none": "No absences planned.",
+    "days_one": "1 day",
+    "days_other": "{{count}} days",
+    "ongoing": "ongoing",
+    "delete": "Delete",
+    "confirmDelete": "Delete the absence of {{name}} ({{from}} – {{to}})?",
+    "deleted": "Absence deleted.",
+    "deleteError": "Deleting failed."
   }
-
 }
-

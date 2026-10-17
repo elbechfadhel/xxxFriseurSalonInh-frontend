@@ -246,5 +246,42 @@
     "networkError": "Netzwerkfehler.",
     "hint1": "Wähle freie Zeitfenster aus, um sie zu sperren.",
     "hint2": "Wähle als 'Gesperrt' markierte Zeitfenster aus, um sie freizugeben."
+  },
+  "absences": {
+    "title": "Abwesenheiten",
+    "employees": "Barber",
+    "from": "Von",
+    "to": "Bis (einschließlich)",
+    "reason": "Grund",
+    "reasons": {
+      "urlaub": "Urlaub",
+      "krankheit": "Krankheit",
+      "feiertag": "Feiertag"
+    },
+    "invalidDates": "Das Enddatum darf nicht vor dem Startdatum liegen.",
+    "checking": "Bestehende Termine werden geprüft…",
+    "conflictsWarning_one": "1 bestehender Termin in diesem Zeitraum. Er wird nicht storniert: bitte den Kunden informieren.",
+    "conflictsWarning_other": "{{count}} bestehende Termine in diesem Zeitraum. Sie werden nicht storniert: bitte die Kunden informieren.",
+    "savedConflicts_one": "Bitte diesen Kunden informieren:",
+    "savedConflicts_other": "Bitte diese {{count}} Kunden informieren:",
+    "save": "Abwesenheit speichern",
+    "saving": "Speichern…",
+    "saved": "Abwesenheit gespeichert.",
+    "saveError": "Speichern fehlgeschlagen.",
+    "overlapError": "Für diesen Zeitraum gibt es bereits eine Abwesenheit. Bitte zuerst die bestehende löschen.",
+    "loginRequired": "Bitte melde dich erneut an.",
+    "hint1": "Während der Abwesenheit können Kunden bei diesem Barber nicht buchen (Website und App).",
+    "hint2": "Für einzelne Stunden die Seite „Zeitfenster sperren“ verwenden.",
+    "upcoming": "Aktuelle und geplante Abwesenheiten",
+    "loading": "Laden…",
+    "loadError": "Abwesenheiten konnten nicht geladen werden.",
+    "none": "Keine Abwesenheiten geplant.",
+    "days_one": "1 Tag",
+    "days_other": "{{count}} Tage",
+    "ongoing": "läuft",
+    "delete": "Löschen",
+    "confirmDelete": "Abwesenheit von {{name}} ({{from}} – {{to}}) löschen?",
+    "deleted": "Abwesenheit gelöscht.",
+    "deleteError": "Löschen fehlgeschlagen."
   }
 }
